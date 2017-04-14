@@ -1,5 +1,5 @@
 /* je compile command
-g++ markGps.cpp gps.cpp calcDist.cpp -o markGps -g  -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -D_LARGEFILE_SOURCE -D_LARGEFILE64 -std=c++11 -lfltk -lgps 
+g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -D_LARGEFILE_SOURCE -D_LARGEFILE64 -std=c++11 -lfltk -lgps 
 */
 
 // Demonstrate how to use Fl_Input in a touchscreen application -erco 08/25/06
@@ -63,7 +63,7 @@ const int kBtnM = 10;
 const int kBtnG = 11;
 const int kBtnFB = 12;
 const int kBtnMark = 13;
-const int kBtnWriteHole = 14;
+const int kBtnWriteMarker = 14;
 const int kBtnWriteAll = 15;
 
 const int kBtnSize = 80;
@@ -85,12 +85,40 @@ struct LatLng {
   double lng;
 };
 
+LatLng currentRefMarker;
+
+Fl_Window *win;
+Fl_Input *my_input;
+Fl_Box *boxYardage;
+Fl_Button *btnMark;
+Fl_Button *btnWrite;
+
+
+FILE *G_fp = NULL;
+const char *SIMPLEGPS_CMD = "simplegps";	
+
+string strDistFromMark("0");
+//string fname;
+vector<Fl_Button *> vbtn; // the hole and marker pushbuttons
+vector<string> vGPGGA;
+vector<string> vMarkers;
+int oldvGPGGAsz =0;
+int nowvGPGGAsz =0;
+GPS myGPS;
+
+class HoleView;
+HoleView *hv;
+
+// Prototypes
+void setupYardage(string s);
+
 class HoleView: public Fl_Gl_Window {
  public:
    HoleView(int x,int y,int w,int h,const char *l):Fl_Gl_Window(x,y,w,h,l){}
    void makeList();
    void draw();
 };
+
 
 
 void HoleView::makeList() {
@@ -191,33 +219,6 @@ void HoleView::draw() {
     glCallList(currentHole);
 }
 
-LatLng currentRefMarker;
-
-Fl_Window *win;
-Fl_Input *my_input;
-Fl_Box *boxYardage;
-Fl_Button *btnMark;
-Fl_Button *btnWrite;
-HoleView *hv;
-
-FILE *G_fp = NULL;
-const char *SIMPLEGPS_CMD = "simplegps";	
-
-string strDistFromMark("0");
-//string fname;
-vector<Fl_Button *> vbtn; // the hole and marker pushbuttons
-vector<string> vGPGGA;
-vector<string> vMarkers;
-int oldvGPGGAsz =0;
-int nowvGPGGAsz =0;
-GPS myGPS;
-
-// Prototypes
-void writeMark_CB(Fl_Widget *);
-void writeAll_CB(Fl_Widget *);
-void mark_CB(Fl_Widget *);
-void setRefMarker();
-void setupYardage(string s);
 
 string getHoleName() {
 	string str;
@@ -241,339 +242,37 @@ string getMarkerName() {
 	return str;
 }
 
-bool isBtn1to9(Fl_Button* b) {
-	if (vbtn[kBtn1] == b) {
-                 cout << "pressed button 1" << endl;
-                 currentHole = 1;
-                 hv->redraw();
-                 return true;
-        }
-
-	else if (vbtn[kBtn2] == b) {
-                 cout << "pressed button 2" << endl;
-                 currentHole = 2;         
-                 hv->redraw();
-                 return true;
-        }
-	else if (vbtn[kBtn3] == b) {
-                 cout << "pressed button 3" << endl;
-                 currentHole = 3;
-                 hv->redraw();
-                 return true;
-        }
-	else if (vbtn[kBtn4] == b){
-                 cout << "pressed button 4" << endl;
-                 currentHole = 4;
-                 hv->redraw();
-                 return true;
-        }
- 
-	else if (vbtn[kBtn5] == b) {
-                 cout << "pressed button 5" << endl;
-                 currentHole = 5;
-                 hv->redraw();
-                 return true;
-        }
-
-	else if (vbtn[kBtn6] == b) return true;
-	else if (vbtn[kBtn7] == b) return true;
-	else if (vbtn[kBtn8] == b) return true;
-	else if (vbtn[kBtn9] == b) return true;
-	else return false;
-}
-
-bool isBtnTMG(Fl_Button *b) {
-	if (vbtn[kBtnT] == b) return true;
-	else if (vbtn[kBtnM] == b) return true;
-	else if (vbtn[kBtnG] == b) return true;
-	else return false;
-}
-
-void handleBtns(Fl_Button * b) {
-// all off
-	if (isBtn1to9(b)) {
-		vbtn[kBtn1]->value(0);
-		vbtn[kBtn2]->value(0);
-		vbtn[kBtn3]->value(0);
-		vbtn[kBtn4]->value(0);
-		vbtn[kBtn5]->value(0);
-		vbtn[kBtn6]->value(0);
-		vbtn[kBtn7]->value(0);
-		vbtn[kBtn8]->value(0);
-		vbtn[kBtn9]->value(0);
-		b->value(1);
-		// after 4 hours the file size would be about 1.75 Mb
-//		vGPGGA.clear();
+void handleBtnFB() {
+	if (bFrontNine) {
+		vbtn[kBtn1]->label("10");
+		vbtn[kBtn2]->label("11");
+		vbtn[kBtn3]->label("12");
+		vbtn[kBtn4]->label("13");
+		vbtn[kBtn5]->label("14");
+		vbtn[kBtn6]->label("15");
+		vbtn[kBtn7]->label("16");
+		vbtn[kBtn8]->label("17");
+		vbtn[kBtn9]->label("18");
+		bFrontNine = false;		
+	} else {
+		vbtn[kBtn1]->label("1");
+		vbtn[kBtn2]->label("2");
+		vbtn[kBtn3]->label("3");
+		vbtn[kBtn4]->label("4");
+		vbtn[kBtn5]->label("5");
+		vbtn[kBtn6]->label("6");
+		vbtn[kBtn7]->label("7");
+		vbtn[kBtn8]->label("8");
+		vbtn[kBtn9]->label("9");	
+		bFrontNine = true;				
 	}
-	else if (isBtnTMG(b)) {
-		vbtn[kBtnT]->value(0);
-		vbtn[kBtnM]->value(0);
-		vbtn[kBtnG]->value(0);
-		b->value(1);	
-	}
-	else if (b == vbtn[kBtnFB]) {
-	    if (bFrontNine) {
-			vbtn[kBtn1]->label("10");
-			vbtn[kBtn2]->label("11");
-			vbtn[kBtn3]->label("12");
-			vbtn[kBtn4]->label("13");
-			vbtn[kBtn5]->label("14");
-			vbtn[kBtn6]->label("15");
-			vbtn[kBtn7]->label("16");
-			vbtn[kBtn8]->label("17");
-			vbtn[kBtn9]->label("18");
-			bFrontNine = false;		
-		} else {
-			vbtn[kBtn1]->label("1");
-			vbtn[kBtn2]->label("2");
-			vbtn[kBtn3]->label("3");
-			vbtn[kBtn4]->label("4");
-			vbtn[kBtn5]->label("5");
-			vbtn[kBtn6]->label("6");
-			vbtn[kBtn7]->label("7");
-			vbtn[kBtn8]->label("8");
-			vbtn[kBtn9]->label("9");	
-			bFrontNine = true;				
-		}
-		for (auto itr : vbtn) 
-			itr->value(0); // all off 
-		vbtn[kBtn1]->value(1);	
-	}
-	else if (b == vbtn[kBtnMark]) {
-//		for (auto itr : vbtn) itr->value(0); // all off 
-	}
-
-	else if (b == vbtn[kBtnWriteHole]) {
-//		for (auto itr : vbtn) itr->value(0); // all off 
-	}
-}
-
-static void Button_CB(Fl_Widget *w, void *data) {
-    
-	handleBtns((Fl_Button *)w);
-}
-
-void setupKeypad(Fl_Window *win) {
-	Fl_Input *in;               // input preview
-	Fl_Callback *enter_cb;      // callback when user hits 'enter'
-	void *enter_data;
-	
-	//	const int kBtnSize = 20;
-	int X=kLeftMargin;
-	int Y=10;
-	int W=100;
-	int H=140;
-	const int kDeltaX = 8;
-
-	// Numeric keypad
-	int colstart = X;
-	int	col = colstart;
-	int	row = Y;
-
-	vbtn.push_back(new Fl_Button(col,row, kBtnSize, kBtnSize,  "1"));   
-	vbtn[kBtn1]->callback(Button_CB, (void*)win); 
-	col += vbtn[kBtn1]->w() + kDeltaX;
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "2"));   
-	vbtn[kBtn2]->callback(Button_CB, (void*)win); 
-	col += vbtn[kBtn2]->w();
-	col=colstart; 
-	row += vbtn[kBtn2]->h();
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "3"));
-    vbtn[kBtn3]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn3]->w() + kDeltaX;
-		
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "4"));
-    vbtn[kBtn4]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn4]->w();
-	col=colstart; 
-	row += vbtn[kBtn4]->h();
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "5"));
-    vbtn[kBtn5]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn5]->w() + kDeltaX;
-
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "6"));
-    vbtn[kBtn6]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn6]->w();
-	col=colstart; 
-	row += vbtn[kBtn6]->h();
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "7"));
-    vbtn[kBtn7]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn7]->w() + kDeltaX;
-
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "8"));
-    vbtn[kBtn8]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn8]->w();
-	col=colstart; 
-	row += vbtn[kBtn8]->h();
-
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "9"));
-    vbtn[kBtn9]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtn9]->w() + kDeltaX;
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "T")); 	
-	vbtn[kBtnT]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtnT]->w();
-	col=colstart; 
-	row += vbtn[kBtnT]->h();
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "M"));
-    vbtn[kBtnM]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtnM]->w() + kDeltaX;
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "G"));
-    vbtn[kBtnG]->callback(Button_CB, (void*)win); 
-    col += vbtn[kBtnG]->w();
-	col=colstart; 
-	row += vbtn[kBtnG]->h();
-	
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,"F/B"));  
-	vbtn[kBtnFB]->callback(Button_CB, (void*)win); 
-	vbtn[kBtnFB]->labelfont(1);
-	vbtn[kBtnFB]->labelsize(24);	
-	col += vbtn[kBtnFB]->w() + kDeltaX;
-
-	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,"Mark")); 
-	vbtn[kBtnMark]->callback(mark_CB); 
-	vbtn[kBtnMark]->labelfont(1);
-	vbtn[kBtnMark]->labelsize(24);	
-	col=colstart; 
-	row += vbtn[kBtnMark]->h() + kDeltaX;
-
-	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nMark");
-	vbtn.push_back(btnWrite);
-	vbtn[kBtnWriteHole]->labelfont(1);
-	vbtn[kBtnWriteHole]->labelsize(20);	
-	btnWrite->callback(writeMark_CB);
-	col += vbtn[kBtnWriteHole]->w() + kDeltaX;
-
-	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nAll");
-	vbtn.push_back(btnWrite);
-	vbtn[kBtnWriteAll]->labelfont(1);
-	vbtn[kBtnWriteAll]->labelsize(20);	
-	btnWrite->callback(writeAll_CB);
-	col=colstart; 
-	row += vbtn[kBtnWriteAll]->h() + kDeltaX;
-
-	boxYardage = new Fl_Box(FL_FRAME_BOX, col, row, kBtnSize*2+kDeltaX, kBtnSize, 0);
-	setupYardage(strDistFromMark);
-	
-	enter_cb = 0;
-	enter_data = 0;
-	
-	for (int i = 0; i < kBtnFB; ++i) {
-		vbtn[i]->labelfont(1);
-		vbtn[i]->labelsize(48);	
-	}
-	for (auto itr : vbtn) {
-	    itr->color(FL_WHITE);
-	    itr->down_color(FL_YELLOW);
-	}
-	
-	// INITIAL STATE
-	vbtn[kBtn1]->value(1);
+	for (auto itr : vbtn) 
+		itr->value(0); // all off 
+	vbtn[kBtn1]->value(1);	
 	vbtn[kBtnT]->value(1);
-
-}
-
-static void updateYardage(string s) {
-    boxYardage->label(s.c_str());
-    boxYardage->redraw();
-//    win->redraw();
-}
-
-static void updateYardage(double d) {
-    ostringstream oss;
-    unsigned int ui = static_cast<unsigned int>(d);
-    oss << ui;
-    updateYardage(oss.str().c_str());
-}
-
-void setupYardage(string s) {
-    boxYardage->labeltype(FL_NORMAL_LABEL);
-    boxYardage->align(FL_ALIGN_CENTER);
-    boxYardage->labelfont(1);
-    boxYardage->labelsize(64);
-    boxYardage->labelcolor(FL_BLACK);
-    boxYardage->color(FL_YELLOW);
-    updateYardage(s);
-}
-
-string getFilename() {
-    string fname = "";
-    string h = getHoleName();
-    string m = getMarkerName();
-
-    if (h.empty()) {
-   		my_input->value( "Select a hole. Try again" );
-    } else if (m.empty()) {
-   		my_input->value( "Select a marker: T M G. Try again" );
-    } else {    	   	
-		fname = getHoleName() + "_" + getMarkerName() + ".txt";
-	}
-	return fname;
-}
-
-void mark_CB(Fl_Widget *) {
-#if USEGPS
-    setRefMarker();
-#endif
-}
-
-void writeMark_CB(Fl_Widget *) {
-#if USEGPS
-    string fname = getFilename();
-    if ( fname.empty() )
-    	return;
-	
-	ofstream file(fname.c_str());
-	for (auto itr : vMarkers )
-		file << itr;
-	file.close();
-	vMarkers.clear();
-	
-	string s = fname + " written";
-	my_input->value( s.c_str() );
-#endif
-}
-
-void writeAll_CB(Fl_Widget *) {
-#if USEGPS
-    string fname = "WalkTheCourse.txt";
-	
-	ofstream file(fname.c_str());
-	for (auto itr : vGPGGA )
-		file << itr;
-	file.close();
-	
-	string s = fname + " written";
-	my_input->value( s.c_str() );
-#endif
 }
 
 #if USEGPS
-gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
-
-bool isgpsup() {
-	bool ok = false;
-    for(int i = 0; i < 5; ++i) {
-        //For version 3.7
-
-        if (gps_rec.stream(WATCH_ENABLE|WATCH_NMEA) == NULL) {
-            cout << "No GPSD running. Retry to connect in " << RETRY_TIME << " seconds." << endl;
-            usleep(RETRY_TIME * ONE_SECOND);
-            continue;    // It will try to connect to gpsd again
-        }
-        else {
-          ok = true;
-        }
-    }
-    return ok;
-}
-
 void setRefMarker() {
     LatLng ll;
 	ll.lat = 0;
@@ -600,6 +299,286 @@ void setRefMarker() {
 	vMarkers = v;
 	currentRefMarker = ll;
 }
+#endif
+
+static void updateYardage(string s) {
+    boxYardage->label(s.c_str());
+    boxYardage->redraw();
+}
+
+static void updateYardage(double d) {
+    ostringstream oss;
+    unsigned int ui = static_cast<unsigned int>(d);
+    oss << ui;
+    updateYardage(oss.str().c_str());
+}
+
+static void Button_CB(Fl_Widget *w, void *data) {
+	Fl_Button * b = static_cast<Fl_Button *>(w);
+    int id = (int)data;
+    switch (id ) {
+		case kBtn1:
+		case kBtn2:
+		case kBtn3:
+		case kBtn4:
+		case kBtn5:
+		case kBtn6:
+		case kBtn7:
+		case kBtn8:
+		case kBtn9:
+			vbtn[kBtn1]->value(0);
+			vbtn[kBtn2]->value(0);
+			vbtn[kBtn3]->value(0);
+			vbtn[kBtn4]->value(0);
+			vbtn[kBtn5]->value(0);
+			vbtn[kBtn6]->value(0);
+			vbtn[kBtn7]->value(0);
+			vbtn[kBtn8]->value(0);
+			vbtn[kBtn9]->value(0);
+			b->value(1);
+			currentHole = id+1;
+			cout << "pressed button = " << currentHole << endl;
+            hv->redraw();
+			break;
+		case kBtnT:
+		case kBtnM:
+		case kBtnG:
+			vbtn[kBtnT]->value(0);
+			vbtn[kBtnM]->value(0);
+			vbtn[kBtnG]->value(0);
+			b->value(1);
+			break;
+		case kBtnFB: 
+			handleBtnFB();
+			break;
+
+		case kBtnMark:
+		#if USEGPS
+			setRefMarker();
+		#endif
+			break;
+
+		case kBtnWriteMarker:
+		#if USEGPS
+			string fname = getFilename();
+			if ( fname.empty() )
+				return;
+			
+			ofstream file(fname.c_str());
+			for (auto itr : vMarkers )
+				file << itr;
+			file.close();
+			vMarkers.clear();
+			
+			string s = fname + " written";
+			my_input->value( s.c_str() );
+		#endif
+			break;
+
+		case kBtnWriteAll:
+		#if USEGPS
+			string fname = "WalkTheCourse.txt";
+			
+			ofstream file(fname.c_str());
+			for (auto itr : vGPGGA )
+				file << itr;
+			file.close();
+			
+			string s = fname + " written";
+			my_input->value( s.c_str() );
+		#endif
+			break;
+
+		default:
+			cout << "In Button_CB: default case should never be called" << endl;
+			break;
+	}
+}
+
+void setupButtons(Fl_Window *win) {
+	Fl_Input *in;               // input preview
+	Fl_Callback *enter_cb;      // callback when user hits 'enter'
+	void *enter_data;
+	
+	int X=kLeftMargin;
+	int Y=10;
+	int W=100;
+	int H=140;
+	const int kDeltaX = 8;
+
+	// Numeric keypad
+	int colstart = X;
+	int	col = colstart;
+	int	row = Y;
+	int num;
+
+	num = kBtn1; 
+	vbtn.push_back(new Fl_Button(col,row, kBtnSize, kBtnSize,  "1"));  
+	vbtn[kBtn1]->callback(Button_CB, (void *)num); 
+	col += vbtn[kBtn1]->w() + kDeltaX;
+	
+	num = kBtn2; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "2"));   
+	vbtn[kBtn2]->callback(Button_CB, (void *)num); 
+	col += vbtn[kBtn2]->w();
+	col=colstart; 
+	row += vbtn[kBtn2]->h();
+	
+	num = kBtn3; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "3"));
+    vbtn[kBtn3]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn3]->w() + kDeltaX;
+		
+	num = kBtn4; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "4"));
+    vbtn[kBtn4]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn4]->w();
+	col=colstart; 
+	row += vbtn[kBtn4]->h();
+	
+	num = kBtn5; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "5"));
+    vbtn[kBtn5]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn5]->w() + kDeltaX;
+
+	num = kBtn6; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "6"));
+    vbtn[kBtn6]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn6]->w();
+	col=colstart; 
+	row += vbtn[kBtn6]->h();
+	
+	num = kBtn7; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "7"));
+    vbtn[kBtn7]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn7]->w() + kDeltaX;
+
+	num = kBtn8; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "8"));
+    vbtn[kBtn8]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn8]->w();
+	col=colstart; 
+	row += vbtn[kBtn8]->h();
+
+	num = kBtn9; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "9"));
+    vbtn[kBtn9]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn9]->w() + kDeltaX;
+	
+	num = kBtnT; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "T")); 	
+	vbtn[kBtnT]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtnT]->w();
+	col=colstart; 
+	row += vbtn[kBtnT]->h();
+	
+	num = kBtnM; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "M"));
+    vbtn[kBtnM]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtnM]->w() + kDeltaX;
+	
+	num = kBtnG; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "G"));
+    vbtn[kBtnG]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtnG]->w();
+	col=colstart; 
+	row += vbtn[kBtnG]->h();
+	
+	num = kBtnFB; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,"F/B"));  
+	vbtn[kBtnFB]->callback(Button_CB, (void *)num); 
+	vbtn[kBtnFB]->labelfont(1);
+	vbtn[kBtnFB]->labelsize(24);	
+	col += vbtn[kBtnFB]->w() + kDeltaX;
+
+	num = kBtnMark; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,"Mark")); 
+	vbtn[kBtnMark]->callback(Button_CB, (void *)num); 
+	vbtn[kBtnMark]->labelfont(1);
+	vbtn[kBtnMark]->labelsize(24);	
+	col=colstart; 
+	row += vbtn[kBtnMark]->h() + kDeltaX;
+
+	num = kBtnWriteMarker; 
+	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nMark");
+	vbtn.push_back(btnWrite);
+	vbtn[kBtnWriteMarker]->labelfont(1);
+	vbtn[kBtnWriteMarker]->labelsize(20);	
+	btnWrite->callback(Button_CB, (void *)num);
+	col += vbtn[kBtnWriteMarker]->w() + kDeltaX;
+
+	num = kBtnWriteAll; 
+	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nAll");
+	vbtn.push_back(btnWrite);
+	vbtn[kBtnWriteAll]->labelfont(1);
+	vbtn[kBtnWriteAll]->labelsize(20);	
+	btnWrite->callback(Button_CB, (void *)num);
+	col=colstart; 
+	row += vbtn[kBtnWriteAll]->h() + kDeltaX;
+
+	boxYardage = new Fl_Box(FL_FRAME_BOX, col, row, kBtnSize*2+kDeltaX, kBtnSize, 0);
+    boxYardage->labeltype(FL_NORMAL_LABEL);
+    boxYardage->align(FL_ALIGN_CENTER);
+    boxYardage->labelfont(1);
+    boxYardage->labelsize(64);
+    boxYardage->labelcolor(FL_BLACK);
+    boxYardage->color(FL_YELLOW);
+    updateYardage(strDistFromMark);
+	
+	enter_cb = 0;
+	enter_data = 0;
+	
+	for (int i = 0; i < kBtnFB; ++i) {
+		vbtn[i]->labelfont(1);
+		vbtn[i]->labelsize(48);	
+	}
+	for (auto itr : vbtn) {
+	    itr->color(FL_WHITE);
+	    itr->down_color(FL_YELLOW);
+	}
+	
+	// INITIAL STATE
+	vbtn[kBtn1]->value(1);
+	vbtn[kBtnT]->value(1);
+
+}
+
+string getFilename() {
+    string fname = "";
+    string h = getHoleName();
+    string m = getMarkerName();
+
+    if (h.empty()) {
+   		my_input->value( "Select a hole. Try again" );
+    } else if (m.empty()) {
+   		my_input->value( "Select a marker: T M G. Try again" );
+    } else {    	   	
+		fname = getHoleName() + "_" + getMarkerName() + ".txt";
+	}
+	return fname;
+}
+
+
+#if USEGPS
+gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
+
+bool isgpsup() {
+	bool ok = false;
+    for(int i = 0; i < 5; ++i) {
+        //For version 3.7
+
+        if (gps_rec.stream(WATCH_ENABLE|WATCH_NMEA) == NULL) {
+            cout << "No GPSD running. Retry to connect in " << RETRY_TIME << " seconds." << endl;
+            usleep(RETRY_TIME * ONE_SECOND);
+            continue;    // It will try to connect to gpsd again
+        }
+        else {
+          ok = true;
+        }
+    }
+    return ok;
+}
+
 
 double nema2utm(double nmea) {
 	double deg, min, min60, sec, sec60, dec_deg;
@@ -679,12 +658,14 @@ int main(int argc, char **argv) {
 //#endif
     ngc = new Course(5);
     ngc->readCourse();
+    
     win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
+    win->begin();
     hv = new HoleView(10,40,280,700,0);
     my_input = new Fl_Input(10,10,274,30,"");
-
-	setupKeypad(win);
+	setupButtons(win);
     win->end();
+ 
     win->resizable(win);
     win->show();
     currentHole = 1;
