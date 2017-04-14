@@ -54,10 +54,18 @@ void Course::readCourse() {
     LL2UTM latlon;
 
 	bool JACK = false;
-	if (JACK)
+	bool JOHN = false;
+	bool JOHN_VM = true;
+	
+    if (JACK)
     	pathprefix = "/home/pi/golf/GolfCourseMap/rpigolf/holes/";
-    else
+    else if (JOHN)
     	pathprefix = "/home/pi/projects/gpsdclient/holes/";
+    else if (JOHN_VM)
+      pathprefix = "/home/je/projects/angc/holes/";
+    else
+      cout << "Could not find holes/ directory";
+	  
     	
     for (h=1;h<=maxHole;h++) {
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";

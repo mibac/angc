@@ -47,7 +47,7 @@ Course *ngc;
 int currentHole;
 
 // GLOBALS
-#define USEGPS 1
+#define USEGPS 0
 
 const int kBtn1 = 0;
 const int kBtn2 = 1;
@@ -443,18 +443,17 @@ void setupKeypad(Fl_Window *win) {
 	col=colstart; 
 	row += vbtn[kBtnMark]->h() + kDeltaX;
 
-	btnWrite = new Fl_Button(col, row, kBtnSize*2+kDeltaX, kBtnSize / 2, "Write Mark");
+	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nMark");
 	vbtn.push_back(btnWrite);
 	vbtn[kBtnWriteHole]->labelfont(1);
-	vbtn[kBtnWriteHole]->labelsize(24);	
+	vbtn[kBtnWriteHole]->labelsize(20);	
 	btnWrite->callback(writeMark_CB);
-	col=colstart; 
-	row += vbtn[kBtnWriteHole]->h() + kDeltaX;
+	col += vbtn[kBtnWriteHole]->w() + kDeltaX;
 
-	btnWrite = new Fl_Button(col, row, kBtnSize*2+kDeltaX, kBtnSize / 2, "Write All");
+	btnWrite = new Fl_Button(col, row, kBtnSize, kBtnSize, "Write\nAll");
 	vbtn.push_back(btnWrite);
 	vbtn[kBtnWriteAll]->labelfont(1);
-	vbtn[kBtnWriteAll]->labelsize(24);	
+	vbtn[kBtnWriteAll]->labelsize(20);	
 	btnWrite->callback(writeAll_CB);
 	col=colstart; 
 	row += vbtn[kBtnWriteAll]->h() + kDeltaX;
@@ -672,12 +671,12 @@ void HandleFD(FL_SOCKET fd, void *data) {
 #endif
 
 int main(int argc, char **argv) {
-#if USEGPS
-    if (isgpsup() == false) {
-    	cout << "No GPS found" << endl;
-    	return 0;
-    }
-#endif
+  //#if USEGPS
+  //    if (isgpsup() == false) {
+  //   	cout << "No GPS found" << endl;
+  //   	return 0;
+  //  }
+//#endif
     ngc = new Course(5);
     ngc->readCourse();
     win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
