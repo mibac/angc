@@ -1,0 +1,14 @@
+13
+BlackTeeBox
+BlueTeeBox
+BlueTeeBox2
+WhiteTeeBox
+Creek
+Green
+LeftTrees
+RightTrees
+Fairway1
+Fairway2
+LeftTrap
+LeftBackTrap
+RightTrap

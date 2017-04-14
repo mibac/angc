@@ -1,0 +1,17 @@
+16
+H3Orientation
+H3CartPath1
+H3LeftTrees1
+H3RightTrees2
+H3TeeBox2
+H3CartPath2
+H3LeftTrees2
+H3RightTrees3
+H3TeeBox3
+H3Fairway
+H3LeftTrees3
+H3RightTrees4
+H3Trap
+H3Green
+H3RightTrees1
+H3TeeBox1
