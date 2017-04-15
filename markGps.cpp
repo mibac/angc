@@ -123,41 +123,23 @@ class HoleView: public Fl_Gl_Window {
 
 
 void HoleView::makeList() {
-  int h,i,k,j,xtran;
-  double x[100],y[100],scale,xscale,yscale,xcen;
+  int h,i,k,j;
+  double x[100],y[100],scale,xscale,yscale,xcen,ycen,xtran,ytran,xsize,ysize;;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D((double) 0,(double) 280,(double) 0,(double) 700);
   glMatrixMode(GL_MODELVIEW);
-/*
-        glDeleteLists(1,1);
-        glNewList(1,GL_COMPILE);
-           glColor3d(0.9,0.5,0.5);
-        //   glClear(GL_COLOR_BUFFER_BIT);
-           glBegin(GL_POLYGON);
-             glVertex2d(0,0);
-             glVertex2d(280,0);
-             glVertex2d(280,700);
-             glVertex2d(0,700);
-           glEnd();
-          glColor3d(0.1,0.8,0.1);
-        //   glClear(GL_COLOR_BUFFER_BIT);
-           glBegin(GL_POLYGON);
-             glVertex2d(150,150);
-             glVertex2d(200,150);
-             glVertex2d(200,200);
-             glVertex2d(150,200);
-           glEnd();
-         glEndList();
-*/
   for (h=1;h<=ngc->maxHole;h++) {
-        xscale = ngc->hole[h].xminmax.v[1]-ngc->hole[h].xminmax.v[0];
-        yscale = ngc->hole[h].yminmax.v[1]-ngc->hole[h].yminmax.v[0];
-        xscale = 280.0/xscale;
-        yscale = 700.0/yscale;
+        xsize = ngc->hole[h].xminmax.v[1]-ngc->hole[h].xminmax.v[0];
+        ysize = ngc->hole[h].yminmax.v[1]-ngc->hole[h].yminmax.v[0];
+        xscale = 280.0/xsize;
+        yscale = 700.0/ysize;
         scale = xscale;
         if (yscale<scale) scale = yscale;
-
+        xcen = scale*xsize/2;
+        ycen = scale*ysize/2;
+        xtran = 140-xcen;
+        ytran = 350-ycen;
         glDeleteLists(h,1);
         glNewList(h,GL_COMPILE);
            glColor3d(153.0/255.0,1.0,153.0/255.0);
@@ -202,8 +184,8 @@ void HoleView::makeList() {
               for (i=0;i<ngc->hole[h].feature[k].poly[j].vertNum;i++) {
                 x[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xminmax.v[0]);
                 y[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].yminmax.v[0]);
-                x[i] = x[i];
-                y[i] = y[i];
+                x[i] = x[i]+xtran;
+                y[i] = y[i]+ytran;
                 glVertex2d(x[i],y[i]);
             }
            glEnd();
