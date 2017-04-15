@@ -24,31 +24,29 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo -I/usr/
 #include <FL/Fl_Timer.H>
 #include <FL/gl.h>
 #include <FL/glu.h>
+
+#ifndef COURSE_H_
 #include "Course.h"
-// #include  <FL/Enumerations.H>
+#endif
 
 #ifndef GPS_H
 #include "gps.h"
 #endif
 
-#ifndef CALC_DISTANCE_H
-#include "calcDist.h"
-#endif
+#ifndef _GPSD_GPSMM_H_
+#include "libgpsmm.h"
+#endif 
 
 #ifndef C2UTM_hpp
 #include "C2UTM.hpp"
 #endif
 
-#include "libgpsmm.h"
-
 using namespace std;
 
-Course *ngc;
-int currentHole;
+// Conditionals
+#define USEGPS 1
 
 // GLOBALS
-#define USEGPS 0
-
 const int kBtn1 = 0;
 const int kBtn2 = 1;
 const int kBtn3 = 2;
@@ -65,17 +63,18 @@ const int kBtnFB = 12;
 const int kBtnMark = 13;
 const int kBtnWriteMarker = 14;
 const int kBtnWriteAll = 15;
-
 const int kBtnSize = 80;
-
 const int kLeftMargin = 300;
-
 const int WAITING_TIME = 5000000;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 const int kNumMarks = 10;
 
 bool bFrontNine = true;
+
+int oldvGPGGAsz =0;
+int nowvGPGGAsz =0;
+int currentHole;
 
 float refMarkf = 0.0;
 float nowMarkf = 0.0;
@@ -98,19 +97,21 @@ FILE *G_fp = NULL;
 const char *SIMPLEGPS_CMD = "simplegps";	
 
 string strDistFromMark("0");
-//string fname;
+
 vector<Fl_Button *> vbtn; // the hole and marker pushbuttons
 vector<string> vGPGGA;
 vector<string> vMarkers;
-int oldvGPGGAsz =0;
-int nowvGPGGAsz =0;
+
 GPS myGPS;
 
 class HoleView;
 HoleView *hv;
 
+Course *ngc;
+
 // Prototypes
 void setupYardage(string s);
+string getFilename();
 
 class HoleView: public Fl_Gl_Window {
  public:
@@ -118,8 +119,6 @@ class HoleView: public Fl_Gl_Window {
    void makeList();
    void draw();
 };
-
-
 
 void HoleView::makeList() {
   int h,i,k,j,xtran;
@@ -313,9 +312,41 @@ static void updateYardage(double d) {
     updateYardage(oss.str().c_str());
 }
 
+void handleWriteMarker() {
+	#if USEGPS
+		string fname = getFilename();
+		if ( fname.empty() )
+			return;
+		
+		ofstream file(fname.c_str());
+		for (auto itr : vMarkers )
+			file << itr;
+		file.close();
+		vMarkers.clear();
+		
+		string s = fname + " written";
+		my_input->value( s.c_str() );
+	#endif
+}
+
+void handleWriteAll() {
+	#if USEGPS
+		string fname = "WalkTheCourse.txt";
+		
+		ofstream file(fname.c_str());
+		for (auto itr : vGPGGA )
+			file << itr;
+		file.close();
+		
+		string s = fname + " written";
+		my_input->value( s.c_str() );
+	#endif
+}
+
 static void Button_CB(Fl_Widget *w, void *data) {
 	Fl_Button * b = static_cast<Fl_Button *>(w);
     int id = (int)data;
+    
     switch (id ) {
 		case kBtn1:
 		case kBtn2:
@@ -359,34 +390,11 @@ static void Button_CB(Fl_Widget *w, void *data) {
 			break;
 
 		case kBtnWriteMarker:
-		#if USEGPS
-			string fname = getFilename();
-			if ( fname.empty() )
-				return;
-			
-			ofstream file(fname.c_str());
-			for (auto itr : vMarkers )
-				file << itr;
-			file.close();
-			vMarkers.clear();
-			
-			string s = fname + " written";
-			my_input->value( s.c_str() );
-		#endif
+		    handleWriteMarker();
 			break;
 
 		case kBtnWriteAll:
-		#if USEGPS
-			string fname = "WalkTheCourse.txt";
-			
-			ofstream file(fname.c_str());
-			for (auto itr : vGPGGA )
-				file << itr;
-			file.close();
-			
-			string s = fname + " written";
-			my_input->value( s.c_str() );
-		#endif
+			handleWriteAll();
 			break;
 
 		default:
