@@ -25,31 +25,29 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo -I/usr/
 #include <FL/Fl_Timer.H>
 #include <FL/gl.h>
 #include <FL/glu.h>
+
+#ifndef COURSE_H_
 #include "Course.h"
-// #include  <FL/Enumerations.H>
+#endif
 
 #ifndef GPS_H
 #include "gps.h"
 #endif
 
-#ifndef CALC_DISTANCE_H
-#include "calcDist.h"
-#endif
+#ifndef _GPSD_GPSMM_H_
+#include "libgpsmm.h"
+#endif 
 
 #ifndef C2UTM_hpp
 #include "C2UTM.hpp"
 #endif
 
-#include "libgpsmm.h"
-
 using namespace std;
 
-Course *ngc;
-int currentHole;
+// Conditionals
+#define USEGPS 1
 
 // GLOBALS
-#define USEGPS 0
-
 const int kBtn1 = 0;
 const int kBtn2 = 1;
 const int kBtn3 = 2;
@@ -59,24 +57,38 @@ const int kBtn6 = 5;
 const int kBtn7 = 6;
 const int kBtn8 = 7;
 const int kBtn9 = 8;
-const int kBtnT = 9;
-const int kBtnM = 10;
-const int kBtnG = 11;
-const int kBtnFB = 12;
-const int kBtnMark = 13;
-const int kBtnWriteMarker = 14;
-const int kBtnWriteAll = 15;
+
+const int kBtn10 = 9;
+const int kBtn11 = 10;
+const int kBtn12 = 11;
+const int kBtn13 = 12;
+const int kBtn14 = 13;
+const int kBtn15 = 14;
+const int kBtn16 = 15;
+const int kBtn17 = 16;
+const int kBtn18 = 17;
+
+const int kBtnT = 18;
+const int kBtnM = 19;
+const int kBtnG = 20;
+const int kBtnFB = 21;
+const int kBtnMark = 22;
+const int kBtnWriteMarker = 23;
+const int kBtnWriteAll = 24;
 
 const int kBtnSize = 80;
-
 const int kLeftMargin = 300;
-
 const int WAITING_TIME = 5000000;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 const int kNumMarks = 10;
+const int kDeltaX = 8;
 
-bool bFrontNine = true;
+bool bFrontNine = false;
+
+int oldvGPGGAsz =0;
+int nowvGPGGAsz =0;
+int currentHole;
 
 float refMarkf = 0.0;
 float nowMarkf = 0.0;
@@ -99,19 +111,21 @@ FILE *G_fp = NULL;
 const char *SIMPLEGPS_CMD = "simplegps";	
 
 string strDistFromMark("0");
-//string fname;
+
 vector<Fl_Button *> vbtn; // the hole and marker pushbuttons
 vector<string> vGPGGA;
 vector<string> vMarkers;
-int oldvGPGGAsz =0;
-int nowvGPGGAsz =0;
+
 GPS myGPS;
 
 class HoleView;
 HoleView *hv;
 
+Course *ngc;
+
 // Prototypes
 void setupYardage(string s);
+string getFilename();
 
 class HoleView: public Fl_Gl_Window {
  public:
@@ -119,8 +133,6 @@ class HoleView: public Fl_Gl_Window {
    void makeList();
    void draw();
 };
-
-
 
 void HoleView::makeList() {
   int h,i,k,j;
@@ -226,33 +238,25 @@ string getMarkerName() {
 }
 
 void handleBtnFB() {
-	if (bFrontNine) {
-		vbtn[kBtn1]->label("10");
-		vbtn[kBtn2]->label("11");
-		vbtn[kBtn3]->label("12");
-		vbtn[kBtn4]->label("13");
-		vbtn[kBtn5]->label("14");
-		vbtn[kBtn6]->label("15");
-		vbtn[kBtn7]->label("16");
-		vbtn[kBtn8]->label("17");
-		vbtn[kBtn9]->label("18");
-		bFrontNine = false;		
-	} else {
-		vbtn[kBtn1]->label("1");
-		vbtn[kBtn2]->label("2");
-		vbtn[kBtn3]->label("3");
-		vbtn[kBtn4]->label("4");
-		vbtn[kBtn5]->label("5");
-		vbtn[kBtn6]->label("6");
-		vbtn[kBtn7]->label("7");
-		vbtn[kBtn8]->label("8");
-		vbtn[kBtn9]->label("9");	
-		bFrontNine = true;				
-	}
 	for (auto itr : vbtn) 
 		itr->value(0); // all off 
-	vbtn[kBtn1]->value(1);	
-	vbtn[kBtnT]->value(1);
+
+	if (bFrontNine) {
+	    for (int i = kBtn1; i <= kBtn9; ++i)
+	    	vbtn[i]->show();
+	    for (int i = kBtn10; i <= kBtn18; ++i)
+	    	vbtn[i]->hide();
+		vbtn[kBtn1]->value(1);	
+		vbtn[kBtnT]->value(1);
+	} else {
+	    for (int i = kBtn1; i <= kBtn9; ++i)
+	    	vbtn[i]->hide();
+	    for (int i = kBtn10; i <= kBtn18; ++i)
+	    	vbtn[i]->show();
+		vbtn[kBtn10]->value(1);	
+		vbtn[kBtnT]->value(1);
+	}
+	bFrontNine = !bFrontNine;
 }
 
 #if USEGPS
@@ -296,9 +300,41 @@ static void updateYardage(double d) {
     updateYardage(oss.str().c_str());
 }
 
+void handleWriteMarker() {
+	#if USEGPS
+		string fname = getFilename();
+		if ( fname.empty() )
+			return;
+		
+		ofstream file(fname.c_str());
+		for (auto itr : vMarkers )
+			file << itr;
+		file.close();
+		vMarkers.clear();
+		
+		string s = fname + " written";
+		my_input->value( s.c_str() );
+	#endif
+}
+
+void handleWriteAll() {
+	#if USEGPS
+		string fname = "WalkTheCourse.txt";
+		
+		ofstream file(fname.c_str());
+		for (auto itr : vGPGGA )
+			file << itr;
+		file.close();
+		
+		string s = fname + " written";
+		my_input->value( s.c_str() );
+	#endif
+}
+
 static void Button_CB(Fl_Widget *w, void *data) {
 	Fl_Button * b = static_cast<Fl_Button *>(w);
     int id = (int)data;
+    
     switch (id ) {
 		case kBtn1:
 		case kBtn2:
@@ -309,15 +345,17 @@ static void Button_CB(Fl_Widget *w, void *data) {
 		case kBtn7:
 		case kBtn8:
 		case kBtn9:
-			vbtn[kBtn1]->value(0);
-			vbtn[kBtn2]->value(0);
-			vbtn[kBtn3]->value(0);
-			vbtn[kBtn4]->value(0);
-			vbtn[kBtn5]->value(0);
-			vbtn[kBtn6]->value(0);
-			vbtn[kBtn7]->value(0);
-			vbtn[kBtn8]->value(0);
-			vbtn[kBtn9]->value(0);
+		case kBtn10:
+		case kBtn11:
+		case kBtn12:
+		case kBtn13:
+		case kBtn14:
+		case kBtn15:
+		case kBtn16:
+		case kBtn17:
+		case kBtn18:
+			for (int i = kBtn1; i <= kBtn18; ++i)
+				vbtn[i]->value(0);
 			b->value(1);
 			currentHole = id+1;
 			cout << "pressed button = " << currentHole << endl;
@@ -342,34 +380,11 @@ static void Button_CB(Fl_Widget *w, void *data) {
 			break;
 
 		case kBtnWriteMarker:
-		#if USEGPS
-			string fname = getFilename();
-			if ( fname.empty() )
-				return;
-			
-			ofstream file(fname.c_str());
-			for (auto itr : vMarkers )
-				file << itr;
-			file.close();
-			vMarkers.clear();
-			
-			string s = fname + " written";
-			my_input->value( s.c_str() );
-		#endif
+		    handleWriteMarker();
 			break;
 
 		case kBtnWriteAll:
-		#if USEGPS
-			string fname = "WalkTheCourse.txt";
-			
-			ofstream file(fname.c_str());
-			for (auto itr : vGPGGA )
-				file << itr;
-			file.close();
-			
-			string s = fname + " written";
-			my_input->value( s.c_str() );
-		#endif
+			handleWriteAll();
 			break;
 
 		default:
@@ -378,24 +393,8 @@ static void Button_CB(Fl_Widget *w, void *data) {
 	}
 }
 
-void setupButtons(Fl_Window *win) {
-	Fl_Input *in;               // input preview
-	Fl_Callback *enter_cb;      // callback when user hits 'enter'
-	void *enter_data;
-	
-	int X=kLeftMargin;
-	int Y=10;
-	int W=100;
-	int H=140;
-	const int kDeltaX = 8;
-
-	// Numeric keypad
-	int colstart = X;
-	int	col = colstart;
-	int	row = Y;
-	int num;
-
-	num = kBtn1; 
+void setupFront9Btns( int &col, int &row ) {
+	int num = kBtn1;
 	vbtn.push_back(new Fl_Button(col,row, kBtnSize, kBtnSize,  "1"));  
 	vbtn[kBtn1]->callback(Button_CB, (void *)num); 
 	col += vbtn[kBtn1]->w() + kDeltaX;
@@ -404,7 +403,7 @@ void setupButtons(Fl_Window *win) {
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "2"));   
 	vbtn[kBtn2]->callback(Button_CB, (void *)num); 
 	col += vbtn[kBtn2]->w();
-	col=colstart; 
+	col=kLeftMargin; 
 	row += vbtn[kBtn2]->h();
 	
 	num = kBtn3; 
@@ -416,7 +415,7 @@ void setupButtons(Fl_Window *win) {
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "4"));
     vbtn[kBtn4]->callback(Button_CB, (void *)num); 
     col += vbtn[kBtn4]->w();
-	col=colstart; 
+	col=kLeftMargin; 
 	row += vbtn[kBtn4]->h();
 	
 	num = kBtn5; 
@@ -428,7 +427,7 @@ void setupButtons(Fl_Window *win) {
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "6"));
     vbtn[kBtn6]->callback(Button_CB, (void *)num); 
     col += vbtn[kBtn6]->w();
-	col=colstart; 
+	col=kLeftMargin; 
 	row += vbtn[kBtn6]->h();
 	
 	num = kBtn7; 
@@ -440,13 +439,96 @@ void setupButtons(Fl_Window *win) {
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "8"));
     vbtn[kBtn8]->callback(Button_CB, (void *)num); 
     col += vbtn[kBtn8]->w();
-	col=colstart; 
+	col=kLeftMargin; 
 	row += vbtn[kBtn8]->h();
 
 	num = kBtn9; 
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "9"));
     vbtn[kBtn9]->callback(Button_CB, (void *)num); 
     col += vbtn[kBtn9]->w() + kDeltaX;
+}
+
+void setupBack9Btns( int &col, int &row ) {
+	int num = kBtn10;
+	vbtn.push_back(new Fl_Button(col,row, kBtnSize, kBtnSize,  "10"));  
+	vbtn[kBtn10]->callback(Button_CB, (void *)num); 
+	col += vbtn[kBtn10]->w() + kDeltaX;
+	
+	num = kBtn11; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "11"));   
+	vbtn[kBtn11]->callback(Button_CB, (void *)num); 
+	col += vbtn[kBtn11]->w();
+	col=kLeftMargin; 
+	row += vbtn[kBtn11]->h();
+	
+	num = kBtn12; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "12"));
+    vbtn[kBtn12]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn12]->w() + kDeltaX;
+		
+	num = kBtn13; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "13"));
+    vbtn[kBtn13]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn13]->w();
+	col=kLeftMargin; 
+	row += vbtn[kBtn13]->h();
+	
+	num = kBtn14; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "14"));
+    vbtn[kBtn14]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn14]->w() + kDeltaX;
+
+	num = kBtn15; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "15"));
+    vbtn[kBtn15]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn15]->w();
+	col=kLeftMargin; 
+	row += vbtn[kBtn15]->h();
+	
+	num = kBtn16; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "16"));
+    vbtn[kBtn16]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn16]->w() + kDeltaX;
+
+	num = kBtn17; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "17"));
+    vbtn[kBtn17]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn17]->w();
+	col=kLeftMargin; 
+	row += vbtn[kBtn17]->h();
+
+	num = kBtn18; 
+	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "18"));
+    vbtn[kBtn18]->callback(Button_CB, (void *)num); 
+    col += vbtn[kBtn18]->w() + kDeltaX;
+    
+	for (int i = kBtn10; i <= kBtn18; ++i)
+		vbtn[i]->hide();
+
+}
+
+void setupButtons(Fl_Window *win) {
+	Fl_Input *in;               // input preview
+	Fl_Callback *enter_cb;      // callback when user hits 'enter'
+	void *enter_data;
+	
+	int X=kLeftMargin;
+	int Y=10;
+	int W=100;
+	int H=140;
+
+	// Numeric keypad
+	int colstart = X;
+	int	col = colstart;
+	int	row = Y;
+	int num;
+    
+    num = kBtn1;
+	setupFront9Btns( col, row );
+	col = colstart;
+	row = Y;
+	num = kBtn10;
+	setupBack9Btns( col, row );
 	
 	num = kBtnT; 
 	vbtn.push_back(new Fl_Button(col,row,kBtnSize,kBtnSize,  "T")); 	
@@ -667,4 +749,3 @@ int main(int argc, char **argv) {
  
     return(Fl::run());
 }
-

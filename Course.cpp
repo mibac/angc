@@ -1,5 +1,13 @@
 #include "Course.h"
 
+#define JACK   0
+
+#if JACK
+	const string pathprefix = "/home/pi/golf/GolfCourseMap/rpigolf/holes/";
+#else
+	const string pathprefix = "/home/pi/projects/gpsdclient/holes/";
+#endif
+
 Hole::Hole() {
 }
 
@@ -49,20 +57,9 @@ void Course::readCourse() {
     ifstream fin,finlist;
     int h,n,i,j,k,t;
     double lt,lg,x1,y1,dd;
-    string pathprefix,holeprefix,flistname,orient,fn,fname;
+    string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
-    LL2UTM latlon;
-
-	bool JACK = false;
-	bool JOHN = true;
-	
-    if (JACK)
-    	pathprefix = "/home/pi/golf/GolfCourseMap/rpigolf/holes/";
-    else if (JOHN)
-    	pathprefix = "/home/pi/projects/gpsdclient/holes/";
-    else
-      cout << "Could not find holes/ directory";
-	  
+    LL2UTM latlon;	  
     	
     for (h=1;h<=maxHole;h++) {
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";

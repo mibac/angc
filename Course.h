@@ -1,3 +1,6 @@
+#ifndef COURSE_H_
+#define COURSE_H_
+
 #include <cstdio>
 #include <iostream>
 #include <iomanip>
@@ -40,3 +43,5 @@ class Course  {
     Hole hole[19];
     void readCourse();
 };
+
+#endif
