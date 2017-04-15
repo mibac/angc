@@ -1,0 +1,15 @@
+14
+H6Orientation
+H6BlackTee
+H6GoldTeeBox
+H6LeftTrap2
+H6RightTrap
+H6RightTrees3
+H6BlueTeeBox
+H6Green
+H6LeftTrees
+H6RightTrees1
+H6RightTrees4
+H6Fairway
+H6LeftTrap1
+H6RightTrees2
