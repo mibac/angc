@@ -1,9 +1,9 @@
 #include "Course.h"
 
-#define JACK   0
+#define JACK   1
 
 #if JACK
-	const string pathprefix = "/home/pi/golf/GolfCourseMap/rpigolf/holes/";
+	const string pathprefix = "/home/pi/golf/NGCHoles/";
 #else
 	const string pathprefix = "/home/pi/projects/gpsdclient/holes/";
 #endif
@@ -69,6 +69,7 @@ void Course::readCourse() {
         hole[h].featureNum=t-1;
         finlist >> orient;
         fname = holeprefix+orient +".txt";
+cout << fname << endl;
         fin.open(fname);
         fin >> n ;
         if (n!=2) {
