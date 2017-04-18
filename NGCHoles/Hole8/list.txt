@@ -1,0 +1,16 @@
+15
+H8Orientation
+H8TeeBox1
+H8TeeBox2
+H8TeeBox3
+H8Fairway1
+H8Fairway2
+H8Green
+H8Trap1
+H8Trap2
+H8RightTrees1
+H8RightTrees2
+H8RightTrees3
+H8LeftTrees1
+H8LeftTrees2
+H8Creek

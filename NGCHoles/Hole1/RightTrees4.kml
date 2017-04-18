@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>RightTrees4.kml</name>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+		<PolyStyle>
+			<fill>0</fill>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>RightTrees4</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<Polygon>
+			<tessellate>1</tessellate>
+			<outerBoundaryIs>
+				<LinearRing>
+					<coordinates>
+						-93.14349594373854,44.45458790497135,0 -93.14346494366542,44.45460380572928,0 -93.14344625085273,44.45463890794042,0 -93.14346209840787,44.45467792544379,0 -93.14346657490267,44.45470124876791,0 -93.14345085655705,44.4547307725113,0 -93.14344503413727,44.45476852107227,0 -93.14346410678857,44.45480189378822,0 -93.14347184799459,44.45488110415776,0 -93.1435025028664,44.45492221424327,0 -93.14353611809268,44.4549649522388,0 -93.14355886999657,44.45497622375044,0 -93.14359468980219,44.45497585012775,0 -93.14362516305447,44.45495667864486,0 -93.14364921796889,44.45492938936573,0 -93.14364852712819,44.45488331699581,0 -93.14361332329797,44.45485355685823,0 -93.14358631520285,44.4548248415853,0 -93.14356913014741,44.45476958518783,0 -93.1435605818057,44.45472756372857,0 -93.14355789783528,44.45467545117167,0 -93.14356402933105,44.45462203813512,0 -93.14353278263296,44.45459683058793,0 -93.14349594373854,44.45458790497135,0 
+					</coordinates>
+				</LinearRing>
+			</outerBoundaryIs>
+		</Polygon>
+	</Placemark>
+</Document>
+</kml>
