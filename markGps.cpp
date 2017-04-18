@@ -721,7 +721,7 @@ int main(int argc, char **argv) {
   //   	return 0;
   //  }
 //#endif
-    ngc = new Course(5);
+    ngc = new Course(9);
     ngc->readCourse();
     
     win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
