@@ -3,7 +3,7 @@
 #define JACK   1
 
 #if JACK
-	const string pathprefix = "/home/pi/golf/NGCHoles/";
+	const string pathprefix = "/home/pi/golf/angc/NGCHoles/";
 #else
 	const string pathprefix = "/home/pi/projects/gpsdclient/holes/";
 #endif
@@ -56,7 +56,7 @@ Course::Course(int mh) {
 void Course::readCourse() {
     ifstream fin,finlist;
     int h,n,i,j,k,t;
-    double lt,lg,x1,y1,dd;
+    double east,north,x1,y1,dd;
     string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
     LL2UTM latlon;	  
@@ -68,7 +68,7 @@ void Course::readCourse() {
         finlist >> t;
         hole[h].featureNum=t-1;
         finlist >> orient;
-        fname = holeprefix+orient +".txt";
+        fname = holeprefix+orient +"Final.txt";
 cout << fname << endl;
         fin.open(fname);
         fin >> n ;
@@ -77,11 +77,9 @@ cout << fname << endl;
             exit(0);
         }
         for (i=0;i<n;i++) {
-            fin >> lg >> lt ;
-            latlon.setLatLon(lt,lg);
-            latlon.convert2UTM();
-            hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = latlon.UTMEast;
-            hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = latlon.UTMNorth;
+            fin >> east >> north ;
+            hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = east;
+            hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
         x1 = hole[h].startOrient[1].v[0]-hole[h].startOrient[0].v[0];
         y1 = hole[h].startOrient[1].v[1]-hole[h].startOrient[0].v[1];
@@ -91,7 +89,7 @@ cout << fname << endl;
         fin.close();
         for (k=0;k<hole[h].featureNum;k++) {
             finlist >> fn;
-            fname = holeprefix + fn+"ConvexUM.txt";
+            fname = holeprefix + fn+"Final.txt";
             fin.open(fname);
             fin >> hole[h].feature[k].polyNum;
             for (j=0;j<hole[h].feature[k].polyNum;j++) {
