@@ -25,7 +25,7 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo -I/usr/
 #include <FL/Fl_Timer.H>
 #include <FL/gl.h>
 #include <FL/glu.h>
-
+#include "HoleView.hpp"
 #ifndef COURSE_H_
 #include "Course.h"
 #endif
@@ -118,102 +118,12 @@ vector<string> vMarkers;
 
 GPS myGPS;
 
-class HoleView;
 HoleView *hv;
-
 Course *ngc;
 
 // Prototypes
 void setupYardage(string s);
 string getFilename();
-
-class HoleView: public Fl_Gl_Window {
- public:
-   HoleView(int x,int y,int w,int h,const char *l):Fl_Gl_Window(x,y,w,h,l){}
-   void makeList();
-   void draw();
-};
-
-void HoleView::makeList() {
-  int h,i,k,j;
-  double x[100],y[100],scale,xscale,yscale,xcen,ycen,xtran,ytran,xsize,ysize;;
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluOrtho2D((double) 0,(double) 280,(double) 0,(double) 700);
-  glMatrixMode(GL_MODELVIEW);
-  for (h=1;h<=ngc->maxHole;h++) {
-        xsize = ngc->hole[h].xminmax.v[1]-ngc->hole[h].xminmax.v[0];
-        ysize = ngc->hole[h].yminmax.v[1]-ngc->hole[h].yminmax.v[0];
-        xscale = 280.0/xsize;
-        yscale = 700.0/ysize;
-        scale = xscale;
-        if (yscale<scale) scale = yscale;
-        xcen = scale*xsize/2;
-        ycen = scale*ysize/2;
-        xtran = 140-xcen;
-        ytran = 350-ycen;
-        glDeleteLists(h,1);
-        glNewList(h,GL_COMPILE);
-           glColor3d(153.0/255.0,1.0,153.0/255.0);
-           glBegin(GL_POLYGON);
-             glVertex2d(0,0);
-             glVertex2d(280,0);
-             glVertex2d(280,700);
-             glVertex2d(0,700);
-           glEnd();
-        for (k=0;k<ngc->hole[h].featureNum;k++) {
-            for (j=0;j<ngc->hole[h].feature[k].polyNum;j++) {
-
-/*            
-             Feature Types
-             1 TeeBox
-             2 Fairway;
-             3 Green
-             4 Bunker
-             5 Trees
-             6 Water
-             7 Cart Path
- */
-
-            switch (ngc->hole[h].feature[k].featureType) {
-                case 1:  glColor3d(76.0/255.0,155.0/255.0,0.0);  // Tee Box
-                    break;
-                case 2:  glColor3d(102.0/255.0,204.0/255.0,0.0);  // Fairway
-                   break;
-                case 3:glColor3d(0.0,204.0/255.0,0.0);    // Green
-                    break;
-                case 4: glColor3d(1.0,1.0,204.0/255.0);   // Trap
-                    break;
-                case 5: glColor3d(0.0,102.0/255.0,0.0);   // Trees
-                    break;
-                case 6: glColor3d(51.0/255.0,153.0/255.0,1.0);   // Water
-                    break;
-                case 7: glColor3d(0.3,0.3,0.3);   // Cart Path
-                    break;
-
-            }
-            glBegin(GL_POLYGON);
-              for (i=0;i<ngc->hole[h].feature[k].poly[j].vertNum;i++) {
-                x[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xminmax.v[0]);
-                y[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].yminmax.v[0]);
-                x[i] = x[i]+xtran;
-                y[i] = y[i]+ytran;
-                glVertex2d(x[i],y[i]);
-            }
-           glEnd();
-           }
-         }
-        glFlush();
-        glEndList();
-    }
-
-}
-
-void HoleView::draw() {
-    cout << "In draw:  current hole = " << currentHole << endl;
-    glCallList(currentHole);
-}
-
 
 string getHoleName() {
 	string str;
@@ -357,8 +267,8 @@ static void Button_CB(Fl_Widget *w, void *data) {
 			for (int i = kBtn1; i <= kBtn18; ++i)
 				vbtn[i]->value(0);
 			b->value(1);
-			currentHole = id+1;
-			cout << "pressed button = " << currentHole << endl;
+			hv->currentHole = id+1;
+			cout << "pressed button = " << hv->currentHole << endl;
             hv->redraw();
 			break;
 		case kBtnT:
@@ -723,23 +633,27 @@ int main(int argc, char **argv) {
 //#endif
     ngc = new Course(9);
     ngc->readCourse();
-    
+    int x,y;
+    cout << "Enter width and height of hole window" << endl;
+    cout << "280<= width<=470  and 400<= height <= 700" << endl;
+    cin >>x >> y ;
     win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
     win->begin();
-    hv = new HoleView(10,40,280,700,0);
+    hv = new HoleView(10,50,x,y,0);
     my_input = new Fl_Input(10,10,274,30,"");
-	setupButtons(win);
+   	setupButtons(win);
     win->end();
  
     win->resizable(win);
     win->show();
-    currentHole = 1;
+    hv->currentHole = 1;
     hv->make_current();
+    hv->initHoleWindow(x,y,ngc);
     hv->makeList();
     hv->show();
     hv->draw();
 #if USEGPS    
-// from howto-add_fd_popen()
+ //from howto-add_fd_popen()
   if ( ( G_fp = popen(SIMPLEGPS_CMD, "r") ) == NULL ) {	// start the external unix command
     perror("popen failed");
     return(1);
