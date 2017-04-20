@@ -28,7 +28,7 @@ class Hole {
     Hole();
     int featureNum;
     Feature feature[30];
-    Vector startOrient[2],currentOrient[2],currentPoint;
+    Vector startOrient[2],currentOrient[2],currentPoint,rotCurrentPoint;
     Vector startUnit,currentUnit;
     Vector xminmax,yminmax;
     void findMinMax();
