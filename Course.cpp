@@ -1,5 +1,4 @@
 #include "Course.h"
-
 #define JACK   1
 
 #if JACK
@@ -28,7 +27,7 @@ void Hole::rotateHoleToOrientation() {
              }
          }
     }
-
+    rotCurrentPoint = rotatePoint(currentPoint,currentUnit);
 }
 
 void Hole::findMinMax() {
@@ -40,10 +39,12 @@ void Hole::findMinMax() {
     for (k=0;k<featureNum;k++) {
         for (j=0;j<feature[k].polyNum;j++) {
             for (i=0;i<feature[k].poly[j].vertNum;i++) {
+              if (feature[k].poly[j].rot[i].v[1]>rotCurrentPoint.v[1]-20) {
                 if (feature[k].poly[j].rot[i].v[0]<xminmax.v[0]) xminmax.v[0]=feature[k].poly[j].rot[i].v[0];
                 if (feature[k].poly[j].rot[i].v[0]>xminmax.v[1]) xminmax.v[1]=feature[k].poly[j].rot[i].v[0];
                 if (feature[k].poly[j].rot[i].v[1]<yminmax.v[0]) yminmax.v[0]=feature[k].poly[j].rot[i].v[1];
                 if (feature[k].poly[j].rot[i].v[1]>yminmax.v[1]) yminmax.v[1]=feature[k].poly[j].rot[i].v[1];
+               }
             }
         }
     }
@@ -56,7 +57,7 @@ Course::Course(int mh) {
 void Course::readCourse() {
     ifstream fin,finlist;
     int h,n,i,j,k,t;
-    double east,north,x1,y1,dd;
+    double walk,east,north,x1,y1,dd;
     string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
     LL2UTM latlon;	  
@@ -69,7 +70,6 @@ void Course::readCourse() {
         hole[h].featureNum=t-1;
         finlist >> orient;
         fname = holeprefix+orient +"Final.txt";
-cout << fname << endl;
         fin.open(fname);
         fin >> n ;
         if (n!=2) {
@@ -81,11 +81,10 @@ cout << fname << endl;
             hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = east;
             hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
-        x1 = hole[h].startOrient[1].v[0]-hole[h].startOrient[0].v[0];
-        y1 = hole[h].startOrient[1].v[1]-hole[h].startOrient[0].v[1];
-        dd = sqrt(x1*x1+y1*y1);
-        hole[h].startUnit.v[0] = hole[h].currentUnit.v[0] = x1/dd;
-        hole[h].startUnit.v[1] = hole[h].currentUnit.v[1] = y1/dd;
+        walk = 0.0;
+        if (h==3) walk = 0.75;
+        hole[h].currentPoint.v[0] = (1-walk)*hole[h].startOrient[0].v[0]+walk*hole[h].startOrient[1].v[0];
+        hole[h].currentPoint.v[1] = (1-walk)*hole[h].startOrient[0].v[1]+walk*hole[h].startOrient[1].v[1];
         fin.close();
         for (k=0;k<hole[h].featureNum;k++) {
             finlist >> fn;
@@ -101,8 +100,6 @@ cout << fname << endl;
 
             fin.close();
         }
-       hole[h].rotateHoleToOrientation();
-       hole[h].findMinMax();
        finlist.close();
     }
 
