@@ -1,11 +1,7 @@
 #include "Course.h"
 #define JACK   1
 
-#if JACK
-	const string pathprefix = "/home/pi/golf/angc/NGCHoles/";
-#else
-	const string pathprefix = "/home/pi/projects/gpsdclient/holes/";
-#endif
+const string pathprefix = "/home/pi/golf/angc/NGCHoles/";
 
 Hole::Hole() {
 }
