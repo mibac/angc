@@ -631,7 +631,7 @@ int main(int argc, char **argv) {
   //   	return 0;
   //  }
 //#endif
-    ngc = new Course(9);
+    ngc = new Course(18);
     ngc->readCourse();
     int x,y;
     cout << "Enter width and height of hole window" << endl;
