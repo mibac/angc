@@ -79,7 +79,7 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 using namespace std;
 
 // Conditionals
-#define USEGPS 1
+#define USEGPS 0
 
 // GLOBALS
 const int WAITING_TIME = 5000000;
@@ -330,6 +330,7 @@ string getFilename();
 // line of data Note: FL_SOCKET as 1st argument is used to fix a compiler
 // error(!) on Windows 64-bit. Unfortunately we need this in FLTK 1.3 -should
 // hopefully be fixed in 1.4 with a better solution.
+#if USEGPS
 void HandleFD(FL_SOCKET fd, void *data) {
   char s[1024];
   string str;
@@ -344,6 +345,7 @@ void HandleFD(FL_SOCKET fd, void *data) {
   nowvGPGGAsz = vGPGGA.size();
   // updateDistanceFromMarkerUTM(str, currentRefMarker);
 }
+#endif
 
 void IdleCallback(void *pData) {
   int n = atoi(in->value());
@@ -362,13 +364,11 @@ int main(int argc, char **argv) {
   //#endif
   const int kBoxSize = 80;
 
-  ngc = new Course(9);
+  ngc = new Course(18);
   ngc->readCourse();
 
-  int x, y;
-  cout << "Enter width and height of hole window" << endl;
-  cout << "280<= width<=470  and 400<= height <= 700" << endl;
-  cin >> x >> y;
+  int x = 480;
+  int y = 666;
   win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
   win->begin();
   hv = new HoleView(0, 0, x, y, 0);
