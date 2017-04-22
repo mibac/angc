@@ -1,0 +1,16 @@
+15
+H10Orientation
+H10TeeBox1
+H10TeeBox2
+H10TeeBox3
+H10Fairway1
+H10Fairway2
+H10Green
+H10Trap1
+H10Trap2
+H10Trees1
+H10Trees2
+H10Trees4
+H10Trees3
+H10Trees5
+H10Creek

@@ -1,4 +1,4 @@
-13
+15
 H4Orientation
 H4Fairway
 H4TeeBox1
@@ -10,5 +10,7 @@ H4Trap3
 H4Trap4
 H4Trap5
 H4Trap6
+H4RightTrees1
+H4RightTrees2
 H4Water
 H4Green
