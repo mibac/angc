@@ -371,7 +371,7 @@ int main(int argc, char **argv) {
   cin >> x >> y;
   win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
   win->begin();
-  hv = new HoleView(10, 50, x, y, 0);
+  hv = new HoleView(0, 0, x, y, 0);
 
   boxYardage = new Fl_Box(FL_FRAME_BOX, 4, 676, kBoxSize * 2, kBoxSize, 0);
   boxYardage->labeltype(FL_NORMAL_LABEL);
