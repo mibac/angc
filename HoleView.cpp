@@ -18,6 +18,7 @@ void HoleView::initHoleWindow(int x,int y,Course *course) {
 
 void HoleView::makeCurrentPointList(int h) {
      double xp,yp;
+        ngc->hole[h].computeYardageToHole();
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
         glDeleteLists(h+100,1);
         glNewList(h+100,GL_COMPILE);
@@ -30,6 +31,9 @@ void HoleView::makeCurrentPointList(int h) {
           yp += 2*ngc->hole[h].ytran;
           glVertex2d(xp,yp);
         glEnd();
+          glColor3f(0.0,0.0,0.0);
+        gl_font(FL_HELVETICA_BOLD,48);
+        gl_draw(ngc->hole[h].currentYardageStr,(float) (xp-120),(float)(yp));
         glFlush();
         glEndList();
 }
@@ -55,7 +59,6 @@ void HoleView::makeCurrentHoleList(int h) {
       if (yscale<ngc->hole[h].scale) ngc->hole[h].scale = yscale;
       xcen = ngc->hole[h].scale*xsize/2.0;
       ycen = ngc->hole[h].scale*ysize/2.0;
-      //cout << "hole " << h << " " << xscale << " " << yscale  << endl;
       ngc->hole[h].xtran = xres/2.0-xcen;
       ngc->hole[h].ytran = yres/2.0-ycen;
       //cout << xsize << " " << ysize << " " << xcen << " " << ycen << " " << xtran << " " << ytran << endl;
