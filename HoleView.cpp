@@ -22,7 +22,7 @@ void HoleView::makeCurrentPointList(int h) {
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
         glDeleteLists(h+100,1);
         glNewList(h+100,GL_COMPILE);
-        glPointSize(6.0);
+        glPointSize(9.0);
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
           xp = ngc->hole[h].scale*(ngc->hole[h].rotCurrentPoint.v[0]-ngc->hole[h].xminmax.v[0]);
@@ -33,7 +33,7 @@ void HoleView::makeCurrentPointList(int h) {
         glEnd();
           glColor3f(0.0,0.0,0.0);
         gl_font(FL_HELVETICA_BOLD,48);
-        gl_draw(ngc->hole[h].currentYardageStr,(float) (xp-120),(float)(yp));
+        gl_draw(ngc->hole[h].currentYardageStr,(float) 10.0,(float)(yp));
         glFlush();
         glEndList();
 }
