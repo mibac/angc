@@ -36,6 +36,9 @@ class Hole {
     Vector  rotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
     void setCurrentPoint(double w);
+    void computeYardageToHole();
+    int yardageToHole;
+    const char* currentYardageStr;
 };
 
 class Course  {
