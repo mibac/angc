@@ -6,11 +6,14 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 -D_LARGEFILE_SOURCE -D_LARGEFILE64 -std=c++11 -lfltk -lgps
 */
 
-// Demonstrate how to use Fl_Input in a touchscreen application -erco 08/25/06
+// Demonstrate how to use Fl_Output in a touchscreen application -erco 08/25/06
 
-#include <unistd.h>
-#include <cmath>
-#include <fstream>
+/*   CHANGE LOG
+        4/17/17 JE: revised nmea2DecimalDegrees. Checked with Google Maps
+                                added functions to show nmea, decimal degrees,
+   and UTM in file output.
+
+*/
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,7 +25,7 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Gl_Window.H>
-#include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>
 #include <FL/Fl_Timer.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
@@ -40,16 +43,16 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 #include "gps.h"
 #endif
 
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 #ifndef _GPSD_GPSMM_H_
 #include "libgpsmm.h"
 #endif
 
 #ifndef C2UTM_hpp
 #include "C2UTM.hpp"
-#endif
-
-#ifndef CHOLESPOPUP_H
-#include "CHolesPopup.h"
 #endif
 
 #ifndef UTILS_H
@@ -94,15 +97,10 @@ int currentHole = 1;
 float refMarkf = 0.0;
 float nowMarkf = 0.0;
 
-struct LatLng {
-  double lat;
-  double lng;
-};
-
 LatLng currentRefMarker;
 
 Fl_Window *win;
-Fl_Input *my_input;
+Fl_Output *my_input;
 Fl_Box *boxYardage;
 Fl_Button *btnMark;
 Fl_Button *btnWrite;
@@ -119,7 +117,7 @@ string strDistFromMark("0");
 vector<string> vGPGGA;
 vector<string> vMarkers;
 
-GPS myGPS;
+CLatLng cll;
 
 HoleView *hv;
 Course *ngc;
@@ -382,12 +380,19 @@ int main(int argc, char **argv) {
   boxYardage->color(FL_YELLOW);
   //    updateYardage(strDistFromMark);
 
-  in = new MyInput(170, 676, 100, 30);
-  in->value("-click here-");
+  in = new MyInput(170, 676, 100, kBoxSize);
+  in->align(FL_ALIGN_CENTER);
+  in->value(" Hole");
+  in->textfont(1);
+  in->textsize(36);
+  in->color(FL_GRAY);
+  in->cursor_color(FL_GRAY);
 
-  markBtn = new CMarkBtn(280, 676, 80, 40, "Mark");
-  writeMarkBtn = new CWriteMarkBtn(280, 720, 80, 40, "Write\nMark");
-  writeAllBtn = new CWriteAllBtn(366, 676, 80, 40, "Write\nAll");
+  markBtn = new CMarkBtn(280, 676, kBoxSize, kBoxSize / 2, "Mark");
+  writeMarkBtn =
+      new CWriteMarkBtn(280, 720, kBoxSize, kBoxSize / 2, "Write\nMark");
+  writeAllBtn =
+      new CWriteAllBtn(366, 676, kBoxSize, kBoxSize / 2, "Write\nAll");
 
   win->end();
 

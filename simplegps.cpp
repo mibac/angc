@@ -41,8 +41,7 @@ int main(void)
 				str = buffer;
                 // We print the NMEA sentences!
 //                cout << "***********" << endl;
-                
-                
+
                 size_t found = str.find("GPGGA");
   				if (found != string::npos)
                 	cout << str << endl;            

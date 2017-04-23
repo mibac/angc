@@ -1,4 +1,9 @@
+#ifndef GPS_H
 #include "gps.h"
+#endif
+
+//https://github.com/manromao/NMEA-Parser/tree/master/GPS
+
 #include <assert.h>
 #include <stdlib.h>
 #include <sstream>

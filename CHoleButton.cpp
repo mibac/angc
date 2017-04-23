@@ -2,9 +2,17 @@
 #include "CHoleButton.h"
 #endif
 
+#include <string>
+using namespace std;
+
 // Called when user finishes entering data with numeric keypad
 void MyInput::SetNumPadValue_CB2() {
-  value(numpad->value());  // pass value from numpad to our input
+  string str(numpad->value());
+  if (str.size() == 1)
+    str = "    " + str;
+  else
+    str = "   " + str;
+  value(str.c_str());  // pass value from numpad to our input
   numpad->hide();          // hide numpad
 }
 
@@ -26,18 +34,19 @@ int MyInput::handle(int e) {
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
         if (!numpad) numpad = new MyNumPad(0, 0, 72*3+12, 72*6+4);
-        numpad->label("Hole");
+        // numpad->label("Hole");
         numpad->SetEnterCallback(SetNumPadValue_CB, (void *)this);
         numpad->position(parent()->x(), parent()->y());
+        numpad->clear_border();
         numpad->clear();
         numpad->show();
       }
       break;
   }
-  return (Fl_Input::handle(e) ? 1 : ret);
+  return (Fl_Output::handle(e) ? 1 : ret);
 }
 
 MyInput::MyInput(int X, int Y, int W, int H, const char *L)
-    : Fl_Input(X, Y, W, H, L) {
+    : Fl_Output(X, Y, W, H, L) {
   numpad = 0;
 }

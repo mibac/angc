@@ -1,6 +1,8 @@
 #ifndef GPS_H
 #define GPS_H
 
+//https://github.com/manromao/NMEA-Parser/tree/master/GPS
+
 #include <iostream>
 #include <string>
 #include <vector>

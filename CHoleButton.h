@@ -3,14 +3,14 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>
 #include <FL/Fl_Window.H>
 
 #ifndef CHOLESPOPUP_H
 #include "CHolesPopup.h"
 #endif
 
-class MyInput : public Fl_Input {
+class MyInput : public Fl_Output {
   MyNumPad *numpad;  // local instance of numeric keypad widget
 
   // Called when user finishes entering data with numeric keypad
