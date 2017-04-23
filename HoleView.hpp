@@ -12,7 +12,8 @@ class HoleView: public Fl_Gl_Window {
  public:
    HoleView(int x,int y,int w,int h,const char *l):Fl_Gl_Window(x,y,w,h,l){}
    void makeList();
-   void makeCurrentList(int h);
+   void makeCurrentHoleList(int h);
+   void makeCurrentPointList(int h);
    void initHoleWindow(int x, int y,Course *course);
    void draw();
 //   int xres,yres,currentHole;
