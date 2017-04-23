@@ -46,6 +46,13 @@ void Hole::findMinMax() {
     }
 }
 
+void Hole::setCurrentPoint(double w) {
+   walk = walk+w;
+   if (walk>1.0) walk = 0.0;
+   currentPoint.v[0] = (1-walk)*startOrient[0].v[0] + walk*startOrient[1].v[0];
+   currentPoint.v[1] = (1-walk)*startOrient[0].v[1] + walk*startOrient[1].v[1];
+}
+
 Course::Course(int mh) {
   maxHole = mh;
 }
@@ -78,7 +85,7 @@ void Course::readCourse() {
             hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
         walk = 0.0;
-// if (h==3) walk = 0.75;
+ if (h==3) walk = 0.75;
         hole[h].currentPoint.v[0] = (1-walk)*hole[h].startOrient[0].v[0]+walk*hole[h].startOrient[1].v[0];
         hole[h].currentPoint.v[1] = (1-walk)*hole[h].startOrient[0].v[1]+walk*hole[h].startOrient[1].v[1];
         fin.close();
