@@ -16,14 +16,32 @@ void HoleView::initHoleWindow(int x,int y,Course *course) {
      glMatrixMode(GL_MODELVIEW);
 }
 
-void HoleView::makeCurrentList(int h) {
+void HoleView::makeCurrentPointList(int h) {
+     double xp,yp;
+        ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
+        glDeleteLists(h+100,1);
+        glNewList(h+100,GL_COMPILE);
+        glPointSize(6.0);
+        glBegin(GL_POINTS);
+          glColor3f(1.0,0.0,0.0);
+          xp = ngc->hole[h].scale*(ngc->hole[h].rotCurrentPoint.v[0]-ngc->hole[h].xminmax.v[0]);
+          yp = ngc->hole[h].scale*(ngc->hole[h].rotCurrentPoint.v[1]-ngc->hole[h].yminmax.v[0]);
+          xp += ngc->hole[h].xtran;
+          yp += 2*ngc->hole[h].ytran;
+          glVertex2d(xp,yp);
+        glEnd();
+        glFlush();
+        glEndList();
+}
+
+void HoleView::makeCurrentHoleList(int h) {
      int i,k,j;
-     double x[100],y[100],scale,xscale,yscale,xcen,ycen;
-     double xtran,ytran,yt,xt,xsize,ysize;
+     double x[100],y[100],xscale,yscale,xcen,ycen;
+     double yt,xt,xsize,ysize;
      double x1,y1,dd,xp,yp;
 
-      x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].currentPoint.v[0];
-      y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].currentPoint.v[1];
+      x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].startOrient[0].v[0];
+      y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].startOrient[0].v[1];
       dd = sqrt(x1*x1+y1*y1);
       ngc->hole[h].currentUnit.v[0] = x1/dd;
       ngc->hole[h].currentUnit.v[1] = y1/dd;
@@ -33,14 +51,14 @@ void HoleView::makeCurrentList(int h) {
       ysize = ngc->hole[h].yminmax.v[1]-ngc->hole[h].yminmax.v[0];
       xscale = xres/xsize;
       yscale = yres/ysize;
-      scale = xscale;
-      if (yscale<scale) scale = yscale;
-      xcen = scale*xsize/2.0;
-      ycen = scale*ysize/2.0;
-      cout << "hole " << h << " " << xscale << " " << yscale  << endl;
-      xtran = xres/2.0-xcen;
-      ytran = yres/2.0-ycen;
-      cout << xsize << " " << ysize << " " << xcen << " " << ycen << " " << xtran << " " << ytran << endl;
+      ngc->hole[h].scale = xscale;
+      if (yscale<ngc->hole[h].scale) ngc->hole[h].scale = yscale;
+      xcen = ngc->hole[h].scale*xsize/2.0;
+      ycen = ngc->hole[h].scale*ysize/2.0;
+      //cout << "hole " << h << " " << xscale << " " << yscale  << endl;
+      ngc->hole[h].xtran = xres/2.0-xcen;
+      ngc->hole[h].ytran = yres/2.0-ycen;
+      //cout << xsize << " " << ysize << " " << xcen << " " << ycen << " " << xtran << " " << ytran << endl;
         glDeleteLists(h,1);
         glNewList(h,GL_COMPILE);
            glColor3d(153.0/255.0,1.0,153.0/255.0);
@@ -71,23 +89,15 @@ void HoleView::makeCurrentList(int h) {
             }
             glBegin(GL_POLYGON);
               for (i=0;i<ngc->hole[h].feature[k].poly[j].vertNum;i++) {
-                x[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xminmax.v[0]);
-                y[i] = scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].yminmax.v[0]);
-                x[i] = x[i]+xtran;
-                y[i] = y[i]+2*ytran;
+                x[i] = ngc->hole[h].scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xminmax.v[0]);
+                y[i] = ngc->hole[h].scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].yminmax.v[0]);
+                x[i] = x[i]+ngc->hole[h].xtran;
+                y[i] = y[i]+2*ngc->hole[h].ytran;
                 glVertex2d(x[i],y[i]);
             }
            glEnd();
            }
          }
-        glPointSize(9.0);
-        glBegin(GL_POINTS);
-          glColor3f(1.0,0.0,0.0);
-          xp = scale*(ngc->hole[h].rotCurrentPoint.v[0]-ngc->hole[h].xminmax.v[0]);
-          yp = scale*(ngc->hole[h].rotCurrentPoint.v[1]-ngc->hole[h].yminmax.v[0]);
-          xp += xtran;
-          yp += 2*ytran;
-          glVertex2d(xp,yp);
         glEnd();
         glFlush();
         glEndList();
@@ -95,10 +105,14 @@ void HoleView::makeCurrentList(int h) {
 
 void HoleView::makeList() {
      int h;
-     for (h=1;h<=ngc->maxHole;h++) makeCurrentList(h);
+     for (h=1;h<=ngc->maxHole;h++) {
+         makeCurrentHoleList(h);
+         makeCurrentPointList(h);
+      }
 }
 
 void HoleView::draw() {
-    cout << "In draw:  current hole = " << currentHole << endl;
+    makeCurrentPointList(currentHole);
     glCallList(currentHole);
+    glCallList(currentHole+100);
 }
