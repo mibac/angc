@@ -60,7 +60,7 @@ void Hole::computeYardageToHole() {
 
    x = startOrient[1].v[0]-currentPoint.v[0];
    y = startOrient[1].v[1]-currentPoint.v[1];
-   yardageToHole  = (int) 1.0936*sqrt(x*x+y*y);
+   yardageToHole  = (int) (1.0936*sqrt(x*x+y*y));
    s  = to_string(yardageToHole);
    currentYardageStr = s.c_str();
 }
