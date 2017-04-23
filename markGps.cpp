@@ -344,9 +344,12 @@ void HandleFD(FL_SOCKET fd, void *data) {
   // updateDistanceFromMarkerUTM(str, currentRefMarker);
 }
 #endif
-
 void IdleCallback(void *pData) {
   int n = atoi(in->value());
+  if (currentHole ==n) {
+     hv->ngc->hole[currentHole].setCurrentPoint(0.001);
+     hv->redraw();
+  }
   if (currentHole != n) {
     hv->redraw();
     currentHole = n;
@@ -364,13 +367,12 @@ int main(int argc, char **argv) {
 
   ngc = new Course(18);
   ngc->readCourse();
-
   int x = 480;
   int y = 666;
   win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
   win->begin();
   hv = new HoleView(0, 0, x, y, 0);
-
+  hv->mode(FL_DOUBLE);
   boxYardage = new Fl_Box(FL_FRAME_BOX, 4, 676, kBoxSize * 2, kBoxSize, 0);
   boxYardage->labeltype(FL_NORMAL_LABEL);
   boxYardage->align(FL_ALIGN_CENTER);
