@@ -31,9 +31,11 @@ class Hole {
     Vector startOrient[2],currentOrient[2],currentPoint,rotCurrentPoint;
     Vector startUnit,currentUnit;
     Vector xminmax,yminmax;
+    double walk,scale, xtran,ytran;
     void findMinMax();
     Vector  rotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
+    void setCurrentPoint(double w);
 };
 
 class Course  {
