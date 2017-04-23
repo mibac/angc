@@ -1,6 +1,0 @@
-5
-Hole2_Fairway
-Hole2_Green	
-Hole2_TeeBox
-Hole2_LeftTrap
-Hole2_RightTrap
