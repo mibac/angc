@@ -346,6 +346,7 @@ void HandleFD(FL_SOCKET fd, void *data) {
 #endif
 void IdleCallback(void *pData) {
   int n = atoi(in->value());
+  if (n==0) n=1;
   if (currentHole ==n) {
      hv->ngc->hole[currentHole].setCurrentPoint(0.001);
      hv->redraw();
