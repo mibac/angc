@@ -36,10 +36,9 @@ int MyInput::handle(int e) {
     case FL_RELEASE:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
-        if (!numpad) numpad = new MyNumPad(0, 0, 72*3+12, 72*6+4);
-        // numpad->label("Hole");
+        if (!numpad) numpad = new MyNumPad(0, 0, 72*3+8, 72*6+4);
         numpad->SetEnterCallback(SetNumPadValue_CB, (void *)this);
-        numpad->position(parent()->x(), parent()->y());
+        numpad->position(parent()->x()+112, parent()->y()+230);
         numpad->clear_border();
         numpad->clear();
         numpad->show();
