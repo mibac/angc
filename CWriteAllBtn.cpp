@@ -6,6 +6,10 @@
 #include "utils.h"
 #endif
 
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 using namespace std;
 
 void CWriteAllBtn::setBtnAttributes(Fl_Button *b) {
@@ -14,9 +18,10 @@ void CWriteAllBtn::setBtnAttributes(Fl_Button *b) {
   b->color(FL_WHITE);
   b->down_color(FL_YELLOW);
 }
-  void CWriteAllBtn::Button_CB() {
-    DEBUG_LOG << "Write All button hit" << endl;
-  }
+void CWriteAllBtn::Button_CB() {
+  cll.writeAll();
+  DEBUG_LOG << "Write All button hit" << endl;
+}
 
 // Handle numeric keypad buttons pressed
 void CWriteAllBtn::staticButton_CB(Fl_Widget *, void *data) {
@@ -26,7 +31,6 @@ void CWriteAllBtn::staticButton_CB(Fl_Widget *, void *data) {
 
 CWriteAllBtn::CWriteAllBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-
   setBtnAttributes(this);
   callback(staticButton_CB, (void *)this);
 }

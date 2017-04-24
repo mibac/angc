@@ -6,7 +6,13 @@
 #include "utils.h"
 #endif
 
-using namespace std;
+#ifndef CHOLEBUTTON_H
+#include "CHoleButton.h"
+#endif
+
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
 
 void CWriteMarkBtn::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
@@ -15,7 +21,10 @@ void CWriteMarkBtn::setBtnAttributes(Fl_Button *b) {
   b->down_color(FL_YELLOW);
 }
   void CWriteMarkBtn::Button_CB() {
-    DEBUG_LOG << "Write Mark button hit" << endl;
+    string s = MyInput::holeName;
+    DEBUG_LOG << "Write Mark button hit. Hole = " << MyInput::holeName << endl;
+    s = s + " E,N:\t";
+    cll.writeMark(s);
   }
 
 // Handle numeric keypad buttons pressed

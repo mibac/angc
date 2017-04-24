@@ -5,9 +5,12 @@
 #include <string>
 using namespace std;
 
+string MyInput::holeName;
+
 // Called when user finishes entering data with numeric keypad
 void MyInput::SetNumPadValue_CB2() {
   string str(numpad->value());
+  MyInput::holeName = str;
   if (str.size() == 1)
     str = "    " + str;
   else

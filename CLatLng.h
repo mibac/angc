@@ -5,13 +5,13 @@
 #include "gps.h"
 #endif
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include <FL/Fl_Input.H>
+#include <FL/Fl_Box.H>
 
 using namespace std;
 
@@ -22,9 +22,9 @@ struct LatLng {
     lat = 0.0;
     lng = 0.0;
   }
-  void setMark( const LatLng& ll) {
-      lat = ll.lat;
-      lng = ll.lng;
+  void setMark(const LatLng &ll) {
+    lat = ll.lat;
+    lng = ll.lng;
   }
 };
 
@@ -37,7 +37,6 @@ struct DDLatLng {
   }
 };
 
-
 struct UtmLatLng {
   double lat;
   double lng;
@@ -45,20 +44,19 @@ struct UtmLatLng {
     lat = 0.0;
     lng = 0.0;
   }
-  void setMark( const UtmLatLng& ll) {
-      lat = ll.lat;
-      lng = ll.lng;
+  void setMark(const UtmLatLng &ll) {
+    lat = ll.lat;
+    lng = ll.lng;
   }
 };
 
-extern ostream& operator<< (ostream& strm, const LatLng& ll );
-extern ostream& operator<< (ostream& strm, const DDLatLng& dll );
-extern ostream& operator<< (ostream& strm, const UtmLatLng& ull );
+extern ostream &operator<<(ostream &strm, const LatLng &ll);
+extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
+extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
 extern GPS myGPS;
 
 class CLatLng {
  public:
-
   CLatLng();
 
   ~CLatLng() = default;
@@ -71,16 +69,15 @@ class CLatLng {
   CLatLng(const char *cstr);
   CLatLng(const LatLng);
 
-  UtmLatLng getNowMarkUTM();
-
-  void setRefMark(Fl_Input *input);
+  bool isgpsup();
+  void setRefMark();
 
   // Utility functions
   void updateLatLng(const string &s);
-  double updateYardage();
+  void updateDistanceFromMarkerUTM(Fl_Box *box);
 
-  void writeMark(const string &fname, Fl_Input *input);
-  void writeAll(Fl_Input *input);
+  void writeMark(const string &s);
+  void writeAll();
 
   // Variables
   vector<string> vGGA;         // the complete round of nmea GPGGA sentences
@@ -90,16 +87,19 @@ class CLatLng {
   vector<UtmLatLng> vUTM;
 
  private:
- const size_t kDataPts = 10; // number of data points to average
+  const size_t kDataPts = 10;  // number of data points to average
 
-  LatLng refLLMark;
-  LatLng nowLLMark;
-  UtmLatLng refUtmMark;
-  UtmLatLng nowUtmMark;
+  UtmLatLng getNowMarkUTM();
 
   double NMEA2DecimalDegrees(const double nmea);
   DDLatLng NMEA2DecimalDegrees(const LatLng &LL);
   UtmLatLng NMEA2UTM(const LatLng &LL);
 };
+
+extern CLatLng cll;
+extern UtmLatLng lastMark;
+extern UtmLatLng nowMark;
+extern ofstream fileMark;
+extern ofstream fileAll;
 
 #endif  // CLATLNG_H

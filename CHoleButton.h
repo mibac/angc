@@ -10,6 +10,9 @@
 #include "CHolesPopup.h"
 #endif
 
+#include <string>
+using namespace std;
+
 class MyInput : public Fl_Output {
   MyNumPad *numpad;  // local instance of numeric keypad widget
 
@@ -22,7 +25,9 @@ class MyInput : public Fl_Output {
   int handle(int e);
 
  public:
+  static string holeName;
+
   MyInput(int X, int Y, int W, int H, const char *L = 0);
 };
 
-#endif //CHOLEBUTTON_H
+#endif  // CHOLEBUTTON_H

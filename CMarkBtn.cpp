@@ -2,9 +2,14 @@
 #include "CMarkBtn.h"
 #endif
 
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 #ifndef UTILS_H
 #include "utils.h"
 #endif
+
 
 using namespace std;
 
@@ -15,7 +20,8 @@ void CMarkBtn::setBtnAttributes(Fl_Button *b) {
   b->down_color(FL_YELLOW);
 }
   void CMarkBtn::Button_CB() {
-    DEBUG_LOG << "Mark button hit" << endl;
+    cll.setRefMark();
+    DEBUG_LOG << "Mark button hit:" <<  endl;
   }
 
 // Handle numeric keypad buttons pressed

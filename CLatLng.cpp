@@ -2,31 +2,49 @@
 #include "CLatLng.h"
 #endif
 
-#ifndef C2UTM_hpp
-#include "C2UTM.hpp"
-#endif
-
+#include <unistd.h>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 
+#ifndef C2UTM_hpp
+#include "C2UTM.hpp"
+#endif
+
+#ifndef _GPSD_GPSMM_H_
+#include "libgpsmm.h"
+#endif
+
+#ifndef UTILS_H
+#include "utils.h"
+#endif
+
+#define TEST_SINGLE_UTM 1
+
 const int kPrecision = 9;
+const int RETRY_TIME = 5;
+const int ONE_SECOND = 1000000;
 
 GPS myGPS;
+CLatLng cll;
+UtmLatLng lastMark;
+UtmLatLng nowMark;
+ofstream fileMark("Markers.txt");
+ofstream fileAll("WalkTheCourse.txt");
 
-ostream& operator<< (ostream& strm, const LatLng& ll ) {
-    strm << ll.lat << ", " << ll.lng << endl;
-    return strm;
+ostream& operator<<(ostream& strm, const LatLng& ll) {
+  strm << ll.lat << ", " << ll.lng << endl;
+  return strm;
 }
 
-ostream& operator<< (ostream& strm, const DDLatLng& dll ) {
-    strm << dll.lat << ", " << dll.lng << endl;
-    return strm;
+ostream& operator<<(ostream& strm, const DDLatLng& dll) {
+  strm << dll.lat << ", " << dll.lng << endl;
+  return strm;
 }
 
-ostream& operator<< (ostream& strm, const UtmLatLng& ull ) {
-    strm << ull.lat << ", " << ull.lng << endl;
-    return strm;
+ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
+  strm << ull.lat << ", " << ull.lng << endl;
+  return strm;
 }
 
 CLatLng::CLatLng() {
@@ -39,8 +57,25 @@ CLatLng::CLatLng() {
 }
 
 CLatLng::CLatLng(const string s) {}
-CLatLng::CLatLng(const char *cstr) {}
+CLatLng::CLatLng(const char* cstr) {}
 CLatLng::CLatLng(const LatLng) {}
+
+bool CLatLng::isgpsup() {
+  bool ok = false;
+  gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
+
+  for (int i = 0; i < 5; ++i) {
+    if (gps_rec.stream(WATCH_ENABLE | WATCH_NMEA) == NULL) {
+      cout << "No GPSD running. Retry to connect in " << RETRY_TIME
+           << " seconds." << endl;
+      usleep(RETRY_TIME * ONE_SECOND);
+      continue;  // It will try to connect to gpsd again
+    } else {
+      ok = true;
+    }
+  }
+  return ok;
+}
 
 double CLatLng::NMEA2DecimalDegrees(const double nmea) {
   double deg = double(int(nmea / 100));
@@ -51,14 +86,14 @@ double CLatLng::NMEA2DecimalDegrees(const double nmea) {
   return dec_deg;
 }
 
-DDLatLng CLatLng::NMEA2DecimalDegrees(const LatLng &LL) {
+DDLatLng CLatLng::NMEA2DecimalDegrees(const LatLng& LL) {
   DDLatLng dll;
   dll.lat = NMEA2DecimalDegrees(LL.lat);
   dll.lng = NMEA2DecimalDegrees(LL.lng);
   return dll;
 }
 
-UtmLatLng CLatLng::NMEA2UTM(const LatLng &LL) {
+UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
   LL2UTM latlon;  //	JACK C2UTM
   UtmLatLng ull;
 
@@ -71,12 +106,13 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng &LL) {
   return ull;
 }
 
-void CLatLng::updateLatLng(const string &s) {
+void CLatLng::updateLatLng(const string& s) {
   LatLng ll;
   DDLatLng dll;
   UtmLatLng ull;
 
   if (myGPS.isValidGGA(s)) {
+      cout << s << endl;
     vGGA.push_back(s);
     myGPS.setValuesGGA(s);
 
@@ -89,21 +125,17 @@ void CLatLng::updateLatLng(const string &s) {
 
     ull = NMEA2UTM(ll);
     vUTM.push_back(ull);
+    nowMark = ull;
   }
 }
 
-double CLatLng::updateYardage() {
-  nowUtmMark = getNowMarkUTM();
+#if TEST_SINGLE_UTM
+void CLatLng::setRefMark() { lastMark = nowMark; }
 
-  double lat = nowUtmMark.lat - refUtmMark.lat;
-  double lng = nowUtmMark.lng - refUtmMark.lng;
-  double d = sqrt(lat * lat + lng * lng);
+UtmLatLng CLatLng::getNowMarkUTM() { return nowMark; }
 
-
-  return d *= 1.0936139;  // meters to yards
-}
-
-void CLatLng::setRefMark(Fl_Input *input) {
+#else
+void CLatLng::setRefMark() {
   LatLng ll;
   int n = std::min(vGGA.size(), kDataPts);
 
@@ -120,13 +152,7 @@ void CLatLng::setRefMark(Fl_Input *input) {
   ll.lat /= v.size();
   ll.lng /= v.size();
   vLastNmarks = v;
-
-  refLLMark.setMark(ll);
-  refUtmMark.setMark(NMEA2UTM(ll));
-
-  ostringstream oss;
-  oss << ll.lat << ", " << ll.lng << "G M " << vGGA.size() << ", " << v.size();
-  input->value(oss.str().c_str());
+  lastMark.setMark(NMEA2UTM(ll));
 }
 
 UtmLatLng CLatLng::getNowMarkUTM() {
@@ -144,63 +170,27 @@ UtmLatLng CLatLng::getNowMarkUTM() {
 
   return ull;
 }
+#endif
 
-void CLatLng::writeMark(const string &fname, Fl_Input *input) {
-  if (fname.empty()) return;
+void CLatLng::updateDistanceFromMarkerUTM(Fl_Box* box) {
+  UtmLatLng u1 = nowMark;
+  UtmLatLng u2 = lastMark;
 
-  ofstream file(fname.c_str());
+  double d = sqrt(pow(u1.lng - u2.lng, 2) + pow(u1.lat - u2.lat, 2));
+  d *= 1.0936139;  // meters to yards
 
-  file << setprecision(kPrecision);
-
-  for (auto itr : vLastNmarks) {
-    file << itr;
-  }
-
-  int n = vLastNmarks.size();
-
-  file << "---- NMEA (lat, lon) ----\t" << vLL.size() << endl;
-  for (size_t i = vLL.size() - n; i < vLL.size(); ++i)
-    file << vLL[i];
-
-  file << "---- Decimal Degrees (lat, lon) ----\t" << vDD.size() << endl;
-  for (size_t i = vDD.size() - n; i < vDD.size(); ++i)
-    file << vDD[i];
-
-  file << "---- UTM (lat, lon) ----\t" << vUTM.size() << endl;
-  for (size_t i = vUTM.size() - n; i < vUTM.size(); ++i)
-    file << vUTM[i];
-
-  file.close();
-
-  vLastNmarks.clear();
-
-  string s = fname + " written";
-  input->value(s.c_str());
+  ostringstream oss;
+  oss << (int)round(d);
+  box->label(oss.str().c_str());
 }
 
-void CLatLng::writeAll(Fl_Input *input) {
-  string fname = "WalkTheCourse.txt";
+void CLatLng::writeMark(const string &s) {
+  fileMark << setprecision(kPrecision);
+  fileMark << s << lastMark.lng << ", " << lastMark.lat << endl;
+  vLastNmarks.clear();
+}
 
-  ofstream file(fname.c_str());
-
-  file << setprecision(kPrecision);
-
-  for (auto itr : vGGA) file << itr;
-
-  file << "---- nmeaLat (lat, lon) ----" << endl;
-  for (size_t i = 0; i < vLL.size(); ++i)
-    file << vLL[i];
-
-  file << "---- Decimal Degrees (lat, lon) ----" << endl;
-  for (size_t i = 0; i < vDD.size(); ++i)
-    file << vDD[i];
-
-  file << "---- UTM (lat, lon, sz) ----" << endl;
-  for (size_t i = 0; i < vUTM.size(); ++i)
-    file << vUTM[i];
-
-  file.close();
-
-  string s = fname + " written";
-  input->value(s.c_str());
+void CLatLng::writeAll() {
+  fileAll << setprecision(kPrecision);
+  for (auto itr : vGGA) fileAll << itr;
 }
