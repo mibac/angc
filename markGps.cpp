@@ -156,17 +156,22 @@ int main(int argc, char **argv) {
 #endif
 
   const int kBoxSize = 80;
+  const int kHoleViewTop = kBoxSize + 8;
+  const int kBtnRow1Top = 0;
+  const int kBtnRow2Top = kBoxSize/2 + 4;
+
 
   ngc = new Course(18);
   ngc->readCourse();
   int x = 480;
-  int y = 666;
+//  int y = 800 - kHoleViewTop; // 712
+  int y = 674;
   win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
   win->begin();
-  hv = new HoleView(0, 0, x, y, 0);
+  hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  boxYardage = new Fl_Box(FL_FRAME_BOX, 4, 676, kBoxSize * 2, kBoxSize, 0);
+  boxYardage = new Fl_Box(FL_FRAME_BOX, 4, kBtnRow1Top, kBoxSize * 2, kBoxSize, 0);
   boxYardage->labeltype(FL_NORMAL_LABEL);
   boxYardage->align(FL_ALIGN_CENTER);
   boxYardage->labelfont(1);
@@ -174,7 +179,7 @@ int main(int argc, char **argv) {
   boxYardage->labelcolor(FL_BLACK);
   boxYardage->color(FL_YELLOW);
 
-  in = new MyInput(170, 676, 100, kBoxSize);
+  in = new MyInput(170, kBtnRow1Top, 100, kBoxSize);
   in->align(FL_ALIGN_CENTER);
   in->value(" Hole");
   in->textfont(1);
@@ -182,13 +187,13 @@ int main(int argc, char **argv) {
   in->color(FL_GRAY);
   in->cursor_color(FL_GRAY);
 
-  markBtn = new CMarkBtn(280, 676, kBoxSize, kBoxSize / 2, "Mark");
+  markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Mark");
   writeMarkBtn =
-      new CWriteMarkBtn(280, 720, kBoxSize, kBoxSize / 2, "Write\nMark");
+      new CWriteMarkBtn(280, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Write\nMark");
   writeAllBtn =
-      new CWriteAllBtn(366, 676, kBoxSize, kBoxSize / 2, "Write\nAll");
+      new CWriteAllBtn(366, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Write\nAll");
 
-  exitBtn = new CExitBtn(366, 720, kBoxSize, kBoxSize / 2, "Exit");
+  exitBtn = new CExitBtn(366, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Exit");
   exitBtn->mainwin = win;
   win->end();
 

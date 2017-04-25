@@ -38,7 +38,7 @@ int MyInput::handle(int e) {
         ret = 1;
         if (!numpad) numpad = new MyNumPad(0, 0, 72*3+8, 72*6+4);
         numpad->SetEnterCallback(SetNumPadValue_CB, (void *)this);
-        numpad->position(parent()->x()+112, parent()->y()+230);
+        numpad->position(parent()->x()+112, parent()->y()+88);
         numpad->clear_border();
         numpad->clear();
         numpad->show();
