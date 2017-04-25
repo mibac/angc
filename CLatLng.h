@@ -22,10 +22,6 @@ struct LatLng {
     lat = 0.0;
     lng = 0.0;
   }
-  void setMark(const LatLng &ll) {
-    lat = ll.lat;
-    lng = ll.lng;
-  }
 };
 
 struct DDLatLng {
@@ -43,10 +39,6 @@ struct UtmLatLng {
   UtmLatLng() {
     lat = 0.0;
     lng = 0.0;
-  }
-  void setMark(const UtmLatLng &ll) {
-    lat = ll.lat;
-    lng = ll.lng;
   }
 };
 
@@ -87,7 +79,6 @@ class CLatLng {
   vector<UtmLatLng> vUTM;
 
  private:
-  const size_t kDataPts = 10;  // number of data points to average
 
   UtmLatLng getNowMarkUTM();
 

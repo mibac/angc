@@ -19,7 +19,8 @@
 #include "utils.h"
 #endif
 
-#define TEST_SINGLE_UTM 1
+#define TEST_SINGLE_UTM 0
+const size_t kDataPts = 10;  // number of data points to average
 
 const int kPrecision = 9;
 const int RETRY_TIME = 5;
@@ -152,7 +153,7 @@ void CLatLng::setRefMark() {
   ll.lat /= v.size();
   ll.lng /= v.size();
   vLastNmarks = v;
-  lastMark.setMark(NMEA2UTM(ll));
+  lastMark = NMEA2UTM(ll);
 }
 
 UtmLatLng CLatLng::getNowMarkUTM() {
