@@ -14,11 +14,11 @@ class HoleView: public Fl_Gl_Window {
    void makeList();
    void makeCurrentHoleList(int h);
    void makeCurrentPointList(int h);
+//   void makePathList(int h);
    void initHoleWindow(int x, int y,Course *course);
    void draw();
-//   int xres,yres,currentHole;
-int xres,yres; //JE
- Course *ngc;
+   int xres,yres; //JE
+   Course *ngc;
 };
 
 #endif
