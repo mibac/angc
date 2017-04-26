@@ -21,7 +21,9 @@ void CMarkBtn::setBtnAttributes(Fl_Button *b) {
 }
   void CMarkBtn::Button_CB() {
     cll.setRefMark();
-    DEBUG_LOG << "Mark button hit:" <<  endl;
+//    holeview->ngc->hole[holeview->ngc->currentHole].setCurrentPoint(0.05);
+//    holeview->redraw();
+//    DEBUG_LOG << "Mark button hit:" <<  endl;
   }
 
 // Handle numeric keypad buttons pressed

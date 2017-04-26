@@ -18,7 +18,11 @@ void HoleView::initHoleWindow(int x,int y,Course *course) {
 
 void HoleView::makeCurrentPointList(int h) {
      double xp,yp;
+     const char *sh, *st;
         ngc->hole[h].computeYardageToHole();
+        ngc->hole[h].computeYardageFromTee();
+//cout << "in mcp " << ngc->hole[h].currentYardageToHoleStr << endl;
+//cout << "in mcp " << ngc->hole[h].currentYardageFromTeeStr << endl;
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
         glDeleteLists(h+100,1);
         glNewList(h+100,GL_COMPILE);
@@ -33,16 +37,41 @@ void HoleView::makeCurrentPointList(int h) {
         glEnd();
           glColor3f(0.0,0.0,0.0);
         gl_font(FL_HELVETICA_BOLD,48);
-        gl_draw(ngc->hole[h].currentYardageStr,(float) 10.0,(float)(yp));
+        sh = ngc->hole[h].currentYardageToHoleStr.c_str();
+        st = ngc->hole[h].currentYardageFromTeeStr.c_str();
+        gl_draw(sh,(float) 10.0,(float)(yp));
+        gl_draw(st,(float) 380.0,(float)(yp));
         glFlush();
         glEndList();
 }
-
+/*
+void HoleView::makePathList(int h) {
+        double xp,yp;
+        Vector rot;
+        glDeleteLists(h+200,1);
+        glNewList(h+200,GL_COMPILE);
+        glPointSize(9.0);
+        glBegin(GL_POINTS);
+          glColor3f(1.0,0.0,0.0);
+        for (int j=0;j< ngc->hole[h].pathPointNum;j++) {
+          rot = ngc->hole[h].rotatePoint(ngc->hole[h].pathPoint[j],ngc->hole[h].currentUnit);
+          xp = ngc->hole[h].scale*(rot.v[0]-ngc->hole[h].xminmax.v[0]);
+          yp = ngc->hole[h].scale*(rot.v[1]-ngc->hole[h].yminmax.v[0]);
+          xp += ngc->hole[h].xtran;
+          yp += 2*ngc->hole[h].ytran;
+//cout << xp << " " << yp << endl;
+          glVertex2d(xp,yp);
+        }
+        glEnd();
+        glFlush();
+        glEndList();
+}
+*/
 void HoleView::makeCurrentHoleList(int h) {
      int i,k,j;
      double x[100],y[100],xscale,yscale,xcen,ycen;
-     double yt,xt,xsize,ysize;
-     double x1,y1,dd,xp,yp;
+     double xsize,ysize;
+     double x1,y1,dd;
 
       x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].startOrient[0].v[0];
       y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].startOrient[0].v[1];
@@ -111,6 +140,7 @@ void HoleView::makeList() {
      for (h=1;h<=ngc->maxHole;h++) {
          makeCurrentHoleList(h);
          makeCurrentPointList(h);
+ //        if (h==3) makePathList(h);
       }
 }
 
@@ -118,4 +148,5 @@ void HoleView::draw() {
     makeCurrentPointList(currentHole);
     glCallList(currentHole);
     glCallList(currentHole+100);
+   // if (currentHole==3) glCallList(currentHole+200);
 }

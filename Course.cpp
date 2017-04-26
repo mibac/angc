@@ -45,25 +45,42 @@ void Hole::findMinMax() {
         }
     }
 }
-
+/*
 void Hole::setCurrentPoint(double w) {
    walk = walk+w;
+//cout << "Walk = " << walk << endl;
    if (walk>1.0) walk = 0.0;
    currentPoint.v[0] = (1-walk)*startOrient[0].v[0] + walk*startOrient[1].v[0];
    currentPoint.v[1] = (1-walk)*startOrient[0].v[1] + walk*startOrient[1].v[1];
+//cout << currentPoint.v[0] << " " << currentPoint.v[1] << endl;
+}
+*/
+void Hole::setCurrentPoint(double east,double north) {
+  currentPoint.v[0] = east;
+  currentPoint.v[1] = north;
 }
 
 void Hole::computeYardageToHole() {
 
    double x,y;
-   string s;
-
    x = startOrient[1].v[0]-currentPoint.v[0];
    y = startOrient[1].v[1]-currentPoint.v[1];
    yardageToHole  = (int) (1.0936*sqrt(x*x+y*y));
-   s  = to_string(yardageToHole);
-   currentYardageStr = s.c_str();
+   currentYardageToHoleStr = to_string(yardageToHole);
+//cout << "ssh " << currentYardageToHoleStr << endl;
 }
+ 
+void Hole::computeYardageFromTee() {
+
+   double x,y;
+
+   x = startOrient[0].v[0]-currentPoint.v[0];
+   y = startOrient[0].v[1]-currentPoint.v[1];
+   yardageFromTee  = (int) (1.0936*sqrt(x*x+y*y));
+   currentYardageFromTeeStr = to_string(yardageFromTee);
+ //cout << "sst " << currentYardageFromTeeStr << endl;
+}
+ 
  
 Course::Course(int mh) {
   maxHole = mh;
@@ -72,7 +89,7 @@ Course::Course(int mh) {
 void Course::readCourse() {
     ifstream fin,finlist;
     int h,n,i,j,k,t;
-    double walk,east,north,x1,y1,dd;
+    double walk,east,north;
     string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
     LL2UTM latlon;	  
@@ -115,7 +132,22 @@ void Course::readCourse() {
             fin.close();
         }
        finlist.close();
+/*
+      if (h==3) {
+        string walkpath = holeprefix+"HoleInterest.pts";
+        fin.open(walkpath);
+        double xx,yy;
+        for (j=0;j<700;j++) {
+           fin >> xx>>yy;
+           if (j>25) {
+              hole[h].pathPoint[j-26].v[0] = xx;
+              hole[h].pathPoint[j-26].v[1] = yy;
+           }
+          hole[h].pathPointNum = 674;
+        }
+        fin.close();
+
+      }
+*/
     }
-
-
 }

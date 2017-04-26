@@ -30,7 +30,7 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
-
+#include<unistd.h>
 #ifndef HOLEVIEW_H_
 #include "HoleView.hpp"
 #endif
@@ -82,6 +82,7 @@ using namespace std;
 
 // GLOBALS
 int currentHole = 1;
+int pathStep = 0;
 
 Fl_Window *win;
 Fl_Output *my_input;
@@ -124,26 +125,41 @@ void HandleFD(FL_SOCKET fd, void *data) {
   cll.updateDistanceFromMarkerUTM(boxYardage);
 }
 #endif
-
-// void IdleCallback(void *pData) {
-//   int n = atoi(in->value());
-//   if (n == 0) n = 1;
-//   if (currentHole == n) {
-//     hv->ngc->hole[currentHole].setCurrentPoint(0.001);
-//     hv->redraw();
-//   } else {
-//     hv->redraw();
-//     currentHole = n;
-//   }
-// }
-
+/*
+ void IdleCallback(void *pData) {
+   int n = atoi(in->value());
+   if (n == 0) n = 1;
+   if (currentHole==n) { 
+     hv->ngc->hole[currentHole].setCurrentPoint(cll.nowMark.lng,cll.nowMark.lat);
+     hv->redraw();
+   }
+   else {
+     hv->redraw();
+     currentHole = n;
+   }
+ }
+*/
 void IdleCallback(void *pData) {
+ 
   int n = atoi(in->value());
   if (n == 0) n = 1;
+/*
+   if (currentHole==n) { 
+     if (currentHole==3) {
+      Vector cp = hv->ngc->hole[currentHole].pathPoint[pathStep];
+       hv->ngc->hole[currentHole].setCurrentPoint(cp.v[0],cp.v[1]);
+       pathStep++;
+       if (pathStep>hv->ngc->hole[currentHole].pathPointNum) pathStep=0;
+       sleep(0.5);
+       hv->redraw();
+      }
+   }
+   else {
+*/
   if (currentHole != n) {
-    // hv->ngc->hole[currentHole].setCurrentPoint(0.001);
     hv->redraw();
     currentHole = n;
+    hv->ngc->currentHole=n;
   }
 }
 
@@ -163,6 +179,7 @@ int main(int argc, char **argv) {
 
   ngc = new Course(18);
   ngc->readCourse();
+  ngc->currentHole=1;
   int x = 480;
 //  int y = 800 - kHoleViewTop; // 712
   int y = 674;
@@ -188,6 +205,7 @@ int main(int argc, char **argv) {
   in->cursor_color(FL_GRAY);
 
   markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Mark");
+  markBtn->holeview = hv;
   writeMarkBtn =
       new CWriteMarkBtn(280, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Write\nMark");
   writeAllBtn =
