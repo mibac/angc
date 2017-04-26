@@ -3,6 +3,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
+#include "HoleView.hpp"
 
 class CMarkBtn : public Fl_Button {
 
@@ -14,6 +15,7 @@ class CMarkBtn : public Fl_Button {
 
  public:
   CMarkBtn(int X, int Y, int W, int H, const char *L = 0);
+  HoleView *holeview;
 
 
 };

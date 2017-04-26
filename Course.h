@@ -35,16 +35,22 @@ class Hole {
     void findMinMax();
     Vector  rotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
-    void setCurrentPoint(double w);
+ //   void setCurrentPoint(double w);
+    void setCurrentPoint(double east,double north);
     void computeYardageToHole();
-    int yardageToHole;
-    const char* currentYardageStr;
+    void computeYardageFromTee();
+    int yardageToHole,yardageFromTee;
+    string currentYardageToHoleStr;
+    string currentYardageFromTeeStr;
+//    Vector pathPoint[1000];
+//    int pathPointNum;
 };
 
 class Course  {
   public:
     Course(int mh);
     int maxHole;
+    int currentHole;
     Hole hole[19];
     void readCourse();
 };
