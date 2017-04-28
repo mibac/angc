@@ -26,7 +26,7 @@ void HoleView::makeCurrentPointList(int h) {
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
         glDeleteLists(h+100,1);
         glNewList(h+100,GL_COMPILE);
-        glPointSize(9.0);
+        glPointSize(12.0);
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
           xp = ngc->hole[h].scale*(ngc->hole[h].rotCurrentPoint.v[0]-ngc->hole[h].xminmax.v[0]);
@@ -116,6 +116,12 @@ void HoleView::makeCurrentHoleList(int h) {
                 case 6: glColor3d(51.0/255.0,153.0/255.0,1.0);   // Water
                     break;
                 case 7: glColor3d(0.3,0.3,0.3);   // Cart Path
+                    break;
+                case 31: glColor3d(1.0,1.0,1.0);   // House
+                    break;
+                case 32: glColor3d(0.1,0.1,0.1);   // Street
+                    break;
+                case 33: glColor3d(0.3,0.3,0.3);   // Driveway
                     break;
 
             }
