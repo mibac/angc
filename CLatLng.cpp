@@ -19,7 +19,7 @@
 #include "utils.h"
 #endif
 
-const size_t kUTMpts = 3;  // number of UTM points to average
+const size_t kUTMpts = 10;  // number of UTM points to average
 const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
@@ -28,9 +28,9 @@ GPS myGPS;
 CLatLng cll;
 // UtmLatLng lastMark;
 // UtmLatLng nowMark;
-ofstream fileMark("aMarkers.txt");
+// ofstream fileMark("aMarkers.txt");
 ofstream fileClub("aClubs.txt");
-ofstream fileAll("aWalkTheCourse.txt");
+ofstream fileAll("allGPS.txt");
 
 ostream& operator<<(ostream& strm, const LatLng& ll) {
   strm << ll.lat << ", " << ll.lng;
@@ -151,14 +151,16 @@ string CLatLng::distanceFromLastMark() {
   return oss.str();
 }
 
-void CLatLng::writeMark(const string& s) {
-  fileMark << setprecision(kPrecision);
-  fileMark << s << lastMark.lng << ", " << lastMark.lat << endl;
-}
+// void CLatLng::writeMark(const string& s) {
+//   fileMark << setprecision(kPrecision);
+//   fileMark << s << lastMark.lng << ", " << lastMark.lat << endl;
+// }
 
 void CLatLng::writeClub(const string& s) {
+  UtmLatLng nowMark = getNowMark();
   fileClub << currentHole << ":\t" << s << "\t" << distanceFromLastMark()
-                    << "\t" << getNowMark() << "\t" << lastMark << endl;
+           << "\t" << lastMark << "\t" << nowMark << endl;
+  lastMark = nowMark;
 }
 
 void CLatLng::writeAll() {
