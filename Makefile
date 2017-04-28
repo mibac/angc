@@ -3,10 +3,10 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o CMarkBtn.o Course.o CWriteAllBtn.o CWriteMarkBtn.o gps.o HoleView.o  CClubPopup.o CClubBtn.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o CMarkBtn.o Course.o CWriteAllBtn.o CWriteMarkBtn.o gps.o HoleView.o CClubPopup.o CClubBtn.o  $(LDFLAGS)
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o CClubPopup.o CClubBtn.o  $(LDFLAGS)
 
-markGps.o: markGps.cpp C2UTM.cpp CExitBtn.cpp CHoleButton.cpp CHolesPopup.cpp CLatLng.cpp CMarkBtn.cpp Course.cpp CWriteAllBtn.cpp CWriteMarkBtn.cpp gps.cpp HoleView.cpp CClubPopup.cpp
+markGps.o: markGps.cpp C2UTM.cpp CExitBtn.cpp CHoleButton.cpp CHolesPopup.cpp CLatLng.cpp  Course.cpp CWriteAllBtn.cpp  gps.cpp HoleView.cpp CClubPopup.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -18,22 +18,16 @@ CLatLng.o: CLatLng.cpp CLatLng.h gps.cpp C2UTM.cpp utils.h
 CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.cpp
 	g++ -c $<  $(CXXFLAGS)
 
-CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.cpp
+CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.cpp CLatLng.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 CHolesPopup.o: CHolesPopup.cpp CHolesPopup.h
-	g++ -c $<  $(CXXFLAGS)
-
-CMarkBtn.o: CMarkBtn.cpp CMarkBtn.h CLatLng.cpp utils.h
 	g++ -c $<  $(CXXFLAGS)
 
 Course.o: Course.cpp Course.h C2UTM.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 CWriteAllBtn.o: CWriteAllBtn.cpp CWriteAllBtn.h CLatLng.cpp utils.h
-	g++ -c $<  $(CXXFLAGS)
-
-CWriteMarkBtn.o: CWriteMarkBtn.cpp CWriteMarkBtn.h CHoleButton.cpp CLatLng.cpp utils.h
 	g++ -c $<  $(CXXFLAGS)
 
 gps.o: gps.cpp gps.h

@@ -21,7 +21,7 @@ void CExitBtn::setBtnAttributes(Fl_Button *b) {
   b->down_color(FL_YELLOW);
 }
 void CExitBtn::Button_CB() {
-  fileMark.close();
+  // fileMark.close();
   fileClub.close();
   fileAll.close();
   DEBUG_LOG << "Exit button hit" << endl;

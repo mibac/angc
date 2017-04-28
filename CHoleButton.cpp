@@ -3,6 +3,11 @@
 #endif
 
 #include <string>
+
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 using namespace std;
 
 MyNumPad *numpad;  // local instance of numeric keypad widget
@@ -19,6 +24,7 @@ void MyInput::SetNumPadValue_CB2() {
     str = "   " + str;
   value(str.c_str());  // pass value from numpad to our input
   numpad->hide();          // hide numpad
+  cll.setRefMark();
 }
 
 void MyInput::SetNumPadValue_CB(Fl_Widget *, void *data) {

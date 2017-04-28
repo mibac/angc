@@ -60,9 +60,9 @@ g++ markGps.cpp gps.cpp calcDist.cpp -o _NGCApp -g  -I/usr/include/cairo
 #include "CHoleButton.h"  //MyInput *in
 #endif
 
-#ifndef CMARKBTN_H
-#include "CMarkBtn.h"
-#endif
+// #ifndef CMARKBTN_H
+// #include "CMarkBtn.h"
+// #endif
 
 // #ifndef CWRITEMARKBTN_H
 // #include "CWriteMarkBtn.h"
@@ -95,7 +95,7 @@ Fl_Box *boxYardage;
 Fl_Button *btnMark;
 Fl_Button *btnWrite;
 MyInput *in;
-CMarkBtn *markBtn;
+// CMarkBtn *markBtn;
 //CWriteMarkBtn *writeMarkBtn;
 CClubBtn *clubBtn;
 CWriteAllBtn *writeAllBtn;
@@ -149,7 +149,7 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-void zeroGpsBuf() {
+void clearGpsBuf() {
     for (int ix = 0; ix < kBUFSIZE; ++ix)
         gpsBuf[ix] = '\0';
 }
@@ -157,6 +157,13 @@ void zeroGpsBuf() {
 void IdleCallback(void *pData) {
   int n = atoi(in->value());
   if (n == 0) n = 1;
+  if (currentHole != n) {
+    // hv->redraw();
+    currentHole = n;
+    hv->ngc->currentHole = n;
+    cll.currentHole = n;
+  }
+
   /*
      if (currentHole==n) {
        if (currentHole==3) {
@@ -168,17 +175,9 @@ void IdleCallback(void *pData) {
          hv->redraw();
         }
      }
-     else {
   */
-  if (currentHole != n) {
-    hv->redraw();
-    currentHole = n;
-    hv->ngc->currentHole = n;
-    cll.currentHole = n;
-  }
-  zeroGpsBuf();
-
-  if (fgets(gpsBuf, sizeof(gpsBuf), gpsin) != NULL) {
+ clearGpsBuf();
+ if (fgets(gpsBuf, sizeof(gpsBuf), gpsin) != NULL) {
     string gpsStr(gpsBuf);
     size_t found = gpsStr.find("GPGGA");
     // size_t found = s.find("GPGLL");
@@ -187,7 +186,11 @@ void IdleCallback(void *pData) {
       string s = cll.distanceFromLastMark();
       boxYardage->label(s.c_str());
       //cout << "In IdleCallback: " << s << endl;
+      UtmLatLng u = cll.getNowMark();
+      hv->ngc->hole[currentHole].setCurrentPoint(u.lng, u.lat);
+      hv->redraw();
     }
+
   }
 
   usleep(100000); // microseconds or idle called 10x second
@@ -251,13 +254,14 @@ int main(int argc, char **argv) {
   //in->color(FL_GRAY);
   in->cursor_color(FL_GRAY);
 
-  markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Mark");
-  markBtn->holeview = hv;
-  clubBtn = new CClubBtn(280, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Club");
-  writeAllBtn =
-      new CWriteAllBtn(366, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Write\nAll");
+  // markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Mark");
+  // markBtn->holeview = hv;
+  clubBtn = new CClubBtn(280, kBtnRow1Top, 100, kBoxSize, "Club");
 
-  exitBtn = new CExitBtn(366, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Exit");
+  writeAllBtn =
+      new CWriteAllBtn(386, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Write\nAll");
+
+  exitBtn = new CExitBtn(386, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Exit");
   exitBtn->mainwin = win;
   win->end();
 

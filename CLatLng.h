@@ -46,11 +46,6 @@ struct UtmLatLng {
   }
 };
 
-extern ostream &operator<<(ostream &strm, const LatLng &ll);
-extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
-extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
-extern GPS myGPS;
-
 class CLatLng {
  public:
   CLatLng();
@@ -73,7 +68,7 @@ class CLatLng {
   void updateLatLng(const string &s);
   string distanceFromLastMark();
 
-  void writeMark(const string &s);
+  // void writeMark(const string &s);
   void writeClub(const string &s);
   void writeAll();
 
@@ -84,7 +79,7 @@ class CLatLng {
   vector<UtmLatLng> vUTM;
 
  private:
-     int currentHole;
+  int currentHole;
   UtmLatLng lastMark;
 
   UtmLatLng getMark(size_t avg);
@@ -93,9 +88,14 @@ class CLatLng {
   UtmLatLng NMEA2UTM(const LatLng &LL);
 };
 
+extern ostream &operator<<(ostream &strm, const LatLng &ll);
+extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
+extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
+extern GPS myGPS;
+
 extern CLatLng cll;
 // extern UtmLatLng nowMark;
-extern ofstream fileMark;
+// extern ofstream fileMark;
 extern ofstream fileClub;
 extern ofstream fileAll;
 
