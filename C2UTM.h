@@ -1,5 +1,5 @@
 //
-//  C2UTM.h
+//  C2UTM.hpp
 //  GLDisplayCourse
 //
 //  Created by Jack on 4/8/17.
@@ -29,7 +29,7 @@ public:
     void setVariables();
     string getLongZone();
     //  string getLatZone(double latitude);
-
+    
     double getEast();
     double getNorth();
     void convert2UTM();

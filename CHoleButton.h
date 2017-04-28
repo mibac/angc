@@ -14,7 +14,6 @@
 using namespace std;
 
 class MyInput : public Fl_Output {
-  MyNumPad *numpad;  // local instance of numeric keypad widget
 
   // Called when user finishes entering data with numeric keypad
   void SetNumPadValue_CB2();
@@ -29,5 +28,7 @@ class MyInput : public Fl_Output {
 
   MyInput(int X, int Y, int W, int H, const char *L = 0);
 };
+
+extern   MyNumPad *numpad;  // local instance of numeric keypad widget
 
 #endif  // CHOLEBUTTON_H

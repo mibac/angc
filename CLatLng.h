@@ -22,6 +22,10 @@ struct LatLng {
     lat = 0.0;
     lng = 0.0;
   }
+  LatLng(const double latitude, const double longitude) {
+    lat = latitude;
+    lng = longitude;
+  }
 };
 
 struct DDLatLng {
@@ -61,36 +65,38 @@ class CLatLng {
   CLatLng(const char *cstr);
   CLatLng(const LatLng);
 
-  bool isgpsup();
+  //  bool isgpsup();
   void setRefMark();
+  UtmLatLng getNowMark();
 
   // Utility functions
   void updateLatLng(const string &s);
-  void updateDistanceFromMarkerUTM(Fl_Box *box);
+  string distanceFromLastMark();
 
   void writeMark(const string &s);
+  void writeClub(const string &s);
   void writeAll();
 
   // Variables
-  vector<string> vGGA;         // the complete round of nmea GPGGA sentences
-  vector<string> vLastNmarks;  // the last 10 vGGA sentences
-  vector<LatLng> vLL;
-  vector<DDLatLng> vDD;
+  vector<string> vGGA;  // the complete round of nmea GPGGA sentences
+  // vector<LatLng> vLL;
+  // vector<DDLatLng> vDD;
   vector<UtmLatLng> vUTM;
 
  private:
+     int currentHole;
+  UtmLatLng lastMark;
 
-  UtmLatLng getNowMarkUTM();
-
+  UtmLatLng getMark(size_t avg);
   double NMEA2DecimalDegrees(const double nmea);
   DDLatLng NMEA2DecimalDegrees(const LatLng &LL);
   UtmLatLng NMEA2UTM(const LatLng &LL);
 };
 
 extern CLatLng cll;
-extern UtmLatLng lastMark;
-extern UtmLatLng nowMark;
+// extern UtmLatLng nowMark;
 extern ofstream fileMark;
+extern ofstream fileClub;
 extern ofstream fileAll;
 
 #endif  // CLATLNG_H

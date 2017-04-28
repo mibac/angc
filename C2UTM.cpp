@@ -6,7 +6,7 @@
 //  Copyright © 2017 Jack Goldfeather. All rights reserved.
 //
 
-#include "C2UTM.hpp"
+#include "C2UTM.h"
 
 #include <iostream>
 #include <math.h>
@@ -47,7 +47,7 @@ void LL2UTM::setLatLon(double lat, double lon)
 {
     latitudeDegree = lat;
     longitude = lon;
-    
+
 }
 
 void LL2UTM::setVariables()
@@ -55,9 +55,9 @@ void LL2UTM::setVariables()
     latitude = latitudeDegree*M_PI/180.0;
     rho = equatorialRadius * (1 - e * e)
     / pow(1 - pow(e * sin(latitude), 2), 3 / 2.0);
-    
+
     nu = equatorialRadius / pow(1 - pow(e * sin(latitude), 2), (1 / 2.0));
-    
+
     double var1;
     if (longitude < 0.0)
     {
@@ -70,10 +70,10 @@ void LL2UTM::setVariables()
     double var2 = (6 * var1) - 183;
     double var3 = longitude - var2;
     p = var3 * 3600 / 10000;
-    
+
     S = A0 * latitude - B0 * sin(2 * latitude) + C0 * sin(4 * latitude) - D0
     * sin(6 * latitude) + E0 * sin(8 * latitude);
-    
+
     K1 = S * k0;
     K2 = nu * sin(latitude) * cos(latitude) * pow(sin1, 2) * k0 * (100000000)
     / 2;
@@ -82,18 +82,18 @@ void LL2UTM::setVariables()
        * pow(e1sq, 2) * pow(cos(latitude), 4))
     * k0
     * (10000000000000000L);
-    
+
     K4 = nu * cos(latitude) * sin1 * k0 * 10000;
-    
+
     K5 = pow(sin1 * cos(latitude), 3) * (nu / 6)
     * (1 - pow(tan(latitude), 2) + e1sq * pow(cos(latitude), 2)) * k0
     * 1000000000000L;
-    
+
     A6 = (pow(p * sin1, 6) * nu * sin(latitude) * pow(cos(latitude), 5) / 720)
     * (61 - 58 * pow(tan(latitude), 2) + pow(tan(latitude), 4) + 270
        * e1sq * pow(cos(latitude), 2) - 330 * e1sq
        * pow(sin(latitude), 2)) * k0 * (1E+24);
-    
+
 }
 
 string LL2UTM::getLongZone() {
@@ -107,7 +107,7 @@ string LL2UTM::getLongZone() {
         longZone = (longitude / 6) + 31;
     }
     string val = to_string((int) longZone);
-    
+
     if (val.length() == 1)
     {
         val = "0" + val;
@@ -126,7 +126,7 @@ double LL2UTM::getNorth() {
         nn = 10000000 + nn;
     }
     return nn;
-    
+
 }
 
 void LL2UTM::convert2UTM() {
@@ -134,7 +134,7 @@ void LL2UTM::convert2UTM() {
     longZone = getLongZone();
     UTMEast = getEast();
     UTMNorth = getNorth();
-    
+
 }
 
 void LL2UTM::print() {

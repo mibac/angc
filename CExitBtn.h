@@ -19,4 +19,6 @@ class CExitBtn : public Fl_Button {
 };
 
 extern CExitBtn *exitBtn;
+extern FILE *gpsin;
+
 #endif  // CEXITBTN_H

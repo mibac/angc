@@ -8,7 +8,7 @@
 #include <iostream>
 
 #ifndef C2UTM_hpp
-#include "C2UTM.hpp"
+#include "C2UTM.h"
 #endif
 
 #ifndef _GPSD_GPSMM_H_
@@ -19,32 +19,31 @@
 #include "utils.h"
 #endif
 
-#define TEST_SINGLE_UTM 0
-const size_t kDataPts = 10;  // number of data points to average
-
+const size_t kUTMpts = 3;  // number of UTM points to average
 const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 
 GPS myGPS;
 CLatLng cll;
-UtmLatLng lastMark;
-UtmLatLng nowMark;
-ofstream fileMark("Markers.txt");
-ofstream fileAll("WalkTheCourse.txt");
+// UtmLatLng lastMark;
+// UtmLatLng nowMark;
+ofstream fileMark("aMarkers.txt");
+ofstream fileClub("aClubs.txt");
+ofstream fileAll("aWalkTheCourse.txt");
 
 ostream& operator<<(ostream& strm, const LatLng& ll) {
-  strm << ll.lat << ", " << ll.lng << endl;
+  strm << ll.lat << ", " << ll.lng;
   return strm;
 }
 
 ostream& operator<<(ostream& strm, const DDLatLng& dll) {
-  strm << dll.lat << ", " << dll.lng << endl;
+  strm << dll.lat << ", " << dll.lng;
   return strm;
 }
 
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
-  strm << ull.lat << ", " << ull.lng << endl;
+  strm << ull.lat << ", " << ull.lng;
   return strm;
 }
 
@@ -61,29 +60,29 @@ CLatLng::CLatLng(const string s) {}
 CLatLng::CLatLng(const char* cstr) {}
 CLatLng::CLatLng(const LatLng) {}
 
-bool CLatLng::isgpsup() {
-  bool ok = false;
-  gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
-
-  for (int i = 0; i < 5; ++i) {
-    if (gps_rec.stream(WATCH_ENABLE | WATCH_NMEA) == NULL) {
-      cout << "No GPSD running. Retry to connect in " << RETRY_TIME
-           << " seconds." << endl;
-      usleep(RETRY_TIME * ONE_SECOND);
-      continue;  // It will try to connect to gpsd again
-    } else {
-      ok = true;
-    }
-  }
-  return ok;
-}
+// bool CLatLng::isgpsup() {
+//   bool ok = false;
+//   gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
+//
+//   for (int i = 0; i < 5; ++i) {
+//     if (gps_rec.stream(WATCH_ENABLE | WATCH_NMEA) == NULL) {
+//       cout << "No GPSD running. Retry to connect in " << RETRY_TIME
+//            << " seconds." << endl;
+//       usleep(RETRY_TIME * ONE_SECOND);
+//       continue;  // It will try to connect to gpsd again
+//     } else {
+//       ok = true;
+//     }
+//   }
+//   return ok;
+// }
 
 double CLatLng::NMEA2DecimalDegrees(const double nmea) {
   double deg = double(int(nmea / 100));
   double min = nmea - (deg * 100);
   double minOver60 = min / 60.0;
   double dec_deg = deg + minOver60;
-  cout << fixed << setprecision(9);
+  // cout << fixed << setprecision(9);
   return dec_deg;
 }
 
@@ -108,57 +107,19 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 }
 
 void CLatLng::updateLatLng(const string& s) {
-  LatLng ll;
-  DDLatLng dll;
-  UtmLatLng ull;
-
   if (myGPS.isValidGGA(s)) {
-      cout << s << endl;
+    // cout << s;
     vGGA.push_back(s);
     myGPS.setValuesGGA(s);
-
-    ll.lat = myGPS.latitude;
-    ll.lng = myGPS.longitude;
-    vLL.push_back(ll);
-
-    dll = NMEA2DecimalDegrees(ll);
-    vDD.push_back(dll);
-
-    ull = NMEA2UTM(ll);
+    LatLng ll(myGPS.latitude, myGPS.longitude);
+    UtmLatLng ull = NMEA2UTM(ll);
     vUTM.push_back(ull);
-    nowMark = ull;
   }
 }
 
-#if TEST_SINGLE_UTM
-void CLatLng::setRefMark() { lastMark = nowMark; }
-
-UtmLatLng CLatLng::getNowMarkUTM() { return nowMark; }
-
-#else
-void CLatLng::setRefMark() {
-  LatLng ll;
-  int n = std::min(vGGA.size(), kDataPts);
-
-  vector<string> v(vGGA.end() - n, vGGA.end());
-
-  for (auto itr : v) {
-    if (myGPS.isValidGGA(itr)) {
-      myGPS.setValuesGGA(itr);
-      ll.lat += myGPS.latitude;
-      ll.lng += myGPS.longitude;
-    }
-  }
-
-  ll.lat /= v.size();
-  ll.lng /= v.size();
-  vLastNmarks = v;
-  lastMark = NMEA2UTM(ll);
-}
-
-UtmLatLng CLatLng::getNowMarkUTM() {
+UtmLatLng CLatLng::getMark(size_t avg) {
   UtmLatLng ull;
-  int n = std::min(vUTM.size(), kDataPts);
+  int n = std::min(vUTM.size(), avg);
   vector<UtmLatLng> v(vUTM.end() - n, vUTM.end());
 
   for (auto itr : v) {
@@ -171,24 +132,33 @@ UtmLatLng CLatLng::getNowMarkUTM() {
 
   return ull;
 }
-#endif
 
-void CLatLng::updateDistanceFromMarkerUTM(Fl_Box* box) {
-  UtmLatLng u1 = nowMark;
+void CLatLng::setRefMark() { lastMark = getMark(kUTMpts); }
+
+UtmLatLng CLatLng::getNowMark() { return getMark(kUTMpts); }
+
+string CLatLng::distanceFromLastMark() {
+  UtmLatLng u1 = getNowMark();
   UtmLatLng u2 = lastMark;
+  double x = u1.lng - u2.lng;
+  double y = u1.lat - u2.lat;
 
-  double d = sqrt(pow(u1.lng - u2.lng, 2) + pow(u1.lat - u2.lat, 2));
+  double d = sqrt(x * x + y * y);
   d *= 1.0936139;  // meters to yards
 
   ostringstream oss;
   oss << (int)round(d);
-  box->label(oss.str().c_str());
+  return oss.str();
 }
 
-void CLatLng::writeMark(const string &s) {
+void CLatLng::writeMark(const string& s) {
   fileMark << setprecision(kPrecision);
   fileMark << s << lastMark.lng << ", " << lastMark.lat << endl;
-  vLastNmarks.clear();
+}
+
+void CLatLng::writeClub(const string& s) {
+  fileClub << currentHole << ":\t" << s << "\t" << distanceFromLastMark()
+                    << "\t" << getNowMark() << "\t" << lastMark << endl;
 }
 
 void CLatLng::writeAll() {

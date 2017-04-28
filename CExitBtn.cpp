@@ -16,14 +16,16 @@ using namespace std;
 
 void CExitBtn::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
-  b->labelsize(18);
+  b->labelsize(24);
   b->color(FL_WHITE);
   b->down_color(FL_YELLOW);
 }
 void CExitBtn::Button_CB() {
   fileMark.close();
+  fileClub.close();
   fileAll.close();
   DEBUG_LOG << "Exit button hit" << endl;
+  pclose(gpsin);
   mainwin->hide();
 }
 

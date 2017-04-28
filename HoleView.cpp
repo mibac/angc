@@ -1,5 +1,5 @@
 #ifndef HOLEVIEW_H_
-#include "HoleView.hpp"
+#include "HoleView.h"
 #endif
 
 #ifndef COURSE_H_

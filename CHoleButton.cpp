@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+MyNumPad *numpad;  // local instance of numeric keypad widget
+
 string MyInput::holeName;
 
 // Called when user finishes entering data with numeric keypad

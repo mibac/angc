@@ -7,7 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include <string>
-#include "C2UTM.hpp"
+#include "C2UTM.h"
 
 struct Vector {
     double v[2];
