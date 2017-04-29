@@ -4,7 +4,7 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 all: aNGCApp
 
 aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o CClubPopup.o CClubBtn.o  $(LDFLAGS)
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o CClubPopup.o CClubBtn.o $(LDFLAGS)
 
 markGps.o: markGps.cpp C2UTM.cpp CExitBtn.cpp CHoleButton.cpp CHolesPopup.cpp CLatLng.cpp  Course.cpp CWriteAllBtn.cpp  gps.cpp HoleView.cpp CClubPopup.cpp
 	g++ -c $<  $(CXXFLAGS)

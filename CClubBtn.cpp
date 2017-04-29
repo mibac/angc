@@ -15,7 +15,7 @@ CClubPopup *myClubPopup;  // local instance of numeric keypad widget
 
 void CClubBtn::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
-  b->labelsize(36);
+  b->labelsize(30);
   b->color(FL_WHITE);
   b->down_color(FL_YELLOW);
 }

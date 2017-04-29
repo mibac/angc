@@ -23,7 +23,7 @@ void CExitBtn::setBtnAttributes(Fl_Button *b) {
 void CExitBtn::Button_CB() {
   // fileMark.close();
   fileClub.close();
-  fileAll.close();
+  fileGPS.close();
   DEBUG_LOG << "Exit button hit" << endl;
   pclose(gpsin);
   mainwin->hide();

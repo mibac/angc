@@ -95,7 +95,7 @@ Fl_Button *btnMark;
 Fl_Button *btnWrite;
 MyInput *in;
 // CMarkBtn *markBtn;
-//CWriteMarkBtn *writeMarkBtn;
+// CWriteMarkBtn *writeMarkBtn;
 CClubBtn *clubBtn;
 CWriteAllBtn *writeAllBtn;
 CExitBtn *exitBtn;
@@ -134,6 +134,39 @@ Course *ngc;
 // }
 // #endif
 
+#if USEGPS
+void HandleFD(FL_SOCKET fd, void *data) {
+  const int bufSz = 1023;
+  char chRA[bufSz + 1];
+
+  int n = atoi(in->value());
+  if (n == 0) n = 1;
+  if (CLatLng::currentHole != n) {
+    // hv->redraw();
+    CLatLng::currentHole = n;
+  }
+
+  if (fgets(chRA, sizeof(chRA), gpsin) == NULL) {  // read the line of data
+    Fl::remove_fd(fileno(gpsin));                  // command ended? disconnect
+    pclose(gpsin);                                 // close the descriptor
+    return;
+  } else {
+    string gpsStr(chRA);
+    size_t found = gpsStr.find("GPGGA");
+    // size_t found = s.find("GPGLL");
+    if (found != string::npos) {
+      cll.updateLatLng(gpsStr.c_str());
+      string s = cll.distanceFromLastMark();
+      boxYardage->label(s.c_str());
+      // cout << "In IdleCallback: " << s << endl;
+      UtmLatLng u = cll.getNowMark();
+      hv->ngc->hole[CLatLng::currentHole].setCurrentPoint(u.lng, u.lat);
+      hv->redraw();
+    }
+  }
+}
+#endif
+
 // void IdleCallback(void *pData) {
 //   int n = atoi(in->value());
 //   if (n == 0) n = 1;
@@ -149,8 +182,7 @@ Course *ngc;
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
 void clearGpsBuf() {
-    for (int ix = 0; ix < kBUFSIZE; ++ix)
-        gpsBuf[ix] = '\0';
+  for (int ix = 0; ix < kBUFSIZE; ++ix) gpsBuf[ix] = '\0';
 }
 
 void IdleCallback(void *pData) {
@@ -173,8 +205,8 @@ void IdleCallback(void *pData) {
         }
      }
   */
- clearGpsBuf();
- if (fgets(gpsBuf, sizeof(gpsBuf), gpsin) != NULL) {
+  clearGpsBuf();
+  if (fgets(gpsBuf, sizeof(gpsBuf), gpsin) != NULL) {
     string gpsStr(gpsBuf);
     size_t found = gpsStr.find("GPGGA");
     // size_t found = s.find("GPGLL");
@@ -182,26 +214,25 @@ void IdleCallback(void *pData) {
       cll.updateLatLng(gpsStr.c_str());
       string s = cll.distanceFromLastMark();
       boxYardage->label(s.c_str());
-      //cout << "In IdleCallback: " << s << endl;
+      // cout << "In IdleCallback: " << s << endl;
       UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[CLatLng::currentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
     }
-
   }
 
-  usleep(100000); // microseconds or idle called 10x second
+  usleep(100000);  // microseconds or idle called 10x second
 }
 
-// This window callback allows the user to save & exit, don't save, or cancel.
-static void window_cb (Fl_Widget *widget, void *)
-{
-    Fl_Window *window = (Fl_Window *)widget;
+// This window callback allows the user to save & exit, don't save, or
+// cancel.
+static void window_cb(Fl_Widget *widget, void *) {
+  Fl_Window *window = (Fl_Window *)widget;
 
-    // fl_choice presents a modal dialog window with up to three choices.
-    myClubPopup->hide();
-    numpad->hide();
-    window->hide();
+  // fl_choice presents a modal dialog window with up to three choices.
+  myClubPopup->hide();
+  numpad->hide();
+  window->hide();
 }
 
 int main(int argc, char **argv) {
@@ -212,29 +243,38 @@ int main(int argc, char **argv) {
   // }
   if (!(gpsin = popen(GPS_CMD, "r"))) {
     cout << "No GPS found" << endl;
-    return 0;
+    return (1);
   }
 #endif
 
+  const int kXDelta = 3;
   const int kBoxSize = 80;
   const int kHoleViewTop = kBoxSize + 8;
   const int kBtnRow1Top = 0;
-  const int kBtnRow2Top = kBoxSize / 2 + 4;
+  const int kYardageLeft = kXDelta;
+  const int kYardageWid = 130;
+  const int kHoleLeft = kYardageLeft + kYardageWid + kXDelta;
+  const int kHoleWid = kBoxSize + kXDelta;
+  const int kClubLeft = kHoleLeft + kHoleWid + kXDelta;
+  const int kClubWid = kBoxSize + kXDelta;
+  const int kWriteLeft = kClubLeft + kClubWid + kXDelta;
+  const int kWriteWid = kBoxSize + kXDelta;
+  const int kExitLeft = kWriteLeft + kWriteWid + kXDelta;
+  const int kExitWid = kBoxSize;
 
   ngc = new Course(18);
   ngc->readCourse();
   int x = 480;
   int y = 674;
-  win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
+  win = new Fl_Window(0, 40, 480, 800, "NGC Golf");
   win->color(fl_rgb_color(162, 255, 146));
-  win->callback( window_cb );
-
+  win->callback(window_cb);
   win->begin();
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
   boxYardage =
-      new Fl_Box(FL_FRAME_BOX, 4, kBtnRow1Top, kBoxSize * 2, kBoxSize, 0);
+      new Fl_Box(FL_FRAME_BOX, 4, kBtnRow1Top, kYardageWid, kBoxSize, 0);
   boxYardage->labeltype(FL_NORMAL_LABEL);
   boxYardage->align(FL_ALIGN_CENTER);
   boxYardage->labelfont(1);
@@ -242,22 +282,22 @@ int main(int argc, char **argv) {
   boxYardage->labelcolor(FL_BLACK);
   boxYardage->color(FL_YELLOW);
 
-  in = new MyInput(170, kBtnRow1Top, 100, kBoxSize);
+  in = new MyInput(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   in->align(FL_ALIGN_CENTER);
-  in->value(" Hole");
+  in->value("Hole");
   in->textfont(1);
-  in->textsize(36);
-  //in->color(FL_GRAY);
+  in->textsize(30);
+  // in->color(FL_GRAY);
   in->cursor_color(FL_GRAY);
 
-  // markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Mark");
-  // markBtn->holeview = hv;
-  clubBtn = new CClubBtn(280, kBtnRow1Top, 100, kBoxSize, "Club");
+  // markBtn = new CMarkBtn(280, kBtnRow1Top, kBoxSize, kBoxSize / 2,
+  // "Mark"); markBtn->holeview = hv;
+  clubBtn = new CClubBtn(kClubLeft, kBtnRow1Top, kClubWid, kBoxSize, "Club");
 
-  writeAllBtn =
-      new CWriteAllBtn(386, kBtnRow1Top, kBoxSize, kBoxSize / 2, "Write\nAll");
+  writeAllBtn = new CWriteAllBtn(kWriteLeft, kBtnRow1Top, kWriteWid, kBoxSize,
+                                 "Write\nAll");
 
-  exitBtn = new CExitBtn(386, kBtnRow2Top, kBoxSize, kBoxSize / 2, "Exit");
+  exitBtn = new CExitBtn(kExitLeft, kBtnRow1Top, kExitWid, kBoxSize, "Exit");
   exitBtn->mainwin = win;
   win->end();
 
@@ -268,17 +308,17 @@ int main(int argc, char **argv) {
   hv->makeList();
   hv->show();
   hv->draw();
-  // #if USEGPS
-  // // from howto-add_fd_popen()
-  // if ((G_fp = popen(GPS_CMD, "r")) == NULL) {  // start the
-  //                                              // external unix command
-  //   perror("popen failed");
-  //   return (1);
-  // }
-  // // setup a callback for the popen() ed descriptor
-  // Fl::add_fd(fileno(G_fp), HandleFD, 0);
-  // #endif
+#if USEGPS
+  // from howto-add_fd_popen()
+  if ((gpsin = popen(GPS_CMD, "r")) == NULL) {  // start the
+                                                // external unix command
+    perror("popen failed");
+    return (1);
+  }
+  // setup a callback for the popen() ed descriptor
+  Fl::add_fd(fileno(gpsin), HandleFD, 0);
+#endif
 
-  Fl::add_idle(IdleCallback, win);
+  // Fl::add_idle(IdleCallback, win);
   return (Fl::run());
 }

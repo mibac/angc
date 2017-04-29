@@ -10,13 +10,13 @@
 #include "CLatLng.h"
 #endif
 
-void HoleView::initHoleWindow(int x, int y, Course *course) {
+void HoleView::initHoleWindow(int x,int y,Course *course) {
   xres = x;
   yres = y;
   ngc = course;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D((double)0, (double)x, (double)0, (double)y);
+     gluOrtho2D((double) 0 ,(double) x, (double) 0, (double) y);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -58,11 +58,11 @@ void HoleView::makePathList(int h) {
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
         for (int j=0;j< ngc->hole[h].pathPointNum;j++) {
-          rot =
-ngc->hole[h].rotatePoint(ngc->hole[h].pathPoint[j],ngc->hole[h].currentUnit); xp
-= ngc->hole[h].scale*(rot.v[0]-ngc->hole[h].xminmax.v[0]); yp =
-ngc->hole[h].scale*(rot.v[1]-ngc->hole[h].yminmax.v[0]); xp +=
-ngc->hole[h].xtran; yp += 2*ngc->hole[h].ytran;
+          rot = ngc->hole[h].rotatePoint(ngc->hole[h].pathPoint[j],ngc->hole[h].currentUnit);
+          xp = ngc->hole[h].scale*(rot.v[0]-ngc->hole[h].xminmax.v[0]);
+          yp = ngc->hole[h].scale*(rot.v[1]-ngc->hole[h].yminmax.v[0]);
+          xp += ngc->hole[h].xtran;
+          yp += 2*ngc->hole[h].ytran;
 //cout << xp << " " << yp << endl;
           glVertex2d(xp,yp);
         }
@@ -72,11 +72,10 @@ ngc->hole[h].xtran; yp += 2*ngc->hole[h].ytran;
 }
 */
 void HoleView::makeCurrentHoleList(int h) {
-<<<<<<< HEAD
-  int i, k, j;
-  double x[100], y[100], xscale, yscale, xcen, ycen;
-  double xsize, ysize;
-  double x1, y1, dd;
+     int i,k,j;
+     double x[100],y[100],xscale,yscale,xcen,ycen;
+     double xsize,ysize;
+     double x1,y1,dd;
 
       x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].startOrient[0].v[0];
       y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].startOrient[0].v[1];
@@ -128,18 +127,15 @@ void HoleView::makeCurrentHoleList(int h) {
                     break;
                 case 33: glColor3d(0.3,0.3,0.3);   // Driveway
                     break;
+
       }
       glBegin(GL_POLYGON);
-      for (i = 0; i < ngc->hole[h].feature[k].poly[j].vertNum; i++) {
-        x[i] =
-            ngc->hole[h].scale * (ngc->hole[h].feature[k].poly[j].rot[i].v[0] -
-                                  ngc->hole[h].xminmax.v[0]);
-        y[i] =
-            ngc->hole[h].scale * (ngc->hole[h].feature[k].poly[j].rot[i].v[1] -
-                                  ngc->hole[h].yminmax.v[0]);
-        x[i] = x[i] + ngc->hole[h].xtran;
-        y[i] = y[i] + 2 * ngc->hole[h].ytran;
-        glVertex2d(x[i], y[i]);
+              for (i=0;i<ngc->hole[h].feature[k].poly[j].vertNum;i++) {
+                x[i] = ngc->hole[h].scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xminmax.v[0]);
+                y[i] = ngc->hole[h].scale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].yminmax.v[0]);
+                x[i] = x[i]+ngc->hole[h].xtran;
+                y[i] = y[i]+2*ngc->hole[h].ytran;
+                glVertex2d(x[i],y[i]);
       }
       glEnd();
     }
@@ -151,7 +147,7 @@ void HoleView::makeCurrentHoleList(int h) {
 
 void HoleView::makeList() {
   int h;
-  for (h = 1; h <= ngc->maxHole; h++) {
+     for (h=1;h<=ngc->maxHole;h++) {
     makeCurrentHoleList(h);
     makeCurrentPointList(h);
     //        if (h==3) makePathList(h);
@@ -159,8 +155,8 @@ void HoleView::makeList() {
 }
 
 void HoleView::draw() {
-  makeCurrentPointList(CLatLng::currentHole);
-  glCallList(CLatLng::currentHole);
-  glCallList(CLatLng::currentHole + 100);
-  // if (CLatLng::currentHole==3) glCallList(CLatLng::currentHole+200);
+    makeCurrentPointList(CLatLng::currentHole);
+    glCallList(CLatLng::currentHole);
+    glCallList(CLatLng::currentHole+100);
+   // if (CLatLng::currentHole==3) glCallList(CLatLng::currentHole+200);
 }

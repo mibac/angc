@@ -19,7 +19,7 @@
 #include "utils.h"
 #endif
 
-const size_t kUTMpts = 10;  // number of UTM points to average
+const size_t kUTMpts = 3;  // number of UTM points to average
 const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;

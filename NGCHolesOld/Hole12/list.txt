@@ -1,0 +1,11 @@
+10
+H12Orientation
+H12TeeBox1
+H12TeeBox2
+H12Fairway
+H12Green
+H12Trap1
+H12Trap2
+H12LeftTrees1
+H12LeftTrees2
+H12RightTrees
