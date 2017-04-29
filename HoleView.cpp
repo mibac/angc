@@ -30,7 +30,7 @@ void HoleView::makeCurrentPointList(int h) {
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
         glDeleteLists(h+100,1);
         glNewList(h+100,GL_COMPILE);
-        glPointSize(12.0);
+        glPointSize(16.0);
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
           xp = ngc->hole[h].scale*(ngc->hole[h].rotCurrentPoint.v[0]-ngc->hole[h].xminmax.v[0]);
