@@ -48,6 +48,8 @@ struct UtmLatLng {
 
 class CLatLng {
  public:
+  static int currentHole;
+
   CLatLng();
 
   ~CLatLng() = default;
@@ -72,14 +74,10 @@ class CLatLng {
   void writeClub(const string &s);
   void writeAll();
 
-  // Variables
-  vector<string> vGGA;  // the complete round of nmea GPGGA sentences
-  // vector<LatLng> vLL;
-  // vector<DDLatLng> vDD;
+  vector<string> vGPS;  // the complete round of nmea GPGGA sentences
   vector<UtmLatLng> vUTM;
 
  private:
-  int currentHole;
   UtmLatLng lastMark;
 
   UtmLatLng getMark(size_t avg);
@@ -94,9 +92,7 @@ extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
 extern GPS myGPS;
 
 extern CLatLng cll;
-// extern UtmLatLng nowMark;
-// extern ofstream fileMark;
 extern ofstream fileClub;
-extern ofstream fileAll;
+extern ofstream fileGPS;
 
 #endif  // CLATLNG_H

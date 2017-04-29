@@ -50,7 +50,6 @@ class Course  {
   public:
     Course(int mh);
     int maxHole;
-    int currentHole;
     Hole hole[19];
     void readCourse();
 };

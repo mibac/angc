@@ -33,7 +33,7 @@ CWriteAllBtn.o: CWriteAllBtn.cpp CWriteAllBtn.h CLatLng.cpp utils.h
 gps.o: gps.cpp gps.h
 	g++ -c $<  $(CXXFLAGS)
 
-HoleView.o: HoleView.cpp HoleView.h Course.cpp
+HoleView.o: HoleView.cpp HoleView.h Course.cpp CLatLng.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 CClubPopup.o: CClubPopup.cpp CClubPopup.h

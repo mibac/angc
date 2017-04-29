@@ -86,7 +86,6 @@ using namespace std;
 #define USEGPS 1
 
 // GLOBALS
-int currentHole = 1;
 int pathStep = 0;
 
 Fl_Window *win;
@@ -157,11 +156,9 @@ void clearGpsBuf() {
 void IdleCallback(void *pData) {
   int n = atoi(in->value());
   if (n == 0) n = 1;
-  if (currentHole != n) {
+  if (CLatLng::currentHole != n) {
     // hv->redraw();
-    currentHole = n;
-    hv->ngc->currentHole = n;
-    cll.currentHole = n;
+    CLatLng::currentHole = n;
   }
 
   /*
@@ -187,7 +184,7 @@ void IdleCallback(void *pData) {
       boxYardage->label(s.c_str());
       //cout << "In IdleCallback: " << s << endl;
       UtmLatLng u = cll.getNowMark();
-      hv->ngc->hole[currentHole].setCurrentPoint(u.lng, u.lat);
+      hv->ngc->hole[CLatLng::currentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
     }
 
@@ -226,7 +223,6 @@ int main(int argc, char **argv) {
 
   ngc = new Course(18);
   ngc->readCourse();
-  ngc->currentHole = 1;
   int x = 480;
   int y = 674;
   win = new Fl_Window(10, 40, 480, 800, "NGC Golf");
@@ -267,7 +263,6 @@ int main(int argc, char **argv) {
 
   win->resizable(win);
   win->show();
-  // hv->currentHole = 1; //JE
   hv->make_current();
   hv->initHoleWindow(x, y, ngc);
   hv->makeList();

@@ -24,13 +24,12 @@ const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 
+int CLatLng::currentHole = 1;
+
 GPS myGPS;
 CLatLng cll;
-// UtmLatLng lastMark;
-// UtmLatLng nowMark;
-// ofstream fileMark("aMarkers.txt");
 ofstream fileClub("aClubs.txt");
-ofstream fileAll("allGPS.txt");
+ofstream fileGPS("allGPS.txt");
 
 ostream& operator<<(ostream& strm, const LatLng& ll) {
   strm << ll.lat << ", " << ll.lng;
@@ -48,12 +47,6 @@ ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
 }
 
 CLatLng::CLatLng() {
-  // LatLng refLLMark;
-  // LatLng nowLLMark;
-  // DDLatLng refDDMark;
-  // DDLatLng nowDDMark;
-  // UtmLatLng refUtmMark;
-  // UtmLatLng nowUtmMark;
 }
 
 CLatLng::CLatLng(const string s) {}
@@ -95,11 +88,12 @@ DDLatLng CLatLng::NMEA2DecimalDegrees(const LatLng& LL) {
 
 UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
   LL2UTM latlon;  //	JACK C2UTM
+  DDLatLng dll;
   UtmLatLng ull;
 
-  ull.lat = NMEA2DecimalDegrees(LL.lat);
-  ull.lng = NMEA2DecimalDegrees(LL.lng);
-  latlon.setLatLon(ull.lat, ull.lng);
+  dll.lat = NMEA2DecimalDegrees(LL.lat);
+  dll.lng = NMEA2DecimalDegrees(LL.lng);
+  latlon.setLatLon(dll.lat, dll.lng);
   latlon.convert2UTM();
   ull.lat = latlon.UTMNorth;
   ull.lng = latlon.UTMEast;
@@ -109,13 +103,14 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 void CLatLng::updateLatLng(const string& s) {
   if (myGPS.isValidGGA(s)) {
     // cout << s;
-    vGGA.push_back(s);
+    vGPS.push_back(s);
     myGPS.setValuesGGA(s);
     LatLng ll(myGPS.latitude, myGPS.longitude);
     UtmLatLng ull = NMEA2UTM(ll);
     vUTM.push_back(ull);
   }
 }
+
 
 UtmLatLng CLatLng::getMark(size_t avg) {
   UtmLatLng ull;
@@ -151,11 +146,6 @@ string CLatLng::distanceFromLastMark() {
   return oss.str();
 }
 
-// void CLatLng::writeMark(const string& s) {
-//   fileMark << setprecision(kPrecision);
-//   fileMark << s << lastMark.lng << ", " << lastMark.lat << endl;
-// }
-
 void CLatLng::writeClub(const string& s) {
   UtmLatLng nowMark = getNowMark();
   fileClub << currentHole << ":\t" << s << "\t" << distanceFromLastMark()
@@ -164,6 +154,6 @@ void CLatLng::writeClub(const string& s) {
 }
 
 void CLatLng::writeAll() {
-  fileAll << setprecision(kPrecision);
-  for (auto itr : vGGA) fileAll << itr;
+  fileGPS << setprecision(kPrecision);
+  for (auto itr : vGPS) fileGPS << itr;
 }

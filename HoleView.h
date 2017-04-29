@@ -6,8 +6,6 @@
 #include <FL/glu.h>
 #include "Course.h"
 
-extern int currentHole;
-
 class HoleView: public Fl_Gl_Window {
  public:
    HoleView(int x,int y,int w,int h,const char *l):Fl_Gl_Window(x,y,w,h,l){}
