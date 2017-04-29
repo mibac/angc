@@ -249,8 +249,8 @@ int main(int argc, char **argv) {
 
   const int kXDelta = 3;
   const int kBoxSize = 80;
-  const int kHoleViewTop = kBoxSize + 8;
-  const int kBtnRow1Top = 0;
+  const int kHoleViewTop = 0;
+  const int kBtnRow1Top = 680;
   const int kYardageLeft = kXDelta;
   const int kYardageWid = 130;
   const int kHoleLeft = kYardageLeft + kYardageWid + kXDelta;
