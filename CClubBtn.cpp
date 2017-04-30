@@ -10,12 +10,14 @@
 
 using namespace std;
 
-string CClubBtn::clubName;
-CClubPopup *myClubPopup;  // local instance of numeric keypad widget
+string CClubBtn::lastHitClub = "";
+string CClubBtn::goingToHitClub = "";
+
+CClubPopup *myClubPopup = nullptr;  // local instance of numeric keypad widget
 
 void CClubBtn::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
-  b->labelsize(30);
+  b->labelsize(24);
   b->color(FL_WHITE);
   b->down_color(FL_YELLOW);
 }
@@ -23,8 +25,9 @@ void CClubBtn::setBtnAttributes(Fl_Button *b) {
 // Called when user finishes entering data with numeric keypad
 void CClubBtn::SetClubPopupValue_CB2() {
   string str(myClubPopup->value());
-  CClubBtn::clubName = str;
-  cll.writeClub(str);
+  CClubBtn::goingToHitClub = str;
+  cll.writeClub(CClubBtn::lastHitClub);
+  CClubBtn::lastHitClub = CClubBtn::goingToHitClub;
   myClubPopup->hide(); // hide ClubPopup
 }
 

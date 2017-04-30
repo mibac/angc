@@ -10,32 +10,32 @@
 
 using namespace std;
 
-MyNumPad *numpad;  // local instance of numeric keypad widget
+CHolesPopup *myHolePopup = nullptr;  // local instance of numeric keypad widget
 
-string MyInput::holeName;
+string CHoleBtn::holeName;
 
 // Called when user finishes entering data with numeric keypad
-void MyInput::SetNumPadValue_CB2() {
-  string str(numpad->value());
-  MyInput::holeName = str;
+void CHoleBtn::SetNumPadValue_CB2() {
+  string str(myHolePopup->value());
+  CHoleBtn::holeName = str;
   if (str.size() == 1)
-    str = "    " + str;
+    str = "  " + str;
   else
-    str = "   " + str;
-  value(str.c_str());  // pass value from numpad to our input
-  numpad->hide();          // hide numpad
+    str = " " + str;
+  value(str.c_str());  // pass value from myHolePopup to our input
+  myHolePopup->hide();          // hide myHolePopup
   cll.setRefMark();
 }
 
-void MyInput::SetNumPadValue_CB(Fl_Widget *, void *data) {
-  MyInput *in = (MyInput *)data;
+void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
+  CHoleBtn *in = (CHoleBtn *)data;
   in->SetNumPadValue_CB2();
 }
 // Handle when user right clicks on our input widget
-int MyInput::handle(int e) {
+int CHoleBtn::handle(int e) {
   int ret = 0;
   switch (e) {
-    // Mouse click on input field? Open numpad dialog..
+    // Mouse click on input field? Open myHolePopup dialog..
     case FL_PUSH:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
@@ -44,19 +44,20 @@ int MyInput::handle(int e) {
     case FL_RELEASE:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
-        if (!numpad) numpad = new MyNumPad(0, 0, 72*3+8, 72*6+4);
-        numpad->SetEnterCallback(SetNumPadValue_CB, (void *)this);
-        numpad->position(parent()->x()+112, parent()->y()+88);
-        numpad->clear_border();
-        numpad->clear();
-        numpad->show();
+        if (!myHolePopup) myHolePopup = new CHolesPopup(0, 0, 72*3+8, 72*6+4);
+        myHolePopup->SetEnterCallback(SetNumPadValue_CB, (void *)this);
+        myHolePopup->position(parent()->x()+112, parent()->y()+88);
+        myHolePopup->clear_border();
+        myHolePopup->clear();
+        myHolePopup->show();
       }
       break;
   }
   return (Fl_Output::handle(e) ? 1 : ret);
 }
 
-MyInput::MyInput(int X, int Y, int W, int H, const char *L)
+CHoleBtn::CHoleBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Output(X, Y, W, H, L) {
-  numpad = 0;
+
+  myHolePopup = nullptr;
 }

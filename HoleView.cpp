@@ -2,6 +2,10 @@
 #include "HoleView.h"
 #endif
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #ifndef COURSE_H_
 #include "Course.h"
 #endif
@@ -155,8 +159,8 @@ void HoleView::makeList() {
 }
 
 void HoleView::draw() {
-    makeCurrentPointList(CLatLng::currentHole);
-    glCallList(CLatLng::currentHole);
-    glCallList(CLatLng::currentHole+100);
-   // if (CLatLng::currentHole==3) glCallList(CLatLng::currentHole+200);
+    makeCurrentPointList(gCurrentHole);
+    glCallList(gCurrentHole);
+    glCallList(gCurrentHole+100);
+   // if (gCurrentHole==3) glCallList(gCurrentHole+200);
 }

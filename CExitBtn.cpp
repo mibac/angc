@@ -2,6 +2,14 @@
 #include "CExitBtn.h"
 #endif
 
+// #include <fstream>
+
+#include <FL/fl_ask.H>
+
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #ifndef UTILS_H
 #include "utils.h"
 #endif
@@ -10,7 +18,13 @@
 #include "CLatLng.h"
 #endif
 
-#include <fstream>
+#ifndef CHOLEBUTTON_H
+#include "CHoleButton.h"
+#endif
+
+#ifndef CCLUBBTN_H
+#include "CClubBtn.h"
+#endif
 
 using namespace std;
 
@@ -20,13 +34,33 @@ void CExitBtn::setBtnAttributes(Fl_Button *b) {
   b->color(FL_WHITE);
   b->down_color(FL_YELLOW);
 }
+
 void CExitBtn::Button_CB() {
-  // fileMark.close();
-  fileClub.close();
-  fileGPS.close();
-  DEBUG_LOG << "Exit button hit" << endl;
-  pclose(gpsin);
-  mainwin->hide();
+  int result = fl_choice("Do you want to save before quitting?",
+                         "Don't Save",  // 0
+                         "Save",        // 1
+                         "Cancel"       // 2
+                         );
+  if (result == 0) {  // Close without saving
+    gFileClub.close();
+    gFileStats.close();
+    gFileGPS.close();
+    if (myClubPopup != nullptr) myClubPopup->hide();
+    if (myHolePopup != nullptr) myHolePopup->hide();
+    pclose(gpsin);
+    mainwin->hide();
+  } else if (result == 1) {  // Save and close
+    cll.writeAll();
+    gFileClub.close();
+    gFileStats.close();
+    gFileGPS.close();
+    if (myClubPopup != nullptr) myClubPopup->hide();
+    if (myHolePopup != nullptr) myHolePopup->hide();
+    pclose(gpsin);
+    mainwin->hide();
+  } else if (result == 2) {  // Cancel / don't close
+                             // don't do anything
+  }
 }
 
 // Handle numeric keypad buttons pressed

@@ -7,6 +7,10 @@
 #include <iomanip>
 #include <iostream>
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #ifndef C2UTM_hpp
 #include "C2UTM.h"
 #endif
@@ -24,25 +28,21 @@ const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 
-int CLatLng::currentHole = 1;
-
 GPS myGPS;
 CLatLng cll;
-ofstream fileClub("aClubs.txt");
-ofstream fileGPS("allGPS.txt");
 
-ostream& operator<<(ostream& strm, const LatLng& ll) {
-  strm << ll.lat << ", " << ll.lng;
-  return strm;
-}
-
-ostream& operator<<(ostream& strm, const DDLatLng& dll) {
-  strm << dll.lat << ", " << dll.lng;
-  return strm;
-}
+// ostream& operator<<(ostream& strm, const LatLng& ll) {
+//   strm << ll.lat << ", " << ll.lng;
+//   return strm;
+// }
+//
+// ostream& operator<<(ostream& strm, const DDLatLng& dll) {
+//   strm << dll.lat << ", " << dll.lng;
+//   return strm;
+// }
 
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
-  strm << ull.lat << ", " << ull.lng;
+  strm << "(" << ull.lng << ",E," << ull.lat << ",N)";
   return strm;
 }
 
@@ -52,23 +52,6 @@ CLatLng::CLatLng() {
 CLatLng::CLatLng(const string s) {}
 CLatLng::CLatLng(const char* cstr) {}
 CLatLng::CLatLng(const LatLng) {}
-
-// bool CLatLng::isgpsup() {
-//   bool ok = false;
-//   gpsmm gps_rec("localhost", DEFAULT_GPSD_PORT);
-//
-//   for (int i = 0; i < 5; ++i) {
-//     if (gps_rec.stream(WATCH_ENABLE | WATCH_NMEA) == NULL) {
-//       cout << "No GPSD running. Retry to connect in " << RETRY_TIME
-//            << " seconds." << endl;
-//       usleep(RETRY_TIME * ONE_SECOND);
-//       continue;  // It will try to connect to gpsd again
-//     } else {
-//       ok = true;
-//     }
-//   }
-//   return ok;
-// }
 
 double CLatLng::NMEA2DecimalDegrees(const double nmea) {
   double deg = double(int(nmea / 100));
@@ -148,12 +131,12 @@ string CLatLng::distanceFromLastMark() {
 
 void CLatLng::writeClub(const string& s) {
   UtmLatLng nowMark = getNowMark();
-  fileClub << currentHole << ":\t" << s << "\t" << distanceFromLastMark()
+  gFileClub << gCurrentHole << "\t" << s << "\t" << distanceFromLastMark()
            << "\t" << lastMark << "\t" << nowMark << endl;
   lastMark = nowMark;
 }
 
 void CLatLng::writeAll() {
-  fileGPS << setprecision(kPrecision);
-  for (auto itr : vGPS) fileGPS << itr;
+  gFileGPS << setprecision(kPrecision);
+  for (auto itr : vGPS) gFileGPS << itr;
 }

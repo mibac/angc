@@ -3,19 +3,19 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o CWriteAllBtn.o  gps.o HoleView.o CClubPopup.o CClubBtn.o $(LDFLAGS)
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o $(LDFLAGS)
 
-markGps.o: markGps.cpp C2UTM.cpp CExitBtn.cpp CHoleButton.cpp CHolesPopup.cpp CLatLng.cpp  Course.cpp CWriteAllBtn.cpp  gps.cpp HoleView.cpp CClubPopup.cpp
+markGps.o: markGps.cpp C2UTM.cpp CExitBtn.cpp CHoleButton.cpp CHolesPopup.cpp CLatLng.cpp  Course.cpp gps.cpp HoleView.cpp CClubPopup.cpp CScoreBtn.cpp CScoreDlg.cpp CScores.cpp CScoreStats.cpp globals.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
 	g++ -c $< $(CXXFLAGS)
 
-CLatLng.o: CLatLng.cpp CLatLng.h gps.cpp C2UTM.cpp utils.h
+CLatLng.o: CLatLng.cpp CLatLng.h gps.cpp C2UTM.cpp utils.h globals.cpp
 	g++ -c $<  $(CXXFLAGS)
 
-CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.cpp
+CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.cpp CHoleButton.cpp CClubBtn.cpp globals.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.cpp CLatLng.cpp
@@ -27,13 +27,10 @@ CHolesPopup.o: CHolesPopup.cpp CHolesPopup.h
 Course.o: Course.cpp Course.h C2UTM.cpp
 	g++ -c $<  $(CXXFLAGS)
 
-CWriteAllBtn.o: CWriteAllBtn.cpp CWriteAllBtn.h CLatLng.cpp utils.h
-	g++ -c $<  $(CXXFLAGS)
-
 gps.o: gps.cpp gps.h
 	g++ -c $<  $(CXXFLAGS)
 
-HoleView.o: HoleView.cpp HoleView.h Course.cpp CLatLng.cpp
+HoleView.o: HoleView.cpp HoleView.h Course.cpp globals.cpp
 	g++ -c $<  $(CXXFLAGS)
 
 CClubPopup.o: CClubPopup.cpp CClubPopup.h
@@ -41,6 +38,21 @@ CClubPopup.o: CClubPopup.cpp CClubPopup.h
 
 CClubBtn.o: CClubBtn.cpp CClubBtn.h CClubPopup.cpp CLatLng.cpp
 			g++ -c $<  $(CXXFLAGS)
+
+CScoreDlg.o: CScoreDlg.cpp CScoreDlg.h CScoreStats.cpp globals.cpp
+			g++ -c $<  $(CXXFLAGS)
+
+CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg.cpp
+			g++ -c $<  $(CXXFLAGS)
+
+CScores.o: CScores.cpp CScores.h globals.cpp
+			g++ -c $<  $(CXXFLAGS)
+
+CScoresStats.o: CScoresStats.cpp CScoresStats.h CScores.cpp
+			g++ -c $<  $(CXXFLAGS)
+
+globals.o: globals.cpp globals.h
+	g++ -c $<  $(CXXFLAGS)
 
 clean:
 	rm *.o

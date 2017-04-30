@@ -9,12 +9,12 @@ class CExitBtn : public Fl_Button {
   void setBtnAttributes(Fl_Button *b);
 
   // Handle numeric keypad buttons pressed
-  void Button_CB();
   static void staticButton_CB(Fl_Widget *w, void *data);
 
  public:
   Fl_Window *mainwin;
 
+  void Button_CB();
   CExitBtn(int X, int Y, int W, int H, const char *L = 0);
 };
 

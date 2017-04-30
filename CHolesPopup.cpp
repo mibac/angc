@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void MyNumPad::setBtnAttributes(Fl_Button *b) {
+void CHolesPopup::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
   b->labelsize(48);
   b->color(FL_WHITE);
@@ -12,7 +12,7 @@ void MyNumPad::setBtnAttributes(Fl_Button *b) {
 }
 
 // Handle numeric keypad buttons pressed
-void MyNumPad::Button_CB2(Fl_Widget *w) {
+void CHolesPopup::Button_CB2(Fl_Widget *w) {
   Fl_Button *b = (Fl_Button *)w;
   // Appends label of button
   // in->replace(in->position(), in->mark(), b->label(), 1);
@@ -22,12 +22,12 @@ void MyNumPad::Button_CB2(Fl_Widget *w) {
   (*enter_cb)(in, enter_data);
 }
 
-void MyNumPad::Button_CB(Fl_Widget *w, void *data) {
-  MyNumPad *numpad = (MyNumPad *)data;
-  numpad->Button_CB2(w);
+void CHolesPopup::Button_CB(Fl_Widget *w, void *data) {
+  CHolesPopup *myHolePopup = (CHolesPopup *)data;
+  myHolePopup->Button_CB2(w);
 }
 
-MyNumPad::MyNumPad(int X, int Y, int W, int H, const char *L)
+CHolesPopup::CHolesPopup(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
   const int bsize = 72;
   const int kDeltaX = 2;
@@ -126,11 +126,11 @@ MyNumPad::MyNumPad(int X, int Y, int W, int H, const char *L)
   enter_data = 0;
 }
 // Return current value
-const char *MyNumPad::value() { return (in->value()); }
+const char *CHolesPopup::value() { return (in->value()); }
 // Clear current value
-void MyNumPad::clear() { in->value(""); }
+void CHolesPopup::clear() { in->value(""); }
 // Set callback for when Enter is pressed
-void MyNumPad::SetEnterCallback(Fl_Callback *cb, void *data) {
+void CHolesPopup::SetEnterCallback(Fl_Callback *cb, void *data) {
   enter_cb = cb;
   enter_data = data;
   hide();

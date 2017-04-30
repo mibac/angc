@@ -58,20 +58,16 @@ CClubPopup::CClubPopup(int X, int Y, int W, int H, const char *L)
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
   col += b->w() + kDeltaX;
-  b = new Fl_Button(col, row, bsize, bsize, "H1");
+  b = new Fl_Button(col, row, bsize, bsize, "Hy");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
   col += b->w() + kDeltaX;
-  b = new Fl_Button(col, row, bsize, bsize, "H2");
+  b = new Fl_Button(col, row, bsize, bsize, "2");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
   col = colstart;
   row += b->h();
 
-  b = new Fl_Button(col, row, bsize, bsize, "2");
-  b->callback(Button_CB, (void *)this);
-  setBtnAttributes(b);
-  col += b->w() + kDeltaX;
   b = new Fl_Button(col, row, bsize, bsize, "3");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
@@ -79,13 +75,13 @@ CClubPopup::CClubPopup(int X, int Y, int W, int H, const char *L)
   b = new Fl_Button(col, row, bsize, bsize, "4");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col = colstart;
-  row += b->h();
-
+  col += b->w() + kDeltaX;
   b = new Fl_Button(col, row, bsize, bsize, "5");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col += b->w() + kDeltaX;
+  col = colstart;
+  row += b->h();
+
   b = new Fl_Button(col, row, bsize, bsize, "6");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
@@ -93,13 +89,13 @@ CClubPopup::CClubPopup(int X, int Y, int W, int H, const char *L)
   b = new Fl_Button(col, row, bsize, bsize, "7");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col = colstart;
-  row += b->h();
-
+  col += b->w() + kDeltaX;
   b = new Fl_Button(col, row, bsize, bsize, "8");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col += b->w() + kDeltaX;
+  col = colstart;
+  row += b->h();
+
   b = new Fl_Button(col, row, bsize, bsize, "9");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
@@ -107,18 +103,22 @@ CClubPopup::CClubPopup(int X, int Y, int W, int H, const char *L)
   b = new Fl_Button(col, row, bsize, bsize, "PW");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col = colstart;
-  row += b->h();
-
+  col += b->w() + kDeltaX;
   b = new Fl_Button(col, row, bsize, bsize, "GW");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
-  col += b->w() + kDeltaX;
+  col = colstart;
+  row += b->h();
+
   b = new Fl_Button(col, row, bsize, bsize, "SW");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
   col += b->w() + kDeltaX;
   b = new Fl_Button(col, row, bsize, bsize, "LW");
+  b->callback(Button_CB, (void *)this);
+  setBtnAttributes(b);
+  col += b->w() + kDeltaX;
+  b = new Fl_Button(col, row, bsize, bsize, "x");
   b->callback(Button_CB, (void *)this);
   setBtnAttributes(b);
   end();

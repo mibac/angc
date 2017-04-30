@@ -5,7 +5,6 @@
 #include "gps.h"
 #endif
 
-#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -48,8 +47,6 @@ struct UtmLatLng {
 
 class CLatLng {
  public:
-  static int currentHole;
-
   CLatLng();
 
   ~CLatLng() = default;
@@ -86,13 +83,11 @@ class CLatLng {
   UtmLatLng NMEA2UTM(const LatLng &LL);
 };
 
-extern ostream &operator<<(ostream &strm, const LatLng &ll);
-extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
+// extern ostream &operator<<(ostream &strm, const LatLng &ll);
+// extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
 extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
 extern GPS myGPS;
 
 extern CLatLng cll;
-extern ofstream fileClub;
-extern ofstream fileGPS;
 
 #endif  // CLATLNG_H

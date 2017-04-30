@@ -26,7 +26,8 @@ class CClubBtn : public Fl_Button {
   int handle(int e);
 
  public:
-  static string clubName;
+     static string lastHitClub;
+     static string goingToHitClub;
 
   CClubBtn(int X, int Y, int W, int H, const char *L = 0);
 };

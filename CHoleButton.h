@@ -11,24 +11,25 @@
 #endif
 
 #include <string>
+
 using namespace std;
 
-class MyInput : public Fl_Output {
+class CHoleBtn : public Fl_Output {
 
   // Called when user finishes entering data with numeric keypad
   void SetNumPadValue_CB2();
 
   static void SetNumPadValue_CB(Fl_Widget *, void *data);
 
-  // Handle when user right clicks on our input widget
+  // Handle when user clicks on our input widget
   int handle(int e);
 
  public:
   static string holeName;
 
-  MyInput(int X, int Y, int W, int H, const char *L = 0);
+  CHoleBtn(int X, int Y, int W, int H, const char *L = 0);
 };
 
-extern   MyNumPad *numpad;  // local instance of numeric keypad widget
+extern   CHolesPopup *myHolePopup;  // local instance of numeric keypad widget
 
 #endif  // CHOLEBUTTON_H
