@@ -81,7 +81,7 @@ CHoleBtn *holeBtn;
 CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
 CExitBtn *exitBtn;
-FILE *gpsin;
+FILE *gpsin = nullptr;
 HoleView *hv;
 Course *ngc;
 
