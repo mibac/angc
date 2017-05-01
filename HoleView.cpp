@@ -217,7 +217,7 @@ void HoleView::makeCurrentGreenList(int h) {
         }
 
     }
-    double xp,yp;
+    double xp,yp,yfront,ypin,yback;
     const char *sf,*sp,*sb;
     string sfront,spin,sback;
     ngc->hole[h].gd.PinRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Pin,ngc->hole[h].currentGreenUnit);
@@ -231,35 +231,35 @@ void HoleView::makeCurrentGreenList(int h) {
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-
+      ypin = yp;
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-
+      yfront = yp;
       glColor3f(1.0,0.0,0.0);
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-
+      yback = yp;
     glEnd();
-
+      int offset = 40;
       glColor3f(0.0,0.0,0.0);
       gl_font(FL_HELVETICA_BOLD,48);
       spin = to_string((int) ngc->hole[h].gd.pinYardage);
       sp = spin.c_str();
-      gl_draw(sp,(float) 10.0,(float)(300));
+      gl_draw(sp,(float) 10.0,(float) (ypin-offset));
       gl_font(FL_HELVETICA_BOLD,48);
       sfront = to_string((int) ngc->hole[h].gd.frontYardage);
       sf = sfront.c_str();
-      gl_draw(sf,(float) 10.0,(float)(200));
+      gl_draw(sf,(float) 10.0,(float) (yfront-offset));
       gl_font(FL_HELVETICA_BOLD,48);
       sback = to_string((int) ngc->hole[h].gd.backYardage);
       sb = sback.c_str();
-      gl_draw(sb,(float) 10.0,(float)(400));
+      gl_draw(sb,(float) 10.0,(float) (yback-offset));
     glFlush();
     glEndList();
 
