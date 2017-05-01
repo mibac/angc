@@ -43,6 +43,7 @@ class Hole {
     void findGreenMinMax();
     Vector  rotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
+    void rotateToGreenOrientation() ;
     void setCurrentPoint(double east,double north);
     void computeYardageToHole();
     void computeYardageFromTee();
