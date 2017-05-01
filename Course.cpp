@@ -25,6 +25,17 @@ void Hole::rotateHoleToOrientation() {
     }
     rotCurrentPoint = rotatePoint(currentPoint,currentUnit);
 }
+void Hole::rotateToGreenOrientation() {
+    int i,j,k;
+    for (k=0;k<featureNum;k++) {
+         for (j=0;j<feature[k].polyNum;j++) {
+             for (i=0;i<feature[k].poly[j].vertNum;i++) {
+                 feature[k].poly[j].rot[i] = rotatePoint(feature[k].poly[j].UTM[i],currentGreenUnit);
+             }
+         }
+    }
+    rotCurrentPoint = rotatePoint(currentPoint,currentGreenUnit);
+}
 
 void Hole::findMinMax() {
     int i,j,k;
@@ -205,7 +216,7 @@ void Course::readCourse() {
         }
        finlist.close();
        string walkpath = pathprefix+"EllingerPath/"+"H"+holenum[h]+"Path.txt";
-       cout << walkpath << endl;
+      // cout << walkpath << endl;
 
         fin.open(walkpath);
         int sk = 10;
@@ -222,7 +233,7 @@ void Course::readCourse() {
               t=0;
            }
         }
-        cout << "stored " << hole[h].pathPointNum << " points" << endl;
+//cout << "stored " << hole[h].pathPointNum << " points" << endl;
         hole[h].currentPathIndex = 0;
         fin.close();
 

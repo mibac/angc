@@ -167,7 +167,7 @@ void HoleView::makeCurrentGreenList(int h) {
     dd = sqrt(x1*x1+y1*y1);
     ngc->hole[h].currentGreenUnit.v[0] = x1/dd;
     ngc->hole[h].currentGreenUnit.v[1] = y1/dd;
-    ngc->hole[h].rotateHoleToOrientation();
+    ngc->hole[h].rotateToGreenOrientation();
     ngc->hole[h].rotCurrentPoint = 
                      ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentGreenUnit);
     ngc->hole[h].findGreenMinMax();
@@ -208,7 +208,7 @@ void HoleView::makeCurrentGreenList(int h) {
                 x[i] = ngc->hole[h].greenscale*(ngc->hole[h].feature[k].poly[j].rot[i].v[0]-ngc->hole[h].xgreenminmax.v[0]);
                 y[i] = ngc->hole[h].greenscale*(ngc->hole[h].feature[k].poly[j].rot[i].v[1]-ngc->hole[h].ygreenminmax.v[0]);
                 x[i] = x[i]+ngc->hole[h].greenxtran;
-                y[i] = y[i]+2*ngc->hole[h].greenytran;
+                y[i] = y[i]+1.5*ngc->hole[h].greenytran;
                 glVertex2d(x[i],y[i]);
             }
             glEnd();
@@ -220,29 +220,29 @@ void HoleView::makeCurrentGreenList(int h) {
     double xp,yp;
     const char *sf,*sp,*sb;
     string sfront,spin,sback;
-    ngc->hole[h].gd.PinRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Pin,ngc->hole[h].currentUnit);
-    ngc->hole[h].gd.FrontRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Front,ngc->hole[h].currentUnit);
-    ngc->hole[h].gd.BackRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Back,ngc->hole[h].currentUnit);
+    ngc->hole[h].gd.PinRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Pin,ngc->hole[h].currentGreenUnit);
+    ngc->hole[h].gd.FrontRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Front,ngc->hole[h].currentGreenUnit);
+    ngc->hole[h].gd.BackRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Back,ngc->hole[h].currentGreenUnit);
     glPointSize(16.0);
     glBegin(GL_POINTS);
       glColor3f(1.0,0.0,0.0);
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.PinRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.PinRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
-      yp = yp+2*ngc->hole[h].greenytran;
+      yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
 
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
-      yp = yp+2*ngc->hole[h].greenytran;
+      yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
 
       glColor3f(1.0,0.0,0.0);
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
-      yp = yp+2*ngc->hole[h].greenytran;
+      yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
 
     glEnd();
