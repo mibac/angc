@@ -15,7 +15,7 @@ struct Vector {
 
 struct Polygon {
     int vertNum;
-    Vector  UTM[100],rot[100],XY[100];;
+    Vector  UTM[100],rot[100];
 };
 
 struct Feature {
@@ -23,27 +23,37 @@ struct Feature {
     Polygon poly[30];
 };
 
+struct greenData {
+    Vector currentP,Pin,Front,Back;
+    Vector PinRot,FrontRot,BackRot;
+    double pinYardage,frontYardage,backYardage;
+    Feature *green;
+};
+
 class Hole {
   public:
     Hole();
-    int featureNum;
+    int featureNum,viewType;
     Feature feature[30];
     Vector startOrient[2],currentOrient[2],currentPoint,rotCurrentPoint;
-    Vector startUnit,currentUnit;
-    Vector xminmax,yminmax;
-    double walk,scale, xtran,ytran;
+    Vector startUnit,currentUnit,currentGreenUnit;
+    Vector xminmax,yminmax,xgreenminmax,ygreenminmax;
+    double walk,scale,xtran,ytran,greenscale,greenxtran,greenytran;
     void findMinMax();
+    void findGreenMinMax();
     Vector  rotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
- //   void setCurrentPoint(double w);
     void setCurrentPoint(double east,double north);
     void computeYardageToHole();
     void computeYardageFromTee();
     int yardageToHole,yardageFromTee;
+    double yardDistance(Vector p1,Vector p2); 
+    void findGreenYardage();
+    greenData gd;
     string currentYardageToHoleStr;
     string currentYardageFromTeeStr;
-//    Vector pathPoint[1000];
-//    int pathPointNum;
+    Vector pathPoint[1000];
+    int pathPointNum,currentPathIndex;
 };
 
 class Course  {
@@ -53,5 +63,4 @@ class Course  {
     Hole hole[19];
     void readCourse();
 };
-
 #endif
