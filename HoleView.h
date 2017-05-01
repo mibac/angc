@@ -12,7 +12,7 @@ class HoleView: public Fl_Gl_Window {
    void makeList();
    void makeCurrentHoleList(int h);
    void makeCurrentPointList(int h);
-//   void makePathList(int h);
+   void makeCurrentGreenList(int h);
    void initHoleWindow(int x, int y,Course *course);
    void draw();
    int xres,yres; //JE
