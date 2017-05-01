@@ -14,7 +14,7 @@
 
 using namespace std;
 
-#define USEGPS 0
+#define USEGPS 1
 
 struct LatLng {
   double lat;

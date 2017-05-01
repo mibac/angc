@@ -33,8 +33,7 @@ string getAsciiDate(const time_t date) {
 }
 
 ostream& operator<<(ostream& strm, const CScores& cs) {
-  strm << cs.date << "\t"
-  << cs.hole << "\t"
+  strm << cs.hole << "\t"
   << cs.updown << "\t"
   << cs.putts << "\t"
   << cs.score << "\t"

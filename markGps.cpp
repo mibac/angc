@@ -85,18 +85,19 @@ char gpsBuf[kBUFSIZE];
 const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 
 
-#if USEGPS
 void HandleFD(FL_SOCKET fd, void *data) {
-  const int bufSz = 1023;
-  char chRA[bufSz + 1];
-
   int n = atoi(holeBtn->value());
   if (n == 0) n = 1;
   if (gCurrentHole != n) {
     // hv->redraw();
     gCurrentHole = n;
+    #if USEGPS == 0
+       hv->redraw();
+	#endif
   }
-
+#if USEGPS
+    const int bufSz = 1023;
+	char chRA[bufSz + 1];
   if (fgets(chRA, sizeof(chRA), gpsin) == NULL) {  // read the line of data
     Fl::remove_fd(fileno(gpsin));                  // command ended? disconnect
     pclose(gpsin);                                 // close the descriptor
@@ -115,8 +116,8 @@ void HandleFD(FL_SOCKET fd, void *data) {
       hv->redraw();
     }
   }
+  #endif
 }
-#endif
 
 // This window callback allows the user to save & exit, don't save, or cancel.
 static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
@@ -190,7 +191,6 @@ int main(int argc, char **argv) {
   hv->makeList();
   hv->show();
   hv->draw();
-#if USEGPS
   // from howto-add_fd_popen()
   if ((gpsin = popen(GPS_CMD, "r")) == NULL) {  // start the
                                                 // external unix command
@@ -199,7 +199,6 @@ int main(int argc, char **argv) {
   }
   // setup a callback for the popen() ed descriptor
   Fl::add_fd(fileno(gpsin), HandleFD, 0);
-#endif
 
   cout << asctime(localtime(&gToday)) << gToday << " seconds since the Epoch\n";
 
