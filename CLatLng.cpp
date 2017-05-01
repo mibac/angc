@@ -46,6 +46,7 @@ ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
   return strm;
 }
 
+#if USEGPS
 CLatLng::CLatLng() {
 }
 
@@ -140,3 +141,49 @@ void CLatLng::writeAll() {
   gFileGPS << setprecision(kPrecision);
   for (auto itr : vGPS) gFileGPS << itr;
 }
+#else
+CLatLng::CLatLng() {
+}
+
+CLatLng::CLatLng(const string s) {}
+CLatLng::CLatLng(const char* cstr) {}
+CLatLng::CLatLng(const LatLng) {}
+
+double CLatLng::NMEA2DecimalDegrees(const double nmea) {
+  return 0;
+}
+
+DDLatLng CLatLng::NMEA2DecimalDegrees(const LatLng& LL) {
+  DDLatLng dll;
+  return dll;
+}
+
+UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
+  UtmLatLng ull;  //	JACK C2UTM
+  return ull;
+}
+
+void CLatLng::updateLatLng(const string& s) {
+}
+
+
+UtmLatLng CLatLng::getMark(size_t avg) {
+  UtmLatLng ull;
+  return ull;
+}
+
+void CLatLng::setRefMark() {  }
+
+UtmLatLng CLatLng::getNowMark() { return getMark(kUTMpts); }
+
+string CLatLng::distanceFromLastMark() {
+  return "";
+}
+
+void CLatLng::writeClub(const string& s) {
+}
+
+void CLatLng::writeAll() {
+}
+
+#endif

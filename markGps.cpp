@@ -67,11 +67,6 @@
 
 using namespace std;
 
-// Conditionals
-#define USEGPS 1
-
-// GLOBALS
-
 Fl_Window *win;
 Fl_Output *my_input;
 Fl_Box *boxYardage;
