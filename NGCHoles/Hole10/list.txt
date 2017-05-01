@@ -1,16 +1,19 @@
-15
-H10Orientation
-H10TeeBox1
-H10TeeBox2
-H10TeeBox3
-H10Fairway1
-H10Fairway2
-H10Green
-H10Trap1
-H10Trap2
-H10Trees1
-H10Trees2
-H10Trees4
-H10Trees3
-H10Trees5
-H10Creek
+18
+H10Orientation 0
+H10TeeBox1 1
+H10TeeBox2 1
+H10TeeBox3 1
+H10Fairway1 2
+H10Fairway2 2
+H10Green 301
+H10Trap1 302
+H10Trap2 302
+H10Trees1 5
+H10Trees2 5
+H10Trees4 5
+H10Trees3 5
+H10Trees5 5
+H10Creek 6
+H10TeeArea 7
+H10CartPath 21
+H10OB 22

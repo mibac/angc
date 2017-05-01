@@ -1,21 +1,22 @@
-20
-H15Orientation
-H15TeeBox1
-H15TeeBox2
-H15TeeBox3
-H15Fairway
-H15Green
-H15Trap1
-H15Trap2
-H15Trap3
-H15Trap4
-H15Trap5
-H15Trap6
-H15Trap7
-H15RightTrees1
-H15RightTrees5
-H15RightTrees2
-H15LeftTrees1
-H15RightTrees3
-H15RightTrees4
-H15Trees2
+21
+H15Orientation 0
+H15TeeBox1 1
+H15TeeBox2 1
+H15TeeBox3 1
+H15Fairway 2
+H15Green 301
+H15Trap1 4
+H15Trap2 4
+H15Trap3 4
+H15Trap4 4
+H15Trap5 4
+H15Trap6 302
+H15Trap7 302
+H15RightTrees1 5
+H15RightTrees5 5
+H15RightTrees2 5
+H15LeftTrees1 5
+H15RightTrees3 5
+H15RightTrees4 5
+H15Trees2 5
+H15TeeArea 7

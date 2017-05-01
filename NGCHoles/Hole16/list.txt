@@ -1,24 +1,26 @@
-23
-H16Orientation
-H16TeeBox1
-H16TeeBox2
-H16TeeBox3
-H16Fairway1
-H16Fairway2
-H16Green
-H16Trap1
-H16Trap2
-H16Trap3
-H16Trap4
-H16LeftTrees1
-H16RightTrees1
-H16RightTrees5
-H16LeftTrees2
-H16RightTrees2
-H16RightTrees6
-H16LeftTrees3
-H16RightTrees3
-H16RightTrees7
-H16RightTrees4
-H16RightTrees8
-H16Creek
+25
+H16Orientation 0
+H16TeeBox1 1
+H16TeeBox2 1
+H16TeeBox3 1
+H16Fairway1 2
+H16Fairway2 2
+H16Green 301
+H16Trap1 4
+H16Trap2 4
+H16Trap3 4
+H16Trap4 302
+H16LeftTrees1 5
+H16RightTrees1 5
+H16RightTrees5 5
+H16LeftTrees2 5
+H16RightTrees2 5
+H16RightTrees6 5
+H16LeftTrees3 5
+H16RightTrees3 5
+H16RightTrees7 5
+H16RightTrees4 5
+H16RightTrees8 5
+H16Creek 6
+H16TeeArea 7
+H16CartPath 21

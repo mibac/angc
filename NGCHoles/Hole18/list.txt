@@ -1,13 +1,15 @@
-12
-H18Orientation
-H18TeeBox1
-H17TeeBox2
-H17TeeBox3
-H18Fairway
-H18Green
-H18Trap2
-H18Trap1
-H18Trap3
-H18RightTrees1
-H18LeftTrees1
-H18Creek
+14
+H18Orientation 0
+H18TeeBox1 1
+H17TeeBox2 1
+H17TeeBox3 1
+H18Fairway 2
+H18Green 301
+H18Trap2 4
+H18Trap1 4
+H18Trap3 302
+H18RightTrees1 5
+H18LeftTrees1 5
+H18Creek 6
+H18TeeArea 7
+H18CartPath 21

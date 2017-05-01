@@ -1,20 +1,23 @@
-19
-Orientation
-BlackTeeBox
-BlueTeeBox
-BlueTeeBox2
-WhiteTeeBox
-Creek
-Green
-LeftTrees
-RightTrees1
-RightTrees2
-RightTrees3
-RightTrees4
-RightTrees5
-H1RightTrees6
-Fairway1
-Fairway2
-LeftTrap
-LeftBackTrap
-RightTrap
+22
+Orientation 0
+BlackTeeBox 1
+BlueTeeBox 1
+BlueTeeBox2 1
+WhiteTeeBox 1
+Fairway1 2
+Fairway2 2
+Green 301
+LeftTrap 302
+LeftBackTrap 302
+RightTrap 302
+LeftTrees 5
+RightTrees1 5
+RightTrees2 5
+RightTrees3 5
+RightTrees4 5
+RightTrees5 5
+H1RightTrees6 5
+Creek 6
+H1TeeArea 7
+H1OB 22
+H1CartPath 21

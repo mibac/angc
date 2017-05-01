@@ -1,11 +1,12 @@
-10
-H12Orientation
-H12TeeBox1
-H12TeeBox2
-H12Fairway
-H12Green
-H12Trap1
-H12Trap2
-H12LeftTrees1
-H12LeftTrees2
-H12RightTrees
+11
+H12Orientation 0
+H12TeeBox1 1
+H12TeeBox2 1
+H12Fairway 2
+H12Green 301
+H12Trap1 302
+H12Trap2 302
+H12LeftTrees1 5
+H12LeftTrees2 5
+H12RightTrees 5
+H12TeeArea 7

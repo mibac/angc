@@ -1,13 +1,16 @@
-12
-H5Orientation
-H5TeeBox1
-H5TeeBox3
-H5TeeBox2
-H5Fairway
-H5Trap1
-H5Trap2
-H5Trap3
-H5RightTrees1
-H5RightTrees2
-H5Water
-H5Green
+15
+H5Orientation 0
+H5TeeBox1 1
+H5TeeBox3 1
+H5TeeBox2 1
+H5Fairway 2
+H5Green 301
+H5Trap1 4
+H5Trap2 4
+H5Trap3 302
+H5RightTrees1 5
+H5RightTrees2 5
+H5Water 6
+H5TeeArea 7
+H5CartPath 21
+H5OB 22

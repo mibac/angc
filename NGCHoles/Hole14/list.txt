@@ -1,18 +1,20 @@
-17
-H14Orientation
-H14TeeBox1
-H14TeeBox2
-H14TeeBox3
-H14TeeBox4
-H14Fairway
-H14Green
-H14Trap1
-H14Trap2
-H14Trap3
-H14LeftTrees2
-H14RightTrees2
-H14LeftTrees3
-H14LeftTrees1
-H14LeftTrees4
-H14RightTrees1
-H14Pond
+19
+H14Orientation 0
+H14TeeBox1 1
+H14TeeBox2 1
+H14TeeBox3 1
+H14TeeBox4 1
+H14Fairway 2
+H14Green 301
+H14Trap1 4
+H14Trap2 4
+H14Trap3 302
+H14LeftTrees2 5
+H14RightTrees2 5
+H14LeftTrees3 5
+H14LeftTrees1 5
+H14LeftTrees4 5
+H14RightTrees1 5
+H14Pond 6
+H14TeeArea 7
+H14OB 22

@@ -1,12 +1,13 @@
-11
-H2Orientation
-H2CartPath
-H2Green
-H2LeftTrees1
-H2RightTrees1
-H2RightTrees2
-H2TeeBox
-H2Fairway
-H2LeftTrap
-H2LeftTrees2
-H2RightTrap
+12
+H2Orientation 0
+H2Green 301
+H2LeftTrees1 5
+H2RightTrees1 5
+H2RightTrees2 5
+H2LeftTrees2 5
+H2TeeBox 1
+H2Fairway 2
+H2LeftTrap 302
+H2RightTrap  302
+H2CartPath 21
+H2OB 22

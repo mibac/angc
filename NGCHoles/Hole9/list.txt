@@ -1,15 +1,17 @@
-14
-H9Orientation
-H9TeeBox1
-H9TeeBox2
-H9TeeBox3
-H9Fairway
-H9Green
-H9Trap1
-H9Trap2
-H9Trap3
-H9Trap4
-H9Trap5
-H9LeftTrees1
-H9LeftTrees2
-H9RightTrees1
+16
+H9Orientation 0
+H9TeeBox1 1
+H9TeeBox2 1
+H9TeeBox3 1
+H9Fairway 2
+H9Green 301
+H9Trap1 4
+H9Trap2 4
+H9Trap3 302
+H9Trap4 302
+H9Trap5 302
+H9LeftTrees1 5
+H9LeftTrees2 5
+H9RightTrees1 5
+H9TeeArea 7
+H9CartPath 21

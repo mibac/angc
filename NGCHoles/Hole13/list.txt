@@ -1,13 +1,14 @@
-12
-H13Orientation
-H13TeeBox1
-H13TeeBox2
-H13Fairway
-H13Green
-H13Trap1
-H13Trap2
-H13LeftTrees
-H13RightTrees2
-H13RightTrees1
-H13Trees1
-H13Pond
+13
+H13Orientation 0
+H13TeeBox1 1
+H13TeeBox2 1
+H13Fairway 2
+H13Green 301
+H13Trap1 4
+H13Trap2 302
+H13LeftTrees 5
+H13RightTrees2 5
+H13RightTrees1 5
+H13Trees1 5
+H13Pond 6
+H13TeeArea 7

@@ -1,17 +1,19 @@
-16
-H17Orientation
-H17Creek
-H17LeftTrees2
-H17RightTrees3
-H17TeeBox1
-H17TeeBox4
-H17Green
-H17RightTrees1
-H17RightTrees4
-H17TeeBox2
-H17Trap1
-H17LeftTrees1
-H17RightTrees2
-H17RightTrees5
-H17TeeBox3
-H17Trap2
+18
+H17Orientation 0
+H17Creek 6
+H17LeftTrees2 5
+H17RightTrees3 5
+H17TeeBox1 1
+H17TeeBox4 1
+H17Green 301
+H17RightTrees1 5
+H17RightTrees4 5
+H17TeeBox2 1
+H17Trap1 302
+H17LeftTrees1 5
+H17RightTrees2 5
+H17RightTrees5 5
+H17TeeBox3 1
+H17Trap2 302
+H17TeeArea 7
+H17CartPath 21
