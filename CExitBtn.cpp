@@ -47,7 +47,7 @@ void CExitBtn::Button_CB() {
     gFileGPS.close();
     if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
-    pclose(gpsin);
+    if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 1) {  // Save and close
     cll.writeAll();
@@ -56,7 +56,7 @@ void CExitBtn::Button_CB() {
     gFileGPS.close();
     if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
-    pclose(gpsin);
+    if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 2) {  // Cancel / don't close
                              // don't do anything
