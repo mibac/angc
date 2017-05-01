@@ -45,19 +45,90 @@ void Hole::findMinMax() {
         }
     }
 }
-/*
-void Hole::setCurrentPoint(double w) {
-   walk = walk+w;
-//cout << "Walk = " << walk << endl;
-   if (walk>1.0) walk = 0.0;
-   currentPoint.v[0] = (1-walk)*startOrient[0].v[0] + walk*startOrient[1].v[0];
-   currentPoint.v[1] = (1-walk)*startOrient[0].v[1] + walk*startOrient[1].v[1];
-//cout << currentPoint.v[0] << " " << currentPoint.v[1] << endl;
+
+void Hole::findGreenMinMax() {
+    int i,j,k;
+
+    xgreenminmax.v[0] = ygreenminmax.v[0] = 100000000000.0;
+    xgreenminmax.v[1] = ygreenminmax.v[1] = -100000000000.0;
+
+    for (k=0;k<featureNum;k++) {
+        for (j=0;j<feature[k].polyNum;j++) {
+            for (i=0;i<feature[k].poly[j].vertNum;i++) {
+              if (feature[k].featureType>300) {
+                if (feature[k].poly[j].rot[i].v[0]<xgreenminmax.v[0]) xgreenminmax.v[0]=feature[k].poly[j].rot[i].v[0];
+                if (feature[k].poly[j].rot[i].v[0]>xgreenminmax.v[1]) xgreenminmax.v[1]=feature[k].poly[j].rot[i].v[0];
+                if (feature[k].poly[j].rot[i].v[1]<ygreenminmax.v[0]) ygreenminmax.v[0]=feature[k].poly[j].rot[i].v[1];
+                if (feature[k].poly[j].rot[i].v[1]>ygreenminmax.v[1]) ygreenminmax.v[1]=feature[k].poly[j].rot[i].v[1];
+                }
+            }
+        }
+    }
+
 }
-*/
+
+
+
 void Hole::setCurrentPoint(double east,double north) {
   currentPoint.v[0] = east;
   currentPoint.v[1] = north;
+}
+
+double Hole::yardDistance(Vector p1,Vector p2) {
+    return 1.0936*sqrt((p1.v[0]-p2.v[0])*(p1.v[0]-p2.v[0])+ (p1.v[1]-p2.v[1])*(p1.v[1]-p2.v[1]));
+}
+
+void Hole::findGreenYardage() {
+    int i,j;
+    double u1,u2,v1,v2;
+    double x1,x2,y1,y2;
+    double a1,a2,b1,b2,c1,c2,det;
+    double s,t,big = 10000000.0;
+    double smin = big, smax = -big;
+
+    u1 = gd.currentP.v[0]; v1 = gd.currentP.v[1];
+    u2 = gd.Pin.v[0]; v2 = gd.Pin.v[1];
+    a1 = u2-u1; a2 = v2-v1;
+    for (j=0;j<gd.green->polyNum;j++)  {
+            for (i=0;i<gd.green->poly[j].vertNum;i++) {
+                if (i<gd.green->poly[j].vertNum-1) {
+                    x1 = gd.green->poly[j].UTM[i].v[0];
+                    y1 = gd.green->poly[j].UTM[i].v[1];
+                    x2 = gd.green->poly[j].UTM[i+1].v[0];
+                    y2 = gd.green->poly[j].UTM[i+1].v[1];
+                 }
+                else {
+                    x1 = gd.green->poly[j].UTM[i].v[0];
+                    y1 = gd.green->poly[j].UTM[i].v[1];
+                    x2 = gd.green->poly[j].UTM[0].v[0];
+                    y2 = gd.green->poly[j].UTM[0].v[1];
+                }
+                b1 = x1-x2; c1= x1-u1;
+                b2 = y1-y2; c2 = y1-v1;
+                det = a2*b1-a1*b2;
+                if (fabs(det)>0.00001) {
+                    t = (c1*a2-c2*a1)/det;
+                    if ((t>=0.0)&&(t<=1.0)) {
+                        s = (c2*b1-c1*b2)/det;
+                        if (s<smin) smin = s;
+                        if (s>smax) smax = s;
+                    }
+
+                }
+            }
+    }
+    if ((smin<big)&&(smax>-big)) {
+        gd.Front.v[0] = u1+smin*a1; gd.Front.v[1] = v1+smin*a2;
+        gd.Back.v[0] = u1+smax*a1; gd.Back.v[1] = v1+smax*a2;
+        gd.pinYardage= yardDistance(gd.Pin,gd.currentP);
+        gd.frontYardage= yardDistance(gd.Front,gd.currentP);
+        gd.backYardage= yardDistance(gd.Back,gd.currentP);
+
+    }
+    else {
+        cout << "problem finding front,back" << endl;
+    }
+
 }
 
 void Hole::computeYardageToHole() {
@@ -67,7 +138,6 @@ void Hole::computeYardageToHole() {
    y = startOrient[1].v[1]-currentPoint.v[1];
    yardageToHole  = (int) (1.0936*sqrt(x*x+y*y));
    currentYardageToHoleStr = to_string(yardageToHole);
-//cout << "ssh " << currentYardageToHoleStr << endl;
 }
  
 void Hole::computeYardageFromTee() {
@@ -78,7 +148,6 @@ void Hole::computeYardageFromTee() {
    y = startOrient[0].v[1]-currentPoint.v[1];
    yardageFromTee  = (int) (1.0936*sqrt(x*x+y*y));
    currentYardageFromTeeStr = to_string(yardageFromTee);
- //cout << "sst " << currentYardageFromTeeStr << endl;
 }
  
  
@@ -89,18 +158,19 @@ Course::Course(int mh) {
 void Course::readCourse() {
     ifstream fin,finlist;
     int h,n,i,j,k,t;
-    double walk,east,north;
+    double east,north;
     string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
     LL2UTM latlon;	  
     	
     for (h=1;h<=maxHole;h++) {
+        hole[h].viewType = 0;
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";
         flistname = holeprefix+ "list.txt";
         finlist.open(flistname);
         finlist >> t;
         hole[h].featureNum=t-1;
-        finlist >> orient;
+        finlist >> orient >> t;
         fname = holeprefix+orient +"Final.txt";
         fin.open(fname);
         fin >> n ;
@@ -113,12 +183,14 @@ void Course::readCourse() {
             hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = east;
             hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
-        walk = 0.0;
-        hole[h].currentPoint.v[0] = (1-walk)*hole[h].startOrient[0].v[0]+walk*hole[h].startOrient[1].v[0];
-        hole[h].currentPoint.v[1] = (1-walk)*hole[h].startOrient[0].v[1]+walk*hole[h].startOrient[1].v[1];
+        hole[h].walk = 0.0;
+        hole[h].currentPoint.v[0] = (1-hole[h].walk)*hole[h].startOrient[0].v[0]+
+                                    hole[h].walk*hole[h].startOrient[1].v[0];
+        hole[h].currentPoint.v[1] = (1-hole[h].walk)*hole[h].startOrient[0].v[1]+
+                                     hole[h].walk*hole[h].startOrient[1].v[1];
         fin.close();
         for (k=0;k<hole[h].featureNum;k++) {
-            finlist >> fn;
+            finlist >> fn >> t;
             fname = holeprefix + fn+"Final.txt";
             fin.open(fname);
             fin >> hole[h].feature[k].polyNum;
@@ -132,22 +204,28 @@ void Course::readCourse() {
             fin.close();
         }
        finlist.close();
-/*
-      if (h==3) {
-        string walkpath = holeprefix+"HoleInterest.pts";
+       string walkpath = pathprefix+"EllingerPath/"+"H"+holenum[h]+"Path.txt";
+       cout << walkpath << endl;
+
         fin.open(walkpath);
+        int sk = 10;
         double xx,yy;
-        for (j=0;j<700;j++) {
+        t = 0;
+        hole[h].pathPointNum = 0;
+        while (!fin.eof()) {
            fin >> xx>>yy;
-           if (j>25) {
-              hole[h].pathPoint[j-26].v[0] = xx;
-              hole[h].pathPoint[j-26].v[1] = yy;
+           t++;
+           if (t==sk){
+              hole[h].pathPoint[hole[h].pathPointNum].v[0] = xx;
+              hole[h].pathPoint[hole[h].pathPointNum].v[1] = yy;
+              hole[h].pathPointNum++;
+              t=0;
            }
-          hole[h].pathPointNum = 674;
         }
+        cout << "stored " << hole[h].pathPointNum << " points" << endl;
+        hole[h].currentPathIndex = 0;
         fin.close();
 
-      }
-*/
+   
     }
 }
