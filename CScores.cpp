@@ -28,8 +28,8 @@ void CScores::setUpdown(int n) { updown = n; }
 void CScores::setPutts(int n) { putts = n; }
 void CScores::setScore(int n) { score = n; }
 
-void CScores::printAsciiDate() {
-    cout << asctime(std::localtime(&date));
+string getAsciiDate(const time_t date) {
+    return asctime(std::localtime(&date));
 }
 
 ostream& operator<<(ostream& strm, const CScores& cs) {
@@ -37,7 +37,8 @@ ostream& operator<<(ostream& strm, const CScores& cs) {
   << cs.hole << "\t"
   << cs.updown << "\t"
   << cs.putts << "\t"
-  << cs.score << endl;
+  << cs.score << "\t"
+  << getAsciiDate(cs.date);
 
   return strm;
 }

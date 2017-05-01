@@ -3,11 +3,17 @@
 #ifndef CSCOREDLG_H
 #define CSCOREDLG_H
 
+#include <ctime>
+#include <string>
+
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Counter.H>
 #include <FL/Fl_Window.H>
 
+#ifndef CSCORESTATS_H
+#include "CScoreStats.h"
+#endif
 
 class CScoreDlg {
  public:
@@ -26,6 +32,7 @@ class CScoreDlg {
   inline void cb_OK_i(Fl_Button *, void *);
   static void cb_OK(Fl_Button *, void *);
 
+  CScores getCurrentScores();
 };
 
 extern void createScoreDlg();

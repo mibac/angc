@@ -31,7 +31,6 @@ public:
     void setPutts(int n);
     void setScore(int n);
 
-    void printAsciiDate();
 
 friend ostream &operator<<(ostream &strm, const CScores &cs);
 
@@ -42,5 +41,7 @@ private:
     int putts;
     int score;
 };
+
+extern string getAsciiDate(const time_t date);
 
 #endif  // CSCORES_H

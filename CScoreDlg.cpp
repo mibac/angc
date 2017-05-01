@@ -8,16 +8,21 @@
 #include "globals.h"
 #endif
 
-#ifndef CSCORESTATS_H
-#include "CScoreStats.h"
-#endif
-
 #include <iostream>
 
 Fl_Counter* holeCounter;
 Fl_Counter* upDownCounter;
 Fl_Counter* puttCounter;
 Fl_Counter* scoreCounter;
+
+CScores CScoreDlg::getCurrentScores() {
+  int h = holeCounter->value();
+  int u = upDownCounter->value();
+  int p = puttCounter->value();
+  int s = scoreCounter->value();
+  CScores cs(h, u, p, s);
+  return cs;
+}
 
 void CScoreDlg::cb_total_i(Fl_Button* b, void*) {
   // int h = holeCounter->value();
@@ -29,6 +34,7 @@ void CScoreDlg::cb_total_i(Fl_Button* b, void*) {
   // b->parent()->hide();
   //
   // gFileStats << cStats.statsRA[h];
+  cStats.statsRA[holeCounter->value()] = getCurrentScores();
   int uds = 0;
   int putts = 0;
   int score = 0;
@@ -51,19 +57,15 @@ void CScoreDlg::cb_total(Fl_Button* o, void* v) {
 
 void CScoreDlg::cb_OK_i(Fl_Button* b, void*) {
   int h = holeCounter->value();
-  int u = upDownCounter->value();
-  int p = puttCounter->value();
-  int s = scoreCounter->value();
-  CScores cs(h, u, p, s);
-  cStats.statsRA[h] = cs;
+  cStats.statsRA[h] = getCurrentScores();
   b->parent()->hide();
-
   gFileStats << cStats.statsRA[h];
 }
 
 void CScoreDlg::cb_OK(Fl_Button* o, void* v) {
   ((CScoreDlg*)(o->parent()->user_data()))->cb_OK_i(o, v);
 }
+
 
 CScoreDlg::CScoreDlg() {
   {
