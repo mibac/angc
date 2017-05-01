@@ -20,9 +20,11 @@ class CScoreDlg {
   Fl_Counter *scoreCounter;
 
  private:
+  inline void cb_total_i(Fl_Button *, void *);
+  static void cb_total(Fl_Button *, void *);
+
   inline void cb_OK_i(Fl_Button *, void *);
   static void cb_OK(Fl_Button *, void *);
-
 
 };
 

@@ -19,6 +19,36 @@ Fl_Counter* upDownCounter;
 Fl_Counter* puttCounter;
 Fl_Counter* scoreCounter;
 
+void CScoreDlg::cb_total_i(Fl_Button* b, void*) {
+  // int h = holeCounter->value();
+  // int u = upDownCounter->value();
+  // int p = puttCounter->value();
+  // int s = scoreCounter->value();
+  // CScores cs(h, u, p, s);
+  // cStats.statsRA[h] = cs;
+  // b->parent()->hide();
+  //
+  // gFileStats << cStats.statsRA[h];
+  int uds = 0;
+  int putts = 0;
+  int score = 0;
+  for (auto itr : cStats.statsRA) {
+    uds += itr.getUpdown();
+    putts += itr.getPutts();
+    score += itr.getScore();
+  }
+
+  b->parent()->hide();
+
+  cout << "Score: " << score << endl;
+  cout << "Putts: " << putts << endl;
+  cout << "Up Downs: " << uds << endl;
+}
+
+void CScoreDlg::cb_total(Fl_Button* o, void* v) {
+  ((CScoreDlg*)(o->parent()->user_data()))->cb_total_i(o, v);
+}
+
 void CScoreDlg::cb_OK_i(Fl_Button* b, void*) {
   int h = holeCounter->value();
   int u = upDownCounter->value();
@@ -132,18 +162,32 @@ CScoreDlg::CScoreDlg() {
       scoreCounter->type(1);
     }  // scoreCounter
     {
-      Fl_Button* o =
-          new Fl_Button(kCounterL, kOKBtnY, kCounterW, kCounterH, "OK");
-      o->box(FL_UP_BOX);
-      o->color(FL_BACKGROUND_COLOR);
-      o->selection_color(FL_BACKGROUND_COLOR);
-      o->labeltype(FL_NORMAL_LABEL);
-      o->labelfont(1);
-      o->labelsize(kLabelSz);
-      o->labelcolor(FL_FOREGROUND_COLOR);
-      o->callback((Fl_Callback*)cb_OK);
-      o->align(Fl_Align(FL_ALIGN_CENTER));
-      o->when(FL_WHEN_RELEASE);
+      Fl_Button* totalsBtn =
+          new Fl_Button(20, kOKBtnY, kCounterW - 50, kCounterH, "Total");
+      totalsBtn->box(FL_UP_BOX);
+      totalsBtn->color(FL_BACKGROUND_COLOR);
+      totalsBtn->selection_color(FL_BACKGROUND_COLOR);
+      totalsBtn->labeltype(FL_NORMAL_LABEL);
+      totalsBtn->labelfont(1);
+      totalsBtn->labelsize(kLabelSz);
+      totalsBtn->labelcolor(FL_FOREGROUND_COLOR);
+      totalsBtn->callback((Fl_Callback*)cb_total);
+      totalsBtn->align(Fl_Align(FL_ALIGN_CENTER));
+      totalsBtn->when(FL_WHEN_RELEASE);
+    }  // Fl_Button* o
+    {
+      Fl_Button* okBtn =
+          new Fl_Button(220, kOKBtnY, kCounterW - 50, kCounterH, "OK");
+      okBtn->box(FL_UP_BOX);
+      okBtn->color(FL_BACKGROUND_COLOR);
+      okBtn->selection_color(FL_BACKGROUND_COLOR);
+      okBtn->labeltype(FL_NORMAL_LABEL);
+      okBtn->labelfont(1);
+      okBtn->labelsize(kLabelSz);
+      okBtn->labelcolor(FL_FOREGROUND_COLOR);
+      okBtn->callback((Fl_Callback*)cb_OK);
+      okBtn->align(Fl_Align(FL_ALIGN_CENTER));
+      okBtn->when(FL_WHEN_RELEASE);
     }  // Fl_Button* o
     sd->set_modal();
     sd->clear_border();
