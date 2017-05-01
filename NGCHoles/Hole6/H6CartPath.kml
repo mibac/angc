@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>H6CartPath.kml</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>H6CartPath</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-93.13538977476803,44.45529416520834,0 -93.13560881283784,44.45526859264174,0 -93.13566738963266,44.45527432482615,0 -93.13623216011021,44.4554413267734,0 -93.13635553217806,44.45545549124119,0 -93.13649652873156,44.45545420783836,0 -93.13663467585326,44.45543910133735,0 -93.13675677224157,44.45542255405041,0 -93.13688642694113,44.45540520570895,0 -93.13728361071364,44.45545126341971,0 -93.13786498972196,44.45555796296249,0 -93.13844090029968,44.45569135309568,0 -93.13894447203258,44.45580475499073,0 -93.13942884207623,44.45588635807044,0 -93.13968020411676,44.45594441940858,0 -93.13974053507816,44.45598132840389,0 -93.13982795552843,44.45601564218276,0 -93.13995197490279,44.45606174717926,0 -93.1400180458071,44.45607035084233,0 -93.14009306491089,44.45606375558073,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>
