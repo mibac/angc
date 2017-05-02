@@ -5,25 +5,41 @@
 
 #include <ctime>
 #include <string>
+#include <array>
 
+#include <FL/names.h>
 #include <FL/Fl.H>
+#include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Counter.H>
 #include <FL/Fl_Window.H>
+#include <FL/Fl_Output.H>
 
 #ifndef CSCORESTATS_H
 #include "CScoreStats.h"
 #endif
 
-class CScoreDlg {
+using namespace std;
+
+class CScoreDlg : public Fl_Window {
  public:
-  CScoreDlg();
+  CScoreDlg(int X, int Y, int W, int H, const char *L = 0);
   CScoreDlg(int hole);
-  Fl_Window *sd;
+
   Fl_Counter *holeCounter;
-  Fl_Counter *upDownCounter;
+  Fl_Counter *updownCounter;
   Fl_Counter *puttCounter;
   Fl_Counter *scoreCounter;
+  Fl_Box *holeDisplay;
+  Fl_Output *scoreDisplay;
+  Fl_Output *updownDisplay;
+  Fl_Output *puttDisplay;
+
+  CScores getCurrentScores();
+  CScores getCurrentScores(int hole);
+  void updateAccumScore();
+  void updateAccumUpdowns();
+  void updateAccumPutts();
 
  private:
   inline void cb_total_i(Fl_Button *, void *);
@@ -31,9 +47,32 @@ class CScoreDlg {
 
   inline void cb_OK_i(Fl_Button *, void *);
   static void cb_OK(Fl_Button *, void *);
+  //  int handle(int e);
 
-  CScores getCurrentScores();
 };
+
+// clang-format off
+const array<string, k18> holeStrs = {
+    {"Par 5, 492",
+    "Par 3, 185",
+    "Par 4, 421",
+    "Par 5, 510",
+    "Par 4, 395",
+    "Par 4, 383",
+    "Par 3, 135",
+    "Par 4, 368",
+    "Par 4, 312",
+    "Par 4, 342",
+    "Par 3, 145",
+    "Par 5, 471",
+    "Par 4, 380",
+    "Par 4, 365",
+    "Par 4, 331",
+    "Par 5, 521",
+    "Par 3, 168",
+    "Par 4, 337"}
+};
+// clang-format on
 
 extern void createScoreDlg();
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>H18CartPath.kml</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>H18CartPath</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-93.1427239501766,44.45378127315045,0 -93.14293043748214,44.45360883500589,0 -93.14306110600857,44.45339988416323,0 -93.14337901109252,44.45326745538048,0 -93.14354031869583,44.45318676213101,0 -93.14362815061183,44.45315849140702,0 -93.14367663589016,44.45311605653012,0 -93.14368597875087,44.45307017972631,0 -93.14373815525875,44.45295022698181,0 -93.14379106036225,44.45288364782949,0 -93.14388653486115,44.45282347834207,0 -93.14396203569476,44.45277043360971,0 -93.14405690102902,44.45273851728971,0 -93.14410903164233,44.45272778291078,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

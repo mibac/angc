@@ -16,9 +16,6 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
-#include <unistd.h>
-
-#define JACK 1
 
 #ifndef CGLOBALS_H
 #include "globals.h"
@@ -91,12 +88,12 @@ const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
   if (n == 0) n = 1;
+  double dt;
   if (gCurrentHole==n) {
      #if USEGPS ==0
       int t;
-      double dt;
-     
-      t = hv->ngc->hole[gCurrentHole].currentPathIndex; 
+
+      t = hv->ngc->hole[gCurrentHole].currentPathIndex;
        hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].pathPoint[t].v[0],hv->ngc->hole[gCurrentHole].pathPoint[t].v[1]);
       dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
       if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
@@ -195,7 +192,8 @@ int main(int argc, char **argv) {
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);
-  holeBtn->value("  H");
+
+  holeBtn->value("  1");
   holeBtn->textfont(1);
   holeBtn->textsize(48);
   // holeBtn->color(FL_GRAY);

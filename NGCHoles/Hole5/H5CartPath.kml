@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>H5CartPath.kml</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>H5CartPath</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-93.13220876838844,44.4518097616696,0 -93.13231284558523,44.45193131581413,0 -93.13234332554148,44.45203823479694,0 -93.13235269063344,44.45212599327614,0 -93.1326550526703,44.45242737888659,0 -93.13273036307979,44.45251807693639,0 -93.13280193343148,44.4526220211224,0 -93.13300071342113,44.45280804225561,0 -93.1331910226463,44.4530413829405,0 -93.13340847155406,44.45327673148577,0 -93.13349116697637,44.45344334708658,0 -93.13356910758756,44.45355089631772,0 -93.13365421940917,44.45366621021918,0 -93.13369507398733,44.45376437741668,0 -93.13372958214435,44.45385898135751,0 -93.13385608179064,44.4539593959664,0 -93.13398454165124,44.4540383215181,0 -93.13413371376828,44.45406442267852,0 -93.13434011122921,44.45414884525679,0 -93.13468490089733,44.45442022788011,0 -93.13486045959762,44.45452917689315,0 -93.13493288669338,44.45460357369026,0 -93.13500383525587,44.45466958250736,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

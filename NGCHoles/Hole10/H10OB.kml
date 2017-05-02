@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>H10OB.kml</name>
+	<Style id="s_ylw-pushpin">
+		<IconStyle>
+			<scale>1.1</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<Style id="s_ylw-pushpin_hl">
+		<IconStyle>
+			<scale>1.3</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pushpin/ylw-pushpin.png</href>
+			</Icon>
+			<hotSpot x="20" y="2" xunits="pixels" yunits="pixels"/>
+		</IconStyle>
+	</Style>
+	<StyleMap id="m_ylw-pushpin">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#s_ylw-pushpin</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#s_ylw-pushpin_hl</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Placemark>
+		<name>H10OB</name>
+		<styleUrl>#m_ylw-pushpin</styleUrl>
+		<LineString>
+			<tessellate>1</tessellate>
+			<coordinates>
+				-93.1450349387154,44.44983997200867,0 -93.14490528301168,44.44981031096885,0 -93.14477426523584,44.4497879920953,0 -93.14476929140415,44.44978796802944,0 -93.14459752039456,44.44976173839757,0 -93.14441784569109,44.44973953542669,0 -93.14426371299365,44.44972836400375,0 -93.14408792045622,44.44970645059121,0 -93.14388760967253,44.44968771505606,0 -93.14359428064674,44.44967596725755,0 -93.14313380609039,44.44965639334555,0 -93.1429258025023,44.44966319931157,0 -93.14268154990023,44.44966316888807,0 -93.14244759421791,44.44966311219783,0 -93.14223032099765,44.44965975267058,0 -93.14206319990649,44.44966688006857,0 -93.14198290890108,44.44968481929359,0 -93.14189267646654,44.44968439188195,0 
+			</coordinates>
+		</LineString>
+	</Placemark>
+</Document>
+</kml>

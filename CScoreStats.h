@@ -10,6 +10,8 @@
 
 using namespace std;
 
+const int k18 = 18;
+
 class CScoreStats {
  public:
   CScoreStats();
@@ -21,15 +23,22 @@ class CScoreStats {
   CScoreStats& operator=(CScoreStats&& other) = default;
 
   CScores* getScoreStats(const int hole);
-  int getTotalUpdown();
-  int getTotalPutts();
-  int getTotalScore();
-  array<CScores, 18> statsRA;
+  // int getTotalUpdown();
+  // int getTotalPutts();
+  // int getTotalScore();
+  int getAccumUpdowns(int fromHole, int toHole);
+  int getAccumPutts(int fromHole, int toHole);
+  int getAccumScore(int fromHole, int toHole);
+  int getAccumPar(int fromHole, int toHole);
+
+  array<CScores, k18> statsRA;
+  const array<int, k18> parRA = {{5,3,4,5,4,4,3,4,4,4,3,5,4,4,4,5,3,4}};
 
  private:
   int totalUpdown;
   int totalPutts;
   int totalScore;
+  int relToPar;
 };
 
 extern CScoreStats cStats;
