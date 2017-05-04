@@ -1,6 +1,9 @@
 #ifndef HOLEVIEW_H_
 #define HOLEVIEW_H_
 
+// JE
+#include <FL/Fl.H>
+// end JE
 #include <FL/Fl_Gl_Window.H>
 #include <FL/gl.h>
 #include <FL/glu.h>
@@ -15,7 +18,10 @@ class HoleView: public Fl_Gl_Window {
    void makeCurrentGreenList(int h);
    void initHoleWindow(int x, int y,Course *course);
    void draw();
-   int xres,yres; //JE
+   // JE
+   int handle(int e); //event
+   // end JE
+   int xres,yres;
    Course *ngc;
 };
 

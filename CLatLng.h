@@ -1,6 +1,10 @@
 #ifndef CLATLNG_H
 #define CLATLNG_H
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #ifndef GPS_H
 #include "gps.h"
 #endif
@@ -38,15 +42,6 @@ struct DDLatLng {
   }
 };
 
-struct UtmLatLng {
-  double lat;
-  double lng;
-  UtmLatLng() {
-    lat = 0.0;
-    lng = 0.0;
-  }
-};
-
 class CLatLng {
  public:
   CLatLng();
@@ -70,11 +65,7 @@ class CLatLng {
   string distanceFromLastMark();
 
   // void writeMark(const string &s);
-  void writeClub(const string &s);
-  void writeAll();
-
-  vector<string> vGPS;  // the complete round of nmea GPGGA sentences
-  vector<UtmLatLng> vUTM;
+  void updateClubVec(const string &s);
 
  private:
   UtmLatLng lastMark;

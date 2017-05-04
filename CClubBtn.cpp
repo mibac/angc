@@ -26,7 +26,7 @@ void CClubBtn::setBtnAttributes(Fl_Button *b) {
 void CClubBtn::SetClubPopupValue_CB2() {
   string str(myClubPopup->value());
   CClubBtn::goingToHitClub = str;
-  cll.writeClub(CClubBtn::lastHitClub);
+  cll.updateClubVec(CClubBtn::lastHitClub);
   CClubBtn::lastHitClub = CClubBtn::goingToHitClub;
   myClubPopup->hide(); // hide ClubPopup
 }

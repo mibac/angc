@@ -3,10 +3,10 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o $(LDFLAGS)
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o $(LDFLAGS)
 
-markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleButton.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg.h CScores.h CScoreStats.h globals.h
+markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleButton.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg.h CScores.h CScoreStats.h globals.h CYellowBtn.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -15,10 +15,10 @@ C2UTM.o: C2UTM.cpp C2UTM.h
 CLatLng.o: CLatLng.cpp CLatLng.h gps.h C2UTM.h utils.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleButton.h CClubBtn.h globals.h
+CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleButton.h CClubBtn.h globals.h CScoreStats.h
 	g++ -c $<  $(CXXFLAGS)
 
-CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.h CLatLng.h
+CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.h CLatLng.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CHolesPopup.o: CHolesPopup.cpp CHolesPopup.h
@@ -50,6 +50,8 @@ CScores.o: CScores.cpp CScores.h globals.h
 
 CScoresStats.o: CScoresStats.cpp CScoresStats.h CScores.h
 			g++ -c $<  $(CXXFLAGS)
+
+CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h
 
 globals.o: globals.cpp globals.h
 	g++ -c $<  $(CXXFLAGS)

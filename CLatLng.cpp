@@ -7,10 +7,6 @@
 #include <iomanip>
 #include <iostream>
 
-#ifndef CGLOBALS_H
-#include "globals.h"
-#endif
-
 #ifndef C2UTM_hpp
 #include "C2UTM.h"
 #endif
@@ -24,22 +20,12 @@
 #endif
 
 const size_t kUTMpts = 3;  // number of UTM points to average
-const int kPrecision = 9;
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 
 GPS myGPS;
 CLatLng cll;
 
-// ostream& operator<<(ostream& strm, const LatLng& ll) {
-//   strm << ll.lat << ", " << ll.lng;
-//   return strm;
-// }
-//
-// ostream& operator<<(ostream& strm, const DDLatLng& dll) {
-//   strm << dll.lat << ", " << dll.lng;
-//   return strm;
-// }
 
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
   strm << "(" << ull.lng << ",E," << ull.lat << ",N)";
@@ -86,7 +72,7 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 
 void CLatLng::updateLatLng(const string& s) {
   if (myGPS.isValidGGA(s)) {
-    // cout << s;
+    gRunningUTC = myGPS.UTC;
     vGPS.push_back(s);
     myGPS.setValuesGGA(s);
     LatLng ll(myGPS.latitude, myGPS.longitude);
@@ -130,17 +116,16 @@ string CLatLng::distanceFromLastMark() {
   return oss.str();
 }
 
-void CLatLng::writeClub(const string& s) {
+void CLatLng::updateClubVec(const string& s) {
   UtmLatLng nowMark = getNowMark();
-  gFileClub << gCurrentHole << "\t" << s << "\t" << distanceFromLastMark()
+  ostringstream oss;
+  oss.clear();
+  oss << gCurrentHole << "\t" << s << "\t" << distanceFromLastMark()
            << "\t" << lastMark << "\t" << nowMark << endl;
+           vClubsUsed.push_back(oss.str());
   lastMark = nowMark;
 }
 
-void CLatLng::writeAll() {
-  gFileGPS << setprecision(kPrecision);
-  for (auto itr : vGPS) gFileGPS << itr;
-}
 #else
 CLatLng::CLatLng() {
 }
@@ -180,10 +165,7 @@ string CLatLng::distanceFromLastMark() {
   return "";
 }
 
-void CLatLng::writeClub(const string& s) {
-}
-
-void CLatLng::writeAll() {
+void CLatLng::updateClubVec(const string& s) {
 }
 
 #endif

@@ -4,6 +4,10 @@
 
 #include <string>
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #ifndef CLATLNG_H
 #include "CLatLng.h"
 #endif
@@ -17,13 +21,21 @@ string CHoleBtn::holeName;
 // Called when user finishes entering data with numeric keypad
 void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
+  gCurrentHole = atoi(str.c_str());
+  bPlayedHole[gCurrentHole] = true;
+  gNowUTC = gRunningUTC;
+  if (bRoundStartFlag == false) {
+      gStartRoundUTC = gNowUTC;
+      bRoundStartFlag = true;
+  }
+  //cout << "In CHoleBtn::SetNumPadValue_CB2 " << gCurrentHole << endl;
   CHoleBtn::holeName = str;
   if (str.size() == 1)
     str = "  " + str;
   else
     str = " " + str;
-  value(str.c_str());  // pass value from myHolePopup to our input
-  myHolePopup->hide();          // hide myHolePopup
+  value(str.c_str());   // pass value from myHolePopup to our input
+  myHolePopup->hide();  // hide myHolePopup
   cll.setRefMark();
 }
 
@@ -44,9 +56,10 @@ int CHoleBtn::handle(int e) {
     case FL_RELEASE:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
-        if (!myHolePopup) myHolePopup = new CHolesPopup(0, 0, 72*3+8, 72*6+4);
+        if (!myHolePopup)
+          myHolePopup = new CHolesPopup(0, 0, 72 * 3 + 8, 72 * 6 + 4);
         myHolePopup->SetEnterCallback(SetNumPadValue_CB, (void *)this);
-        myHolePopup->position(parent()->x()+112, parent()->y()+88);
+        myHolePopup->position(parent()->x() + 112, parent()->y() + 88);
         myHolePopup->clear_border();
         myHolePopup->clear();
         myHolePopup->show();
@@ -58,6 +71,5 @@ int CHoleBtn::handle(int e) {
 
 CHoleBtn::CHoleBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Output(X, Y, W, H, L) {
-
   myHolePopup = nullptr;
 }

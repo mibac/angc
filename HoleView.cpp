@@ -79,7 +79,7 @@ void HoleView::makeCurrentHoleList(int h) {
       ngc->hole[h].currentUnit.v[0] = x1/dd;
       ngc->hole[h].currentUnit.v[1] = y1/dd;
       ngc->hole[h].rotateHoleToOrientation();
-      ngc->hole[h].rotCurrentPoint = 
+      ngc->hole[h].rotCurrentPoint =
                      ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
       ngc->hole[h].findMinMax();
 
@@ -130,7 +130,7 @@ void HoleView::makeCurrentHoleList(int h) {
                 case DRIVEWAY: glColor3d(0.3,0.3,0.3);  // Driveway
 
             }
-           if ((ngc->hole[h].feature[k].featureType<20)||(ngc->hole[h].feature[k].featureType>100)) 
+           if ((ngc->hole[h].feature[k].featureType<20)||(ngc->hole[h].feature[k].featureType>100))
                 glBegin(GL_POLYGON);
            else {
                 if (ngc->hole[h].feature[k].featureType==CARTPATH) {
@@ -168,7 +168,7 @@ void HoleView::makeCurrentGreenList(int h) {
     ngc->hole[h].currentGreenUnit.v[0] = x1/dd;
     ngc->hole[h].currentGreenUnit.v[1] = y1/dd;
     ngc->hole[h].rotateToGreenOrientation();
-    ngc->hole[h].rotCurrentPoint = 
+    ngc->hole[h].rotCurrentPoint =
                      ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentGreenUnit);
     ngc->hole[h].findGreenMinMax();
 
@@ -288,7 +288,25 @@ void HoleView::draw() {
          glCallList(gCurrentHole+100);
     }
     else {
-         makeCurrentGreenList(gCurrentHole); 
+         makeCurrentGreenList(gCurrentHole);
          glCallList(gCurrentHole+300);
      }
 }
+
+// JE
+int HoleView::handle(int e) {
+  switch(e) {
+    case FL_PUSH:
+      // cout << "FL_PUSH (x, y): " << Fl::event_x() << ", " << Fl::event_y() << endl;
+      return 1;
+  case FL_DRAG:
+      // cout << "FL_DRAG "  << Fl::event_x() << ", " << Fl::event_y() << endl;
+      return 1;
+  case FL_RELEASE:
+      // cout << "FL_RELEASE "  << Fl::event_x() << ", " << Fl::event_y() << endl;
+      return 1;
+    default:
+      return Fl_Gl_Window::handle(e);
+  }
+}
+// end JE

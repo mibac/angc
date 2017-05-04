@@ -30,7 +30,7 @@ class CScoreDlg : public Fl_Window {
   Fl_Counter *updownCounter;
   Fl_Counter *puttCounter;
   Fl_Counter *scoreCounter;
-  Fl_Box *holeDisplay;
+  Fl_Output *holeDisplay;
   Fl_Output *scoreDisplay;
   Fl_Output *updownDisplay;
   Fl_Output *puttDisplay;

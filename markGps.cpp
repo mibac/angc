@@ -61,6 +61,10 @@
 #include "CExitBtn.h"
 #endif
 
+#ifndef CYELLOWBTN_H
+#include "CYellowBtn.h"
+#endif
+
 #ifndef CSCORES_H
 #include "CScores.h"
 #endif
@@ -69,9 +73,9 @@ using namespace std;
 
 Fl_Window *win;
 Fl_Output *my_input;
-Fl_Box *boxYardage;
 Fl_Button *btnMark;
 Fl_Button *btnWrite;
+CYellowBtn *yellowBtn;
 CHoleBtn *holeBtn;
 CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
@@ -84,39 +88,45 @@ const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
 const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 
-
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
   if (n == 0) n = 1;
   double dt;
-  if (gCurrentHole==n) {
-     #if USEGPS ==0
-      int t;
+  if (gCurrentHole == n) {
+#if USEGPS == 0
+    int t;
 
-      t = hv->ngc->hole[gCurrentHole].currentPathIndex;
-       hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].pathPoint[t].v[0],hv->ngc->hole[gCurrentHole].pathPoint[t].v[1]);
-      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
-      else hv->ngc->hole[gCurrentHole].viewType=0;
-      hv->ngc->hole[gCurrentHole].currentPathIndex++;
-      if (hv->ngc->hole[gCurrentHole].currentPathIndex== hv->ngc->hole[gCurrentHole].pathPointNum)
-          hv->ngc->hole[gCurrentHole].currentPathIndex=0;
+    t = hv->ngc->hole[gCurrentHole].currentPathIndex;
+    hv->ngc->hole[gCurrentHole].setCurrentPoint(
+        hv->ngc->hole[gCurrentHole].pathPoint[t].v[0],
+        hv->ngc->hole[gCurrentHole].pathPoint[t].v[1]);
+    dt = hv->ngc->hole[gCurrentHole].yardDistance(
+        hv->ngc->hole[gCurrentHole].currentPoint,
+        hv->ngc->hole[gCurrentHole].startOrient[1]);
+    if (dt < 150.0)
+      hv->ngc->hole[gCurrentHole].viewType = 1;
+    else
+      hv->ngc->hole[gCurrentHole].viewType = 0;
+    hv->ngc->hole[gCurrentHole].currentPathIndex++;
+    if (hv->ngc->hole[gCurrentHole].currentPathIndex ==
+        hv->ngc->hole[gCurrentHole].pathPointNum)
+      hv->ngc->hole[gCurrentHole].currentPathIndex = 0;
 
-      usleep(500000);
-      hv->redraw();
-     #endif
+    usleep(500000);
+    hv->redraw();
+#endif
   }
   if (gCurrentHole != n) {
     // hv->redraw();
     gCurrentHole = n;
-    #if USEGPS == 0
-       hv->ngc->hole[gCurrentHole].currentPathIndex=0;
-       hv->redraw();
-     #endif
+#if USEGPS == 0
+    hv->ngc->hole[gCurrentHole].currentPathIndex = 0;
+    hv->redraw();
+#endif
   }
 #if USEGPS
-    const int bufSz = 1023;
-	char chRA[bufSz + 1];
+  const int bufSz = 1023;
+  char chRA[bufSz + 1];
   if (fgets(chRA, sizeof(chRA), gpsin) == NULL) {  // read the line of data
     Fl::remove_fd(fileno(gpsin));                  // command ended? disconnect
     pclose(gpsin);                                 // close the descriptor
@@ -127,19 +137,24 @@ void HandleFD(FL_SOCKET fd, void *data) {
     // size_t found = s.find("GPGLL");
     if (found != string::npos) {
       cll.updateLatLng(gpsStr.c_str());
-      string s = cll.distanceFromLastMark();
-      boxYardage->label(s.c_str());
+      //   string s = cll.distanceFromLastMark();
+      //   yellowBtn->label(s.c_str());
       // cout << "holeBtn IdleCallback: " << s << endl;
       UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
-// Added code for green closeup
-      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
-      else hv->ngc->hole[gCurrentHole].viewType=0;
+      // Added code for green closeup
+      dt = hv->ngc->hole[gCurrentHole].yardDistance(
+          hv->ngc->hole[gCurrentHole].currentPoint,
+          hv->ngc->hole[gCurrentHole].startOrient[1]);
+      if (dt < 150.0)
+        hv->ngc->hole[gCurrentHole].viewType = 1;
+      else
+        hv->ngc->hole[gCurrentHole].viewType = 0;
       hv->redraw();
     }
+    yellowBtn->updateTime();
   }
-  #endif
+#endif
 }
 
 // This window callback allows the user to save & exit, don't save, or cancel.
@@ -168,7 +183,7 @@ int main(int argc, char **argv) {
   const int kExitLeft = kWriteLeft + kWriteWid + kXDelta;
   const int kExitWid = kBoxSize;
 
-  initGlobals(); // in globals.h
+  initGlobals();  // in globals.h
 
   ngc = new Course(18);
   ngc->readCourse();
@@ -181,14 +196,7 @@ int main(int argc, char **argv) {
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  boxYardage =
-      new Fl_Box(FL_FRAME_BOX, 4, kBtnRow1Top, kYardageWid, kBoxSize, 0);
-  boxYardage->labeltype(FL_NORMAL_LABEL);
-  boxYardage->align(FL_ALIGN_CENTER);
-  boxYardage->labelfont(1);
-  boxYardage->labelsize(64);
-  boxYardage->labelcolor(FL_BLACK);
-  boxYardage->color(FL_YELLOW);
+  yellowBtn = new CYellowBtn(4, kBtnRow1Top, kYardageWid, kBoxSize, 0);
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);
@@ -224,7 +232,7 @@ int main(int argc, char **argv) {
   // setup a callback for the popen() ed descriptor
   Fl::add_fd(fileno(gpsin), HandleFD, 0);
 
-  cout << asctime(localtime(&gToday)) << gToday << " seconds since the Epoch\n";
+  // cout << asctime(localtime(&gToday)) << gToday << " seconds since the Epoch\n";
 
   // Fl::add_idle(IdleCallback, win);
   return (Fl::run());

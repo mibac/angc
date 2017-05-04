@@ -13,33 +13,6 @@ CScoreStats::CScoreStats() : totalUpdown(0), totalPutts(0), totalScore(0) {
   }
 }
 
-// int CScoreStats::getTotalUpdown() {
-//   for (int ii = 0; ii < k18; ++ii) {
-//     totalUpdown += statsRA[ii].getUpdown();
-//   }
-//   return totalUpdown;
-// }
-//
-// int CScoreStats::getTotalPutts() {
-//   for (int ii = 0; ii < k18; ++ii) {
-//     totalPutts += statsRA[ii].getPutts();
-//   }
-//   return totalPutts;
-// }
-// int CScoreStats::getTotalScore() {
-//   for (int ii = 0; ii < k18; ++ii) {
-//     totalScore += statsRA[ii].getScore();
-//   }
-//   return totalScore;
-// }
-//
-// int CScoreStats::getRelationToPar() {
-//   int myscore = 0;
-//
-//   for (int ii = 0; ii < k18; ++ii) myscore += statsRA[ii].getScore();
-//   return myscore - 72;
-// }
-
 CScores* CScoreStats::getScoreStats(const int hole) {
   CScores* cs = nullptr;
   for (int ii = 0; ii < k18; ++ii) {
@@ -49,26 +22,30 @@ CScores* CScoreStats::getScoreStats(const int hole) {
   return cs;
 }
 
-int CScoreStats::getAccumUpdowns(int fromHole, int toHole) {
+int CScoreStats::getAccumUpdowns() {
   int total = 0;
-  for (int ii = fromHole; ii < toHole; ++ii) total += statsRA[ii].getUpdown();
+  for (int ii = 0; ii < k18; ++ii)
+    if (bPlayedHole[ii]) total += statsRA[ii].getUpdown();
   return total;
 }
 
-int CScoreStats::getAccumPutts(int fromHole, int toHole) {
+int CScoreStats::getAccumPutts() {
   int total = 0;
-  for (int ii = fromHole; ii < toHole; ++ii) total += statsRA[ii].getPutts();
+  for (int ii = 0; ii < k18; ++ii)
+    if (bPlayedHole[ii]) total += statsRA[ii].getPutts();
   return total;
 }
 
-int CScoreStats::getAccumScore(int fromHole, int toHole) {
+int CScoreStats::getAccumScore() {
   int total = 0;
-  for (int ii = fromHole; ii < toHole; ++ii) total += statsRA[ii].getScore();
+  for (int ii = 0; ii < k18; ++ii)
+    if (bPlayedHole[ii]) total += statsRA[ii].getScore();
   return total;
 }
 
-int CScoreStats::getAccumPar(int fromHole, int toHole) {
+int CScoreStats::getAccumPar() {
   int total = 0;
-  for (int ii = fromHole; ii < toHole; ++ii) total += parRA[ii];
+  for (int ii = 0; ii < k18; ++ii)
+    if (bPlayedHole[ii]) total += parRA[ii];
   return total;
 }
