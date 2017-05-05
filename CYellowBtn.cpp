@@ -122,26 +122,18 @@ void CYellowBtn::updateElapsedTime() {
 }
 
 void CYellowBtn::updateLocalTime() {
-  if (gNowUTC != 0) {
-    int seconds = gNowUTC;
-    string tm = to_string(seconds);
-    // cout << "In updateLocalTime tm = " << tm << endl;
-    string hs = tm.substr(0, 2);
-    string ms = tm.substr(2, 2);
-    string ss = tm.substr(4, 2);
+  time_t rawtime;
+  struct tm *timeinfo;
+  char buffer[80];
 
-    int hr = stoi(hs);
-    if (hr > 12) hr = hr - 12 - 5;
-    hs = to_string(hr);
-    hs = hs + ":";
-    if (ms.length() == 1) ms = "0" + ms;
-    // else if (ms.length() > 2)
-    // ms = ms.substr(0,1);
+  time(&rawtime);
+  timeinfo = localtime(&rawtime);
 
-    string s = hs + ms;
-    yellowBtn->value(s.c_str());
-    redraw();
-  }
+  strftime(buffer, sizeof(buffer), "%I:%M:%S", timeinfo);
+  std::string s(buffer);
+
+  yellowBtn->value(s.c_str());
+  redraw();
 }
 
 // Handle when user right clicks on our input widget

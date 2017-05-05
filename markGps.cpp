@@ -146,7 +146,7 @@ void HandleFD(FL_SOCKET fd, void *data) {
       dt = hv->ngc->hole[gCurrentHole].yardDistance(
           hv->ngc->hole[gCurrentHole].currentPoint,
           hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt < 150.0)
+      if (dt < 200.0)
         hv->ngc->hole[gCurrentHole].viewType = 1;
       else
         hv->ngc->hole[gCurrentHole].viewType = 0;
