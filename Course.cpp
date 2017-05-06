@@ -1,6 +1,7 @@
 #include "Course.h"
 #define JACK   1
 
+
 const string pathprefix = "/home/pi/golf/angc/NGCHoles/";
 
 Hole::Hole() {
@@ -11,6 +12,14 @@ Vector  Hole::rotatePoint(Vector x,Vector u) {
 
     v.v[0] = u.v[1]*x.v[0] - u.v[0]*x.v[1];
     v.v[1] = u.v[0]*x.v[0] + u.v[1]*x.v[1];
+    return v;
+}
+
+Vector  Hole::unrotatePoint(Vector x,Vector u) {
+    Vector v;
+
+    v.v[0] = u.v[1]*x.v[0] + u.v[0]*x.v[1];
+    v.v[1] = -u.v[0]*x.v[0] + u.v[1]*x.v[1];
     return v;
 }
 
@@ -145,8 +154,10 @@ void Hole::findGreenYardage() {
 void Hole::computeYardageToHole() {
 
    double x,y;
-   x = startOrient[1].v[0]-currentPoint.v[0];
-   y = startOrient[1].v[1]-currentPoint.v[1];
+   //x = startOrient[1].v[0]-currentPoint.v[0];
+   //y = startOrient[1].v[1]-currentPoint.v[1];
+   x = gd.Pin.v[0]-currentPoint.v[0];
+   y = gd.Pin.v[1]-currentPoint.v[1];
    yardageToHole  = (int) (1.0936*sqrt(x*x+y*y));
    currentYardageToHoleStr = to_string(yardageToHole);
 }
@@ -175,7 +186,9 @@ void Course::readCourse() {
     LL2UTM latlon;	  
     	
     for (h=1;h<=maxHole;h++) {
+        hole[h].showMarkPoint=false;
         hole[h].viewType = 0;
+        hole[h].zoomScale = 3.0; 
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";
         flistname = holeprefix+ "list.txt";
         finlist.open(flistname);
@@ -194,11 +207,17 @@ void Course::readCourse() {
             hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = east;
             hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
+        hole[h].gd.Pin.v[0] = hole[h].startOrient[1].v[0];
+        hole[h].gd.Pin.v[1] = hole[h].startOrient[1].v[1];
         hole[h].walk = 0.0;
+      //  hole[h].currentPoint.v[0] = (1-hole[h].walk)*hole[h].startOrient[0].v[0]+
+      //                              hole[h].walk*hole[h].startOrient[1].v[0];
+      //  hole[h].currentPoint.v[1] = (1-hole[h].walk)*hole[h].startOrient[0].v[1]+
+       //                              hole[h].walk*hole[h].startOrient[1].v[1];
         hole[h].currentPoint.v[0] = (1-hole[h].walk)*hole[h].startOrient[0].v[0]+
-                                    hole[h].walk*hole[h].startOrient[1].v[0];
+                                    hole[h].walk*hole[h].gd.Pin.v[0];
         hole[h].currentPoint.v[1] = (1-hole[h].walk)*hole[h].startOrient[0].v[1]+
-                                     hole[h].walk*hole[h].startOrient[1].v[1];
+                                     hole[h].walk*hole[h].gd.Pin.v[1];
         fin.close();
         for (k=0;k<hole[h].featureNum;k++) {
             finlist >> fn >> t;
@@ -215,6 +234,7 @@ void Course::readCourse() {
             fin.close();
         }
        finlist.close();
+/*
        string walkpath = pathprefix+"EllingerPath/"+"H"+holenum[h]+"Path.txt";
       // cout << walkpath << endl;
 
@@ -236,7 +256,7 @@ void Course::readCourse() {
 //cout << "stored " << hole[h].pathPointNum << " points" << endl;
         hole[h].currentPathIndex = 0;
         fin.close();
-
+*/
    
     }
 }

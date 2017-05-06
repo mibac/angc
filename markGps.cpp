@@ -88,29 +88,17 @@ const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
   if (n == 0) n = 1;
-  double dt;
+ // double dt;
   if (gCurrentHole==n) {
      #if USEGPS ==0
-      int t;
-
-      t = hv->ngc->hole[gCurrentHole].currentPathIndex;
-       hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].pathPoint[t].v[0],hv->ngc->hole[gCurrentHole].pathPoint[t].v[1]);
-      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
-      else hv->ngc->hole[gCurrentHole].viewType=0;
-      hv->ngc->hole[gCurrentHole].currentPathIndex++;
-      if (hv->ngc->hole[gCurrentHole].currentPathIndex== hv->ngc->hole[gCurrentHole].pathPointNum)
-          hv->ngc->hole[gCurrentHole].currentPathIndex=0;
-
-      usleep(500000);
       hv->redraw();
+
      #endif
+
   }
   if (gCurrentHole != n) {
-    // hv->redraw();
     gCurrentHole = n;
     #if USEGPS == 0
-       hv->ngc->hole[gCurrentHole].currentPathIndex=0;
        hv->redraw();
      #endif
   }
@@ -133,9 +121,9 @@ void HandleFD(FL_SOCKET fd, void *data) {
       UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
 // Added code for green closeup
-      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
-      else hv->ngc->hole[gCurrentHole].viewType=0;
+//      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
+ //     if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
+  //    else hv->ngc->hole[gCurrentHole].viewType=0;
       hv->redraw();
     }
   }
