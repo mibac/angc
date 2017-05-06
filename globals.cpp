@@ -10,11 +10,11 @@ using namespace std;
 
 int gCurrentHole;
 time_t gToday;
-int gLastUTC;
-int gNowUTC;
-int gStartHoleUTC;
-int gStartRoundUTC;
-int gRunningUTC;
+time_t gLastClockTm;
+time_t gNowClockTm;
+time_t gStartHoleClockTm;
+time_t gStartRoundClockTm;
+// time_t gRunningUTC;
 
 bool bRoundStartFlag;
 
@@ -30,11 +30,11 @@ array<bool, k18> bPlayedHole;
 
 void initGlobals() {
   gCurrentHole = 1;
-  gLastUTC = 0;
-  gNowUTC = 0;
-  gStartHoleUTC = 0;
-  gStartRoundUTC = 0;
-  gRunningUTC = 0;
+  gLastClockTm = 0;
+  gNowClockTm = 0;
+  gStartHoleClockTm = 0;
+  gStartRoundClockTm = 0;
+  //gRunningUTC = 0;
   bRoundStartFlag = false;
   gToday = time(nullptr);
 

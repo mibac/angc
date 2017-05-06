@@ -18,7 +18,7 @@ void CYellowBtn::setAttributes() {
   align(FL_ALIGN_CENTER);
 
   textfont(1);
-  textsize(36);
+  textsize(24);
   textcolor(FL_BLACK);
   color(FL_YELLOW);
   readonly(1);
@@ -45,8 +45,9 @@ void CYellowBtn::updateTime() {
 }
 
 void CYellowBtn::updateHoleTime() {
-  if (gNowUTC != gLastUTC) {
-    int seconds = gNowUTC - gLastUTC;
+    if (gStartHoleClockTm == 0)
+        return;
+    int seconds = time(&gNowClockTm) - gStartHoleClockTm;
     int hr = seconds / 3600;
     int mn = seconds / 60;
     int sc = seconds - (hr * 3600 + mn * 60);
@@ -74,19 +75,13 @@ void CYellowBtn::updateHoleTime() {
     else if (ss.length() != 2)
       ss = "";
 
-    string s = hs + ms + ss;
+    string s = "    Hole\n    " + hs + ms + ss;
     yellowBtn->value(s.c_str());
-    gLastUTC = gNowUTC;
     redraw();
-  }
 }
 
 void CYellowBtn::updateElapsedTime() {
-  if (gNowUTC != 0) {
-    // cout << "In CYellowBtn::updateTime now, last " << gNowUTC << " " <<
-    // gLastUTC
-    //      << endl;
-    int seconds = gNowUTC - gStartRoundUTC;
+    int seconds = time(&gNowClockTm) - gStartRoundClockTm;
     int hr = seconds / 3600;
     int mn = seconds / 60;
     int sc = seconds - (hr * 3600 + mn * 60);
@@ -114,11 +109,9 @@ void CYellowBtn::updateElapsedTime() {
     else if (ss.length() != 2)
       ss = "";
 
-    string s = hs + ms + ss;
+    string s = "   Round\n    " + hs + ms + ss;
     yellowBtn->value(s.c_str());
-    gLastUTC = gNowUTC;
     redraw();
-  }
 }
 
 void CYellowBtn::updateLocalTime() {
@@ -129,7 +122,7 @@ void CYellowBtn::updateLocalTime() {
   time(&rawtime);
   timeinfo = localtime(&rawtime);
 
-  strftime(buffer, sizeof(buffer), "%I:%M:%S", timeinfo);
+  strftime(buffer, sizeof(buffer), "    Clock\n  %I:%M:%S", timeinfo);
   std::string s(buffer);
 
   yellowBtn->value(s.c_str());
@@ -158,7 +151,7 @@ int CYellowBtn::handle(int e) {
 }
 
 CYellowBtn::CYellowBtn(int X, int Y, int W, int H, const char *L)
-    : Fl_Output(X, Y, W, H, L) {
+    : Fl_Multiline_Output(X, Y, W, H, L) {
   setAttributes();
   count = 0;
 }

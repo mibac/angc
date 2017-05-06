@@ -3,14 +3,14 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Output.H>
+#include <FL/Fl_Multiline_Output.H>
 #include <FL/Fl_Window.H>
 
 #include <string>
 
 using namespace std;
 
-class CYellowBtn : public Fl_Output {
+class CYellowBtn : public Fl_Multiline_Output {
   int count;
   // Called when user finishes entering data with numeric keypad
   void yellowBtn_CB2();

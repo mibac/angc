@@ -23,9 +23,10 @@ void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
   gCurrentHole = atoi(str.c_str());
   bPlayedHole[gCurrentHole] = true;
-  gNowUTC = gRunningUTC;
+  time(&gNowClockTm);
+  gStartHoleClockTm = gNowClockTm;
   if (bRoundStartFlag == false) {
-      gStartRoundUTC = gNowUTC;
+      gStartRoundClockTm = gNowClockTm;
       bRoundStartFlag = true;
   }
   //cout << "In CHoleBtn::SetNumPadValue_CB2 " << gCurrentHole << endl;

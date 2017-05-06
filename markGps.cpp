@@ -86,7 +86,8 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
 
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
@@ -223,17 +224,8 @@ int main(int argc, char **argv) {
   hv->makeList();
   hv->show();
   hv->draw();
-  // from howto-add_fd_popen()
-  if ((gpsin = popen(GPS_CMD, "r")) == NULL) {  // start the
-                                                // external unix command
-    perror("popen failed");
-    return (1);
-  }
-  // setup a callback for the popen() ed descriptor
+// setup a callback for the popen() ed descriptor
   Fl::add_fd(fileno(gpsin), HandleFD, 0);
 
-  // cout << asctime(localtime(&gToday)) << gToday << " seconds since the Epoch\n";
-
-  // Fl::add_idle(IdleCallback, win);
   return (Fl::run());
 }

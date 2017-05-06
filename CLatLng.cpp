@@ -72,7 +72,7 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 
 void CLatLng::updateLatLng(const string& s) {
   if (myGPS.isValidGGA(s)) {
-    gRunningUTC = myGPS.UTC;
+    // gRunningUTC = myGPS.UTC;
     vGPS.push_back(s);
     myGPS.setValuesGGA(s);
     LatLng ll(myGPS.latitude, myGPS.longitude);
