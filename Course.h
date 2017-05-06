@@ -37,11 +37,15 @@ class Hole {
     Feature feature[30];
     Vector startOrient[2],currentOrient[2],currentPoint,rotCurrentPoint;
     Vector startUnit,currentUnit,currentGreenUnit;
+    Vector markPoint;
+    bool showMarkPoint;
     Vector xminmax,yminmax,xgreenminmax,ygreenminmax;
     double walk,scale,xtran,ytran,greenscale,greenxtran,greenytran;
+    double zoomScale;
     void findMinMax();
     void findGreenMinMax();
     Vector  rotatePoint(Vector x, Vector u);
+    Vector  unrotatePoint(Vector x, Vector u);
     void rotateHoleToOrientation();
     void rotateToGreenOrientation() ;
     void setCurrentPoint(double east,double north);
