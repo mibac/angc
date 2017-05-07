@@ -478,6 +478,11 @@ int HoleView::handle(int e) {
              else if (ngc->hole[gCurrentHole].viewType==FULLVIEW) {
                  ngc->hole[gCurrentHole].viewType = ZOOMVIEW;
                  ngc->hole[gCurrentHole].showMarkPoint=false;
+                 if (!ngc->hole[gCurrentHole].zoomPointSelected) {
+                   xPressed= xres/2;
+                   yPressed=yres/2;
+                 }
+                    
                  redraw();
                }
           }
@@ -495,6 +500,7 @@ int HoleView::handle(int e) {
               switch (ngc->hole[gCurrentHole].viewType) {
               case FULLVIEW:
                 xPressed = x; yPressed=y;
+                ngc->hole[gCurrentHole].zoomPointSelected=true;
                 break; 
               case GREENVIEW:
                 xPressed = x; yPressed=y;

@@ -107,7 +107,8 @@ void Hole::findGreenYardage() {
     double smin = big, smax = -big;
 
     u1 = gd.currentP.v[0]; v1 = gd.currentP.v[1];
-    u2 = gd.Pin.v[0]; v2 = gd.Pin.v[1];
+    //u2 = gd.Pin.v[0]; v2 = gd.Pin.v[1];
+    u2 = gd.Center.v[0]; v2 = gd.Center.v[1];
     a1 = u2-u1; a2 = v2-v1;
     for (j=0;j<gd.green->polyNum;j++)  {
             for (i=0;i<gd.green->poly[j].vertNum;i++) {
@@ -187,6 +188,7 @@ void Course::readCourse() {
     	
     for (h=1;h<=maxHole;h++) {
         hole[h].showMarkPoint=false;
+        hole[h].zoomPointSelected=false;
         hole[h].viewType = 0;
         hole[h].zoomScale = 3.0; 
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";
@@ -207,8 +209,8 @@ void Course::readCourse() {
             hole[h].startOrient[i].v[0] = hole[h].currentOrient[i].v[0] = east;
             hole[h].startOrient[i].v[1] = hole[h].currentOrient[i].v[1] = north;
         }
-        hole[h].gd.Pin.v[0] = hole[h].startOrient[1].v[0];
-        hole[h].gd.Pin.v[1] = hole[h].startOrient[1].v[1];
+        hole[h].gd.Pin.v[0] = hole[h].gd.Center.v[0] = hole[h].startOrient[1].v[0];
+        hole[h].gd.Pin.v[1] = hole[h].gd.Center.v[1] = hole[h].startOrient[1].v[1];
         hole[h].walk = 0.0;
       //  hole[h].currentPoint.v[0] = (1-hole[h].walk)*hole[h].startOrient[0].v[0]+
       //                              hole[h].walk*hole[h].startOrient[1].v[0];
