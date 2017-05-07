@@ -86,14 +86,16 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+#define JACK 1
+#if JACK
+ const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+#else
 const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
-
+#endif
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
     yellowBtn->updateTime();
   if (n == 0) n = 1;
- // double dt;
   if (gCurrentHole==n) {
      #if USEGPS ==0
       hv->redraw();
@@ -119,14 +121,8 @@ void HandleFD(FL_SOCKET fd, void *data) {
     if (found != string::npos) {
       cll.updateLatLng(gpsStr.c_str());
       string s = cll.distanceFromLastMark();
-//       boxYardage->label(s.c_str());
-//       // cout << "holeBtn IdleCallback: " << s << endl;
        UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
-// Added code for green closeup
-//      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
- //     if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
-  //    else hv->ngc->hole[gCurrentHole].viewType=0;
       hv->redraw();
     }
   }
