@@ -387,17 +387,21 @@ void HoleView::makeCurrentGreenList(int h) {
       int offset = 40;
       glColor3f(0.0,0.0,0.0);
       gl_font(FL_HELVETICA_BOLD,48);
-      spin = to_string((int) ngc->hole[h].gd.pinYardage);
+      spin = to_string((int) ngc->hole[h].gd.pinYardage)+"P";
       sp = spin.c_str();
-      gl_draw(sp,(float) 10.0,(float) (ypin-offset));
+     // gl_draw(sp,(float) 10.0,(float) (ypin-offset));
+      gl_draw(sp,(float) xres/2-80,(float) (offset));
       gl_font(FL_HELVETICA_BOLD,48);
-      sfront = to_string((int) ngc->hole[h].gd.frontYardage);
+      sfront = to_string((int) ngc->hole[h].gd.frontYardage)+"F";
       sf = sfront.c_str();
-      gl_draw(sf,(float) 10.0,(float) (yfront-offset));
+      //gl_draw(sf,(float) 10.0,(float) (yfront-offset));
+      gl_draw(sf,(float) 10.0,(float) (offset));
       gl_font(FL_HELVETICA_BOLD,48);
-      sback = to_string((int) ngc->hole[h].gd.backYardage);
+      sback = to_string((int) ngc->hole[h].gd.backYardage)+"B";
       sb = sback.c_str();
-      gl_draw(sb,(float) 10.0,(float) (yback-offset));
+//      gl_draw(sb,(float) 10.0,(float) (yback-offset));
+      gl_draw(sb,(float) (xres-150),(float) (offset));
+
     glFlush();
     glEndList();
 
