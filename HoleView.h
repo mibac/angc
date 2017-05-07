@@ -18,6 +18,7 @@ class HoleView: public Fl_Gl_Window {
    void makeZoomButtonList();
    void makeGreenButtonList();
    void makeMarkPointList(int h);
+   void makeZoomList(int h);
    void initHoleWindow(int x, int y,Course *course);
    void draw();
    bool insideZoomButton(double x,double y);

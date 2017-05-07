@@ -15,7 +15,7 @@ struct Vector {
 
 struct Polygon {
     int vertNum;
-    Vector  UTM[100],rot[100];
+    Vector  UTM[100],rot[100],XY[100];
 };
 
 struct Feature {
