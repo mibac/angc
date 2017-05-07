@@ -33,13 +33,20 @@
 #define GREENVIEW 1
 #define ZOOMVIEW 2
 
+#define ZOOMLIST 100
+#define GREENLIST 200
+#define CURRENTPOINTLIST 300
+#define ZOOMBUTTONLIST 400
+#define GREENBUTTONLIST 500
+#define MARKPOINTLIST 600
+
 void HoleView::initHoleWindow(int x,int y,Course *course) {
   xres = x;
   yres = y;
   ngc = course;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-     gluOrtho2D((double) 0 ,(double) x, (double) 0, (double) y);
+  gluOrtho2D((double) 0 ,(double) x, (double) 0, (double) y);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -50,8 +57,8 @@ void HoleView::makeCurrentPointList(int h) {
         ngc->hole[h].computeYardageToHole();
         ngc->hole[h].computeYardageFromTee();
         ngc->hole[h].rotCurrentPoint = ngc->hole[h].rotatePoint(ngc->hole[h].currentPoint,ngc->hole[h].currentUnit);
-        glDeleteLists(h+100,1);
-        glNewList(h+100,GL_COMPILE);
+        glDeleteLists(h+CURRENTPOINTLIST,1);
+        glNewList(h+CURRENTPOINTLIST,GL_COMPILE);
         glPointSize(16.0);
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
@@ -84,8 +91,8 @@ void HoleView::makeMarkPointList(int h) {
      string s;
 
       rot = ngc->hole[h].rotatePoint(ngc->hole[h].markPoint,ngc->hole[h].currentUnit);
-        glDeleteLists(h+100,1);
-        glNewList(h+100,GL_COMPILE);
+        glDeleteLists(h+MARKPOINTLIST,1);
+        glNewList(h+MARKPOINTLIST,GL_COMPILE);
         glPointSize(16.0);
         glBegin(GL_POINTS);
           glColor3f(1.0,0.0,0.0);
@@ -117,8 +124,8 @@ void HoleView::makeMarkPointList(int h) {
 void HoleView::makeZoomButtonList() {
 
      zoomButtonX = 5.0; zoomButtonY = yres-90; zoomButtonS = 80;
-     glDeleteLists(400,1);
-     glNewList(400,GL_COMPILE);
+     glDeleteLists(ZOOMBUTTONLIST,1);
+     glNewList(ZOOMBUTTONLIST,GL_COMPILE);
         glBegin(GL_POLYGON);
           glColor3f(1.0,1.0,1.0);
           glVertex2d(zoomButtonX,zoomButtonY);
@@ -139,8 +146,8 @@ void HoleView::makeZoomButtonList() {
 void HoleView::makeGreenButtonList() {
 
      greenButtonX = xres-90; greenButtonY = yres-90; greenButtonS = 80;
-     glDeleteLists(500,1);
-     glNewList(500,GL_COMPILE);
+     glDeleteLists(GREENBUTTONLIST,1);
+     glNewList(GREENBUTTONLIST,GL_COMPILE);
         glBegin(GL_POLYGON);
           glColor3f(1.0,1.0,1.0);
           glVertex2d(greenButtonX,greenButtonY);
@@ -164,8 +171,6 @@ void HoleView::makeCurrentHoleList(int h) {
      double xsize,ysize;
      double x1,y1,dd;
 
-      //x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].startOrient[0].v[0];
-     // y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].startOrient[0].v[1];
       x1 = ngc->hole[h].gd.Pin.v[0]-ngc->hole[h].startOrient[0].v[0];
       y1 = ngc->hole[h].gd.Pin.v[1]-ngc->hole[h].startOrient[0].v[1];
       dd = sqrt(x1*x1+y1*y1);
@@ -240,19 +245,82 @@ void HoleView::makeCurrentHoleList(int h) {
                       -ngc->hole[h].yminmax.v[0]);
                 x[i] = x[i]+ngc->hole[h].xtran;
                 y[i] = y[i]+2*ngc->hole[h].ytran;
-            if (ngc->hole[h].viewType==ZOOMVIEW) {
-                x[i] = x[i]*ngc->hole[h].zoomScale;
-                y[i] = y[i]*ngc->hole[h].zoomScale;
-                x[i] = x[i]+xres/2.0-ngc->hole[h].zoomScale*xPressed;
-                y[i] = y[i]+yres/2.0-ngc->hole[h].zoomScale*yPressed;
-            };
+                ngc->hole[h].feature[k].poly[j].XY[i].v[0]= x[i];
+                ngc->hole[h].feature[k].poly[j].XY[i].v[1]= y[i];
                 glVertex2d(x[i],y[i]);
             }
           glEnd();
         }
        }
     glEnd();
-    
+    glFlush();
+    glEndList();
+}
+
+void HoleView::makeZoomList(int h) {
+      double x,y;
+      int i,j,k;
+
+      glDeleteLists(ZOOMLIST+h,1);
+      glNewList(ZOOMLIST+h,GL_COMPILE);
+         glEnable(GL_BLEND);
+         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+         glEnable(GL_LINE_SMOOTH);
+         glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+         for (k=0;k<ngc->hole[h].featureNum;k++) {
+            for (j=0;j<ngc->hole[h].feature[k].polyNum;j++) {
+              switch (ngc->hole[h].feature[k].featureType) {
+                case TEEBOX:  glColor3d(76.0/255.0,155.0/255.0,0.0);  // Tee Box
+                    break;
+                case FAIRWAY:  glColor3d(102.0/255.0,204.0/255.0,0.0);  // Fairway
+                    break;
+                case GREEN:glColor3d(0.0,204.0/255.0,0.0);    // Green
+                    break;
+                case TRAP: glColor3d(1.0,1.0,204.0/255.0);   // Trap
+                    break;
+                case TRAPGREEN: glColor3d(1.0,1.0,204.0/255.0);   // Trap
+                    break;
+                case TREES: glColor3d(0.0,102.0/255.0,0.0);   // Trees
+                    break;
+                case WATER: glColor3d(51.0/255.0,153.0/255.0,1.0);   // Water
+                    break;
+                case TEEAREA: glColor4d(38.0/255.0,73.0/255.0,0.0,0.2);   // Tee Area
+                    break;
+                case CARTPATH: glColor4d(0.0,0.0,0.0,0.55);  // Cart Path
+                    break;
+                case OB: glColor4d(1.0,1.0,1.0,1.0);  // OB
+                    break;
+                case HOUSE: glColor3d(1.0,1.0,1.0);  // House
+                    break;
+                case STREET: glColor3d(0.1,0.1,0.1);  // Street
+                    break;
+                case DRIVEWAY: glColor3d(0.3,0.3,0.3);  // Driveway
+
+            }
+           if ((ngc->hole[h].feature[k].featureType<20)||(ngc->hole[h].feature[k].featureType>100))
+                glBegin(GL_POLYGON);
+           else {
+                if (ngc->hole[h].feature[k].featureType==CARTPATH) {
+                    glLineWidth(8.0);
+                }
+                else if (ngc->hole[h].feature[k].featureType==OB) glLineWidth(4.0);
+                glBegin(GL_LINE_STRIP);
+            }
+
+           for (i=0;i<ngc->hole[h].feature[k].poly[j].vertNum;i++) {
+                x = ngc->hole[h].feature[k].poly[j].XY[i].v[0];
+                y = ngc->hole[h].feature[k].poly[j].XY[i].v[1];
+                x = x*ngc->hole[h].zoomScale;
+                y = y*ngc->hole[h].zoomScale;
+                x = x+xres/2.0-ngc->hole[h].zoomScale*xPressed;
+                y = y+yres/2.0-ngc->hole[h].zoomScale*yPressed;
+                glVertex2d(x,y);
+            }
+          glEnd();
+        }
+       }
+    glEnd();
+
     glFlush();
     glEndList();
 }
@@ -298,8 +366,6 @@ void HoleView::makeCurrentGreenList(int h) {
     double x[100],y[100],xscale,yscale,ycen,xcen,xsize,ysize;
     int i,j,k;
 
-    //x1 = ngc->hole[h].startOrient[1].v[0]-ngc->hole[h].currentPoint.v[0];
-    //y1 = ngc->hole[h].startOrient[1].v[1]-ngc->hole[h].currentPoint.v[1];
     x1 = ngc->hole[h].gd.Pin.v[0]-ngc->hole[h].currentPoint.v[0];
     y1 = ngc->hole[h].gd.Pin.v[1]-ngc->hole[h].currentPoint.v[1];
     dd = sqrt(x1*x1+y1*y1);
@@ -322,12 +388,11 @@ void HoleView::makeCurrentGreenList(int h) {
     ngc->hole[h].greenxtran = xres/2.0-xcen;
     ngc->hole[h].greenytran = yres/2.0-ycen;
 
-    glDeleteLists(h+300,1);
-    glNewList(h+300,GL_COMPILE);
+    glDeleteLists(h+GREENLIST,1);
+    glNewList(h+GREENLIST,GL_COMPILE);
 
     for (k=0;k<ngc->hole[h].featureNum;k++) {
         if (ngc->hole[h].feature[k].featureType==GREEN) {
-           // ngc->hole[h].gd.Pin =ngc->hole[h].startOrient[1];
             ngc->hole[h].gd.currentP = ngc->hole[h].currentPoint;
             ngc->hole[h].gd.green = &ngc->hole[h].feature[k];
             ngc->hole[h].findGreenYardage();
@@ -355,7 +420,8 @@ void HoleView::makeCurrentGreenList(int h) {
         }
 
     }
-    double xp,yp,yfront,ypin,yback;
+    double xp,yp;
+  //  double yfront,ypin,yback;
     const char *sf,*sp,*sb;
     string sfront,spin,sback;
     ngc->hole[h].gd.PinRot = ngc->hole[h].rotatePoint(ngc->hole[h].gd.Pin,ngc->hole[h].currentGreenUnit);
@@ -369,20 +435,20 @@ void HoleView::makeCurrentGreenList(int h) {
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-      ypin = yp;
+      //ypin = yp;
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.FrontRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-      yfront = yp;
+      //yfront = yp;
       glColor3f(1.0,0.0,0.0);
       xp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[0]-ngc->hole[h].xgreenminmax.v[0]);
       yp = ngc->hole[h].greenscale*(ngc->hole[h].gd.BackRot.v[1]-ngc->hole[h].ygreenminmax.v[0]);
       xp = xp+ngc->hole[h].greenxtran;
       yp = yp+1.5*ngc->hole[h].greenytran;
       glVertex2d(xp,yp);
-      yback = yp;
+      //yback = yp;
     glEnd();
       int offset = 40;
       glColor3f(0.0,0.0,0.0);
@@ -426,29 +492,28 @@ void HoleView::draw() {
     glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
     switch (ngc->hole[gCurrentHole].viewType) {
        case FULLVIEW:
-         makeCurrentHoleList(gCurrentHole);
          makeCurrentPointList(gCurrentHole);
          makeZoomButtonList();
          makeGreenButtonList();
          glCallList(gCurrentHole);
-         glCallList(gCurrentHole+100);
-         glCallList(400);
-         glCallList(500);
+         glCallList(gCurrentHole+CURRENTPOINTLIST);
+         glCallList(ZOOMBUTTONLIST);
+         glCallList(GREENBUTTONLIST);
         break;
        case GREENVIEW:    
          makeCurrentGreenList(gCurrentHole); 
          makeGreenButtonList();
-         glCallList(gCurrentHole+300);
-         glCallList(500);
+         glCallList(gCurrentHole+GREENLIST);
+         glCallList(GREENBUTTONLIST);
         break;
        case ZOOMVIEW:
-         makeCurrentHoleList(gCurrentHole);
+         makeZoomList(gCurrentHole);
          makeZoomButtonList();
-         glCallList(gCurrentHole);
-         glCallList(400);
+         glCallList(gCurrentHole+ZOOMLIST);
+         glCallList(ZOOMBUTTONLIST);
          if (ngc->hole[gCurrentHole].showMarkPoint) {
             makeMarkPointList(gCurrentHole);
-            glCallList(gCurrentHole+100);
+            glCallList(gCurrentHole+MARKPOINTLIST);
          }
        break;
      }
@@ -472,7 +537,6 @@ int HoleView::handle(int e) {
    double x,y;
    switch (e) {
       case FL_PUSH:
-     //     cout   << "Push " << Fl::event_x() << " " << Fl::event_y() << endl;
           x = Fl::event_x(); y = yres-Fl::event_y();
           if (insideZoomButton(x,y))  {
              if (ngc->hole[gCurrentHole].viewType==ZOOMVIEW) {
@@ -515,7 +579,6 @@ int HoleView::handle(int e) {
                 ngc->hole[gCurrentHole].markPoint = UTMFromZoomPixelCoord(x,y);
                 ngc->hole[gCurrentHole].showMarkPoint=true;
                 redraw();
-     //           ngc->hole[gCurrentHole].showMarkPoint=false;
                 break;
               }
            } 
