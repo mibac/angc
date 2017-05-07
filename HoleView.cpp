@@ -46,7 +46,7 @@ void HoleView::initHoleWindow(int x,int y,Course *course) {
   ngc = course;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-     gluOrtho2D((double) 0 ,(double) x, (double) 0, (double) y);
+  gluOrtho2D((double) 0 ,(double) x, (double) 0, (double) y);
   glMatrixMode(GL_MODELVIEW);
 }
 
@@ -320,7 +320,6 @@ void HoleView::makeZoomList(int h) {
         }
        }
     glEnd();
-    
     glFlush();
     glEndList();
 }
@@ -502,7 +501,7 @@ void HoleView::draw() {
          glCallList(GREENBUTTONLIST);
         break;
        case GREENVIEW:    
-         makeCurrentGreenList(gCurrentHole);
+         makeCurrentGreenList(gCurrentHole); 
          makeGreenButtonList();
          glCallList(gCurrentHole+GREENLIST);
          glCallList(GREENBUTTONLIST);
@@ -537,7 +536,7 @@ bool HoleView::insideGreenButton(double x, double y) {
 int HoleView::handle(int e) {
    double x,y;
    switch (e) {
-    case FL_PUSH:
+      case FL_PUSH:
           x = Fl::event_x(); y = yres-Fl::event_y();
           if (insideZoomButton(x,y))  {
              if (ngc->hole[gCurrentHole].viewType==ZOOMVIEW) {

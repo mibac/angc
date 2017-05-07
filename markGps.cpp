@@ -95,16 +95,15 @@ void HandleFD(FL_SOCKET fd, void *data) {
   if (n == 0) n = 1;
  // double dt;
   if (gCurrentHole==n) {
-#if USEGPS ==0
-    hv->redraw();
-#endif
-
+     #if USEGPS ==0
+      hv->redraw();
+     #endif
   }
   if (gCurrentHole != n) {
     gCurrentHole = n;
-#if USEGPS == 0
-    hv->redraw();
-#endif
+    #if USEGPS == 0
+       hv->redraw();
+     #endif
   }
 #if USEGPS
   const int bufSz = 1023;
@@ -124,7 +123,7 @@ void HandleFD(FL_SOCKET fd, void *data) {
 //       // cout << "holeBtn IdleCallback: " << s << endl;
        UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
-      // Added code for green closeup
+// Added code for green closeup
 //      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
  //     if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
   //    else hv->ngc->hole[gCurrentHole].viewType=0;
