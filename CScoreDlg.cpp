@@ -18,7 +18,6 @@ const int kWindowW = 460;
 const int kWindowH = 400;
 const int kCounterH = 60;
 const int kCounterW = 200;
-// const int kCounterL = kWindowW / 2 - kCounterW / 2;
 const int kCounterL = 24;
 const int kLabelSz = 36;
 const int kTextSz = 48;
@@ -37,39 +36,29 @@ void hole_CB(Fl_Widget* w, void* v) {
   holeindex = c->value() - 1;
 
   CScoreDlg* d = (CScoreDlg*)(w->parent());
-  d->holeDisplay->label(holeStrs[holeindex].c_str());
-  //  CScores cs = cStats.statsRA[holeindex];
+  d->holeDisplay->value(holeStrs[holeindex].c_str());
   CScores cs = d->getCurrentScores(holeindex);
   d->scoreCounter->value(cStats.statsRA[holeindex].getScore());
   d->updownCounter->value(cStats.statsRA[holeindex].getUpdown());
   d->puttCounter->value(cStats.statsRA[holeindex].getPutts());
-  // d->updateAccumScore();
-  // d->updateAccumUpdowns();
-  // d->updateAccumPutts();
 }
 
 void score_CB(Fl_Widget* w, void* v) {
   Fl_Counter* c = (Fl_Counter*)w;
   int n = c->value();
   cStats.statsRA[holeindex].setScore(n);
-  // CScoreDlg* d = (CScoreDlg*)v;
-  //d->updateAccumScore();
 }
 
 void updown_CB(Fl_Widget* w, void* v) {
   Fl_Counter* c = (Fl_Counter*)w;
   int n = c->value();
   cStats.statsRA[holeindex].setUpdown(n);
-  // CScoreDlg* d = (CScoreDlg*)v;
-  //d->updateAccumUpdowns();
 }
 
 void putt_CB(Fl_Widget* w, void* v) {
   Fl_Counter* c = (Fl_Counter*)w;
   int n = c->value();
   cStats.statsRA[holeindex].setPutts(n);
-  // CScoreDlg* d = (CScoreDlg*)v;
-  //d->updateAccumPutts();
 }
 
 void CScoreDlg::updateAccumScore() {
@@ -129,18 +118,6 @@ void CScoreDlg::cb_total(Fl_Button* o, void* v) {
 void CScoreDlg::cb_OK_i(Fl_Button* b, void*) {
   cStats.statsRA[holeCounter->value()] = getCurrentScores();
   b->parent()->hide();
-  // int uds = 0;
-  // int putts = 0;
-  // int score = 0;
-  // for (auto itr : cStats.statsRA) {
-  //   uds += itr.getUpdown();
-  //   putts += itr.getPutts();
-  //   score += itr.getScore();
-  // }
-  //
-  // for (auto itr : cStats.statsRA) {
-  //   gFileStats << itr;
-  // }
 }
 
 void CScoreDlg::cb_OK(Fl_Button* o, void* v) {

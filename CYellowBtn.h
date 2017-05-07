@@ -14,19 +14,14 @@ class CYellowBtn : public Fl_Multiline_Output {
   int count;
   // Called when user finishes entering data with numeric keypad
   void yellowBtn_CB2();
-
   static void yellowBtn_CB(Fl_Widget *, void *data);
 
   void setAttributes();
   // Handle when user clicks on our input widget
   int handle(int e);
-  void updateHoleTime();
-  void updateElapsedTime();
-  void updateLocalTime();
+  void calcTime(time_t reftm, string str);
 
  public:
-  static string holeName;
-
   CYellowBtn(int X, int Y, int W, int H, const char *L = 0);
   void updateTime();
 };

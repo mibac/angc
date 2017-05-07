@@ -52,6 +52,7 @@ CScoresStats.o: CScoresStats.cpp CScoresStats.h CScores.h
 			g++ -c $<  $(CXXFLAGS)
 
 CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h
+	g++ -c $<  $(CXXFLAGS)
 
 globals.o: globals.cpp globals.h
 	g++ -c $<  $(CXXFLAGS)

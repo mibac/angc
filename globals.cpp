@@ -14,9 +14,8 @@ time_t gLastClockTm;
 time_t gNowClockTm;
 time_t gStartHoleClockTm;
 time_t gStartRoundClockTm;
-// time_t gRunningUTC;
 
-bool bRoundStartFlag;
+bool bRoundStarted;
 
 ofstream gFileStats;
 ofstream gFileClub;
@@ -34,8 +33,7 @@ void initGlobals() {
   gNowClockTm = 0;
   gStartHoleClockTm = 0;
   gStartRoundClockTm = 0;
-  //gRunningUTC = 0;
-  bRoundStartFlag = false;
+  bRoundStarted = false;
   gToday = time(nullptr);
 
   for( int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;

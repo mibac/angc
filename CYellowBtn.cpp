@@ -11,8 +11,6 @@
 
 using namespace std;
 
-string CYellowBtn::holeName;
-
 void CYellowBtn::setAttributes() {
   labeltype(FL_NORMAL_LABEL);
   align(FL_ALIGN_CENTER);
@@ -32,97 +30,27 @@ void CYellowBtn::yellowBtn_CB(Fl_Widget *, void *data) {}
 void CYellowBtn::updateTime() {
   switch (count) {
     case 0:
-      updateHoleTime();
+      calcTime( gStartHoleClockTm, "     Hole\n     %M:%S");
       break;
     case 1:
-      updateElapsedTime();
+      calcTime(gStartRoundClockTm, "   Round\n     %M:%S");
       break;
     case 2:
-      updateLocalTime();
+      calcTime(0, "    Clock\n  %I:%M:%S");
       break;
     default:;
   }
 }
 
-void CYellowBtn::updateHoleTime() {
-    if (gStartHoleClockTm == 0)
-        return;
-    int seconds = time(&gNowClockTm) - gStartHoleClockTm;
-    int hr = seconds / 3600;
-    int mn = seconds / 60;
-    int sc = seconds - (hr * 3600 + mn * 60);
-    string hs = to_string(hr);
-    string ms = to_string(mn);
-    string ss = to_string(sc);
-    if (hr == 0)
-      hs = "";
-    else if (hs.length() == 1)
-      hs = "0" + hs + ":";
-    else if (hs.length() == 2)
-      hs = hs + ":";
-    else
-      hs = "";
+void CYellowBtn::calcTime(time_t tm, string str) {
+  if (!bRoundStarted) return;
 
-    if (ms.length() == 1)
-      ms = "0" + ms + ":";
-    else if (ms.length() == 2)
-      ms = ms + ":";
-    else
-      ms = "";
-
-    if (ss.length() == 1)
-      ss = "0" + ss;
-    else if (ss.length() != 2)
-      ss = "";
-
-    string s = "    Hole\n    " + hs + ms + ss;
-    yellowBtn->value(s.c_str());
-    redraw();
-}
-
-void CYellowBtn::updateElapsedTime() {
-    int seconds = time(&gNowClockTm) - gStartRoundClockTm;
-    int hr = seconds / 3600;
-    int mn = seconds / 60;
-    int sc = seconds - (hr * 3600 + mn * 60);
-    string hs = to_string(hr);
-    string ms = to_string(mn);
-    string ss = to_string(sc);
-    if (hr == 0)
-      hs = "";
-    else if (hs.length() == 1)
-      hs = "0" + hs + ":";
-    else if (hs.length() == 2)
-      hs = hs + ":";
-    else
-      hs = "";
-
-    if (ms.length() == 1)
-      ms = "0" + ms + ":";
-    else if (ms.length() == 2)
-      ms = ms + ":";
-    else
-      ms = "";
-
-    if (ss.length() == 1)
-      ss = "0" + ss;
-    else if (ss.length() != 2)
-      ss = "";
-
-    string s = "   Round\n    " + hs + ms + ss;
-    yellowBtn->value(s.c_str());
-    redraw();
-}
-
-void CYellowBtn::updateLocalTime() {
-  time_t rawtime;
   struct tm *timeinfo;
   char buffer[80];
 
-  time(&rawtime);
-  timeinfo = localtime(&rawtime);
-
-  strftime(buffer, sizeof(buffer), "    Clock\n  %I:%M:%S", timeinfo);
+  time_t seconds = time(&gNowClockTm) - tm;
+  timeinfo = localtime(&seconds);
+  strftime(buffer, sizeof(buffer), str.c_str(), timeinfo);
   std::string s(buffer);
 
   yellowBtn->value(s.c_str());

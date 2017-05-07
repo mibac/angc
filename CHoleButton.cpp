@@ -25,11 +25,10 @@ void CHoleBtn::SetNumPadValue_CB2() {
   bPlayedHole[gCurrentHole] = true;
   time(&gNowClockTm);
   gStartHoleClockTm = gNowClockTm;
-  if (bRoundStartFlag == false) {
+  if (bRoundStarted == false) {
       gStartRoundClockTm = gNowClockTm;
-      bRoundStartFlag = true;
+      bRoundStarted = true;
   }
-  //cout << "In CHoleBtn::SetNumPadValue_CB2 " << gCurrentHole << endl;
   CHoleBtn::holeName = str;
   if (str.size() == 1)
     str = "  " + str;

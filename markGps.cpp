@@ -91,37 +91,18 @@ const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
 
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
+    yellowBtn->updateTime();
   if (n == 0) n = 1;
-  double dt;
-  if (gCurrentHole == n) {
-#if USEGPS == 0
-    int t;
-
-    t = hv->ngc->hole[gCurrentHole].currentPathIndex;
-    hv->ngc->hole[gCurrentHole].setCurrentPoint(
-        hv->ngc->hole[gCurrentHole].pathPoint[t].v[0],
-        hv->ngc->hole[gCurrentHole].pathPoint[t].v[1]);
-    dt = hv->ngc->hole[gCurrentHole].yardDistance(
-        hv->ngc->hole[gCurrentHole].currentPoint,
-        hv->ngc->hole[gCurrentHole].startOrient[1]);
-    if (dt < 150.0)
-      hv->ngc->hole[gCurrentHole].viewType = 1;
-    else
-      hv->ngc->hole[gCurrentHole].viewType = 0;
-    hv->ngc->hole[gCurrentHole].currentPathIndex++;
-    if (hv->ngc->hole[gCurrentHole].currentPathIndex ==
-        hv->ngc->hole[gCurrentHole].pathPointNum)
-      hv->ngc->hole[gCurrentHole].currentPathIndex = 0;
-
-    usleep(500000);
+ // double dt;
+  if (gCurrentHole==n) {
+#if USEGPS ==0
     hv->redraw();
 #endif
+
   }
   if (gCurrentHole != n) {
-    // hv->redraw();
     gCurrentHole = n;
 #if USEGPS == 0
-    hv->ngc->hole[gCurrentHole].currentPathIndex = 0;
     hv->redraw();
 #endif
   }
@@ -138,22 +119,17 @@ void HandleFD(FL_SOCKET fd, void *data) {
     // size_t found = s.find("GPGLL");
     if (found != string::npos) {
       cll.updateLatLng(gpsStr.c_str());
-      //   string s = cll.distanceFromLastMark();
-      //   yellowBtn->label(s.c_str());
-      // cout << "holeBtn IdleCallback: " << s << endl;
-      UtmLatLng u = cll.getNowMark();
+      string s = cll.distanceFromLastMark();
+//       boxYardage->label(s.c_str());
+//       // cout << "holeBtn IdleCallback: " << s << endl;
+       UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       // Added code for green closeup
-      dt = hv->ngc->hole[gCurrentHole].yardDistance(
-          hv->ngc->hole[gCurrentHole].currentPoint,
-          hv->ngc->hole[gCurrentHole].startOrient[1]);
-      if (dt < 200.0)
-        hv->ngc->hole[gCurrentHole].viewType = 1;
-      else
-        hv->ngc->hole[gCurrentHole].viewType = 0;
+//      dt = hv->ngc->hole[gCurrentHole].yardDistance(hv->ngc->hole[gCurrentHole].currentPoint,hv->ngc->hole[gCurrentHole].startOrient[1]);
+ //     if (dt<150.0) hv->ngc->hole[gCurrentHole].viewType=1;
+  //    else hv->ngc->hole[gCurrentHole].viewType=0;
       hv->redraw();
     }
-    yellowBtn->updateTime();
   }
 #endif
 }
@@ -225,7 +201,7 @@ int main(int argc, char **argv) {
   hv->show();
   hv->draw();
 // setup a callback for the popen() ed descriptor
-  Fl::add_fd(fileno(gpsin), HandleFD, 0);
+  if (gpsin!= nullptr) Fl::add_fd(fileno(gpsin), HandleFD, 0);
 
   return (Fl::run());
 }

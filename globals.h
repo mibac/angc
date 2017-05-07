@@ -13,14 +13,12 @@ const int k18 = 18;
 const int kPrecision = 9;
 
 extern int gCurrentHole;
-// extern time_t gLastClockTm;   // returns seconds
 extern time_t gNowClockTm;
 extern time_t gStartHoleClockTm;
-//extern time_t gRunningClockTm;
 extern time_t gStartRoundClockTm;
 extern time_t gToday;
 
-extern bool bRoundStartFlag;
+extern bool bRoundStarted;
 
 struct UtmLatLng {
   double lat;
