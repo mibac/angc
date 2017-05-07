@@ -24,7 +24,7 @@ struct Feature {
 };
 
 struct greenData {
-    Vector currentP,Pin,Front,Back;
+    Vector currentP,Pin,Front,Back,Center;
     Vector PinRot,FrontRot,BackRot;
     double pinYardage,frontYardage,backYardage;
     Feature *green;
@@ -38,7 +38,7 @@ class Hole {
     Vector startOrient[2],currentOrient[2],currentPoint,rotCurrentPoint;
     Vector startUnit,currentUnit,currentGreenUnit;
     Vector markPoint;
-    bool showMarkPoint;
+    bool showMarkPoint,zoomPointSelected;
     Vector xminmax,yminmax,xgreenminmax,ygreenminmax;
     double walk,scale,xtran,ytran,greenscale,greenxtran,greenytran;
     double zoomScale;
