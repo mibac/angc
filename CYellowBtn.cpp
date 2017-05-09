@@ -16,7 +16,7 @@ void CYellowBtn::setAttributes() {
   align(FL_ALIGN_CENTER);
 
   textfont(1);
-  textsize(24);
+  textsize(36);
   textcolor(FL_BLACK);
   color(FL_YELLOW);
   readonly(1);
@@ -27,10 +27,51 @@ void CYellowBtn::yellowBtn_CB2() {}
 
 void CYellowBtn::yellowBtn_CB(Fl_Widget *, void *data) {}
 
-void CYellowBtn::updateTime() {
+#if GPSTIME
+void CYellowBtn::calcGPStime(int reftm, const string &lbl) {
+  int seconds = gNowGPStime - reftm;
+  string stm = to_string(seconds);
+  int len = stm.length();
+  if (len < 6) {
+    for (int ix = 0; ix <= 6 - len; ++ix) stm = "0" + stm;
+  }
+
+  string hs = stm.substr(0, 2);
+  string ms = stm.substr(2, 2);
+  string ss = stm.substr(4, 2);
+
+  string s;
+  if (reftm == 0)  // clock time
+    s = lbl + hs + ":" + ms;
+  else
+    s = lbl + ms + ":" + ss;
+
+  value(s.c_str());
+  redraw();
+}
+
+void CYellowBtn::updateGPStime() {
   switch (count) {
     case 0:
-      calcTime( gStartHoleClockTm, "     Hole\n     %M:%S");
+      calcGPStime(gStartHoleGPStime, "Hole\n");
+      break;
+    case 1:
+      calcGPStime(gStartRoundGPStime, "Round\n");
+      break;
+    case 2:
+      calcGPStime(0, "Clock\n");
+      break;
+    default:;
+  }
+}
+
+void CYellowBtn::updateClockTime() {}
+void CYellowBtn::calcClockTime(time_t reftm, string str) {}
+#else
+void CYellowBtn::updateClockTime() {
+  switch (count) {
+    case 0:
+      calcTime(gStartHoleClockTm, "     Hole\n     %M:%S");
       break;
     case 1:
       calcTime(gStartRoundClockTm, "   Round\n     %M:%S");
@@ -42,7 +83,7 @@ void CYellowBtn::updateTime() {
   }
 }
 
-void CYellowBtn::calcTime(time_t tm, string str) {
+void CYellowBtn::calcClockTime(time_t tm, string str) {
   if (!bRoundStarted) return;
 
   struct tm *timeinfo;
@@ -56,6 +97,7 @@ void CYellowBtn::calcTime(time_t tm, string str) {
   yellowBtn->value(s.c_str());
   redraw();
 }
+#endif
 
 // Handle when user right clicks on our input widget
 int CYellowBtn::handle(int e) {

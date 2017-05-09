@@ -1,11 +1,11 @@
 #ifndef CGLOBALS_H
 #define CGLOBALS_H
 
-#include <vector>
-#include <string>
+#include <array>
 #include <ctime>
 #include <fstream>
-#include <array>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,10 +13,18 @@ const int k18 = 18;
 const int kPrecision = 9;
 
 extern int gCurrentHole;
+extern time_t gToday;
+
+#define GPSTIME 1
+#if GPSTIME
+extern int gNowGPStime;
+extern int gStartHoleGPStime;
+extern int gStartRoundGPStime;
+#else
 extern time_t gNowClockTm;
 extern time_t gStartHoleClockTm;
 extern time_t gStartRoundClockTm;
-extern time_t gToday;
+#endif
 
 extern bool bRoundStarted;
 

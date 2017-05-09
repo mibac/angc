@@ -86,26 +86,25 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-#define JACK 1
-#if JACK
- const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
-#else
-const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
-#endif
+const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";  // john
+// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";  // jack
+// const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";  // john
+
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
-    yellowBtn->updateTime();
   if (n == 0) n = 1;
-  if (gCurrentHole==n) {
-     #if USEGPS ==0
-      hv->redraw();
-     #endif
+  // double dt;
+  if (gCurrentHole == n) {
+#if USEGPS == 0
+    hv->redraw();
+
+#endif
   }
   if (gCurrentHole != n) {
     gCurrentHole = n;
-    #if USEGPS == 0
-       hv->redraw();
-     #endif
+#if USEGPS == 0
+    hv->redraw();
+#endif
   }
 #if USEGPS
   const int bufSz = 1023;
@@ -120,10 +119,10 @@ void HandleFD(FL_SOCKET fd, void *data) {
     // size_t found = s.find("GPGLL");
     if (found != string::npos) {
       cll.updateLatLng(gpsStr.c_str());
-      string s = cll.distanceFromLastMark();
-       UtmLatLng u = cll.getNowMark();
+      UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
+      yellowBtn->updateGPStime();
     }
   }
 #endif
@@ -195,8 +194,8 @@ int main(int argc, char **argv) {
   hv->makeList();
   hv->show();
   hv->draw();
-// setup a callback for the popen() ed descriptor
-  if (gpsin!= nullptr) Fl::add_fd(fileno(gpsin), HandleFD, 0);
+  // setup a callback for the popen() ed descriptor
+  Fl::add_fd(fileno(gpsin), HandleFD, 0);
 
   return (Fl::run());
 }

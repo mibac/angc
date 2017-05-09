@@ -19,11 +19,14 @@ class CYellowBtn : public Fl_Multiline_Output {
   void setAttributes();
   // Handle when user clicks on our input widget
   int handle(int e);
-  void calcTime(time_t reftm, string str);
+
+  void calcGPStime(int reftm, const string &lbl);
+  void calcClockTime(time_t reftm, string str);
 
  public:
   CYellowBtn(int X, int Y, int W, int H, const char *L = 0);
-  void updateTime();
+  void updateGPStime();
+  void updateClockTime();
 };
 
 extern CYellowBtn *yellowBtn;  // local instance of numeric keypad widget

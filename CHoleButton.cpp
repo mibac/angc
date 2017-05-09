@@ -23,12 +23,20 @@ void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
   gCurrentHole = atoi(str.c_str());
   bPlayedHole[gCurrentHole] = true;
+#if GPSTIME
+gStartHoleGPStime = gNowGPStime;
+if (bRoundStarted == false) {
+  gStartRoundGPStime = gNowGPStime;
+  bRoundStarted = true;
+}
+#else
   time(&gNowClockTm);
   gStartHoleClockTm = gNowClockTm;
   if (bRoundStarted == false) {
-      gStartRoundClockTm = gNowClockTm;
-      bRoundStarted = true;
+    gStartRoundClockTm = gNowClockTm;
+    bRoundStarted = true;
   }
+#endif
   CHoleBtn::holeName = str;
   if (str.size() == 1)
     str = "  " + str;

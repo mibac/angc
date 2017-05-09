@@ -77,6 +77,7 @@ void CLatLng::updateLatLng(const string& s) {
     LatLng ll(myGPS.latitude, myGPS.longitude);
     UtmLatLng ull = NMEA2UTM(ll);
     vUTM.push_back(ull);
+    gNowGPStime = myGPS.UTC;
   }
 }
 
