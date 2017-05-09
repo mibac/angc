@@ -46,7 +46,7 @@
 #endif
 
 #ifndef CHOLEBUTTON_H
-#include "CHoleButton.h"  //CHoleBtn *holeBtn
+#include "CHoleBtn.h"  //CHoleBtn *holeBtn
 #endif
 
 #ifndef CCLUBBTN_H
@@ -118,11 +118,11 @@ void HandleFD(FL_SOCKET fd, void *data) {
     size_t found = gpsStr.find("GPGGA");
     // size_t found = s.find("GPGLL");
     if (found != string::npos) {
+      yellowBtn->updateGPStime();
       cll.updateLatLng(gpsStr.c_str());
       UtmLatLng u = cll.getNowMark();
       hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
-      yellowBtn->updateGPStime();
     }
   }
 #endif
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  yellowBtn = new CYellowBtn(4, kBtnRow1Top, kYardageWid, kBoxSize, 0);
+  yellowBtn = new CYellowBtn(3, kBtnRow1Top, kYardageWid+1, kBoxSize, 0);
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);

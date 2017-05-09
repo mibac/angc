@@ -26,7 +26,6 @@ const int ONE_SECOND = 1000000;
 GPS myGPS;
 CLatLng cll;
 
-
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
   strm << "(" << ull.lng << ",E," << ull.lat << ",N)";
   return strm;
@@ -71,14 +70,14 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 }
 
 void CLatLng::updateLatLng(const string& s) {
-  if (myGPS.isValidGGA(s)) {
+  // if (myGPS.isValidGGA(s)) {
     vGPS.push_back(s);
     myGPS.setValuesGGA(s);
     LatLng ll(myGPS.latitude, myGPS.longitude);
     UtmLatLng ull = NMEA2UTM(ll);
     vUTM.push_back(ull);
     gNowGPStime = myGPS.UTC;
-  }
+  // }
 }
 
 

@@ -15,7 +15,7 @@
 using namespace std;
 
 class CHoleBtn : public Fl_Output {
-
+  void countHolesPlayed();
   // Called when user finishes entering data with numeric keypad
   void SetNumPadValue_CB2();
 
@@ -25,11 +25,12 @@ class CHoleBtn : public Fl_Output {
   int handle(int e);
 
  public:
+  static int holesPlayed;
   static string holeName;
 
   CHoleBtn(int X, int Y, int W, int H, const char *L = 0);
 };
 
-extern   CHolesPopup *myHolePopup;  // local instance of numeric keypad widget
+extern CHolesPopup *myHolePopup;  // local instance of numeric keypad widget
 
 #endif  // CHOLEBUTTON_H

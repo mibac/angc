@@ -1,5 +1,5 @@
 #ifndef CHOLEBUTTON_H
-#include "CHoleButton.h"
+#include "CHoleBtn.h"
 #endif
 
 #include <string>
@@ -18,25 +18,25 @@ CHolesPopup *myHolePopup = nullptr;  // local instance of numeric keypad widget
 
 string CHoleBtn::holeName;
 
+int CHoleBtn::holesPlayed = 0;
+
+void CHoleBtn::countHolesPlayed() {
+  for (int ix = 0; ix < 18; ++ix)
+    if (bPlayedHole[ix]) CHoleBtn::holesPlayed += 1;
+}
+
 // Called when user finishes entering data with numeric keypad
 void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
   gCurrentHole = atoi(str.c_str());
   bPlayedHole[gCurrentHole] = true;
-#if GPSTIME
-gStartHoleGPStime = gNowGPStime;
-if (bRoundStarted == false) {
-  gStartRoundGPStime = gNowGPStime;
-  bRoundStarted = true;
-}
-#else
-  time(&gNowClockTm);
-  gStartHoleClockTm = gNowClockTm;
+  countHolesPlayed();
+  gStartHoleGPStime = gNowGPStime;
   if (bRoundStarted == false) {
-    gStartRoundClockTm = gNowClockTm;
+    gStartRoundGPStime = gNowGPStime;
     bRoundStarted = true;
   }
-#endif
+
   CHoleBtn::holeName = str;
   if (str.size() == 1)
     str = "  " + str;

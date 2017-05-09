@@ -19,7 +19,7 @@
 #endif
 
 #ifndef CHOLEBUTTON_H
-#include "CHoleButton.h"
+#include "CHoleBtn.h"
 #endif
 
 #ifndef CCLUBBTN_H
@@ -32,6 +32,8 @@
 
 using namespace std;
 
+const string path = "/home/pi/golf/angc/";
+
 void CExitBtn::setFileSuffix() {
   ostringstream oss;
   oss << gToday;
@@ -39,7 +41,7 @@ suffix = oss.str() + ".txt";
 }
 
 void CExitBtn::writeGPS() {
-  string s = "aGPS_" + suffix;
+  string s = path + "aGPS_" + suffix;
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
   for (auto itr : vGPS) gFileGPS << itr;
@@ -47,7 +49,7 @@ void CExitBtn::writeGPS() {
 }
 
 void CExitBtn::writeClubsUsed() {
-  string s = "aClubs_" + suffix;
+  string s = path + "aClubs_" + suffix;
   gFileClub.open(s.c_str());
   gFileClub << setprecision(kPrecision);
   for (auto itr : vClubsUsed) gFileClub << itr;
@@ -55,7 +57,7 @@ void CExitBtn::writeClubsUsed() {
 }
 
 void CExitBtn::writeStats() {
-  string s = "aStats_" + suffix;
+  string s = path + "aStats_" + suffix;
   gFileStats.open(s.c_str());
   for (auto itr : cStats.statsRA) gFileStats << itr;
   gFileStats.close();
