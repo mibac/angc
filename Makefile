@@ -58,5 +58,7 @@ globals.o: globals.cpp globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CGPStime.o: CGPStime.cpp CGPStime.h
+	g++ -c $<  $(CXXFLAGS)
+
 clean:
 	rm *.o
