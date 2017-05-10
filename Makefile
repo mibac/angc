@@ -3,10 +3,10 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleButton.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o $(LDFLAGS)
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o $(LDFLAGS)
 
-markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleButton.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg.h CScores.h CScoreStats.h globals.h CYellowBtn.h
+markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -15,10 +15,10 @@ C2UTM.o: C2UTM.cpp C2UTM.h
 CLatLng.o: CLatLng.cpp CLatLng.h gps.h C2UTM.h utils.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleButton.h CClubBtn.h globals.h CScoreStats.h
+CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleBtn.h CClubBtn.h globals.h CScoreStats.h
 	g++ -c $<  $(CXXFLAGS)
 
-CHoleButton.o: CHoleButton.cpp CHoleButton.h CHolesPopup.h CLatLng.h globals.h
+CHoleBtn.o: CHoleBtn.cpp CHoleBtn.h CHolesPopup.h CLatLng.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CHolesPopup.o: CHolesPopup.cpp CHolesPopup.h
@@ -51,11 +51,12 @@ CScores.o: CScores.cpp CScores.h globals.h
 CScoresStats.o: CScoresStats.cpp CScoresStats.h CScores.h
 			g++ -c $<  $(CXXFLAGS)
 
-CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h
+CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h CGPStime.h CHoleBtn.h
 	g++ -c $<  $(CXXFLAGS)
 
 globals.o: globals.cpp globals.h
 	g++ -c $<  $(CXXFLAGS)
 
+CGPStime.o: CGPStime.cpp CGPStime.h
 clean:
 	rm *.o

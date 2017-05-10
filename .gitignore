@@ -12,3 +12,5 @@ unused/*
 aClubs*
 aStats*
 aGPS*
+.DS_Store
+*.gch

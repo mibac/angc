@@ -9,6 +9,14 @@
 #include "globals.h"
 #endif
 
+#ifndef CGPSTIME_H
+#include "CGPStime.h"
+#endif
+
+#ifndef CHOLEBUTTON_H
+#include "CHoleBtn.h"
+#endif
+
 using namespace std;
 
 void CYellowBtn::setAttributes() {
@@ -16,7 +24,7 @@ void CYellowBtn::setAttributes() {
   align(FL_ALIGN_CENTER);
 
   textfont(1);
-  textsize(36);
+  textsize(32);
   textcolor(FL_BLACK);
   color(FL_YELLOW);
   readonly(1);
@@ -27,13 +35,13 @@ void CYellowBtn::yellowBtn_CB2() {}
 
 void CYellowBtn::yellowBtn_CB(Fl_Widget *, void *data) {}
 
-#if GPSTIME
-void CYellowBtn::calcGPStime(int reftm, const string &lbl) {
-  int seconds = gNowGPStime - reftm;
-  string stm = to_string(seconds);
+void CYellowBtn::calcGPStime(const string &lbl) {
+  if (gNowGPStime == 0) return;
+  int sec = gNowGPStime;
+  string stm = to_string(sec);
   int len = stm.length();
   if (len < 6) {
-    for (int ix = 0; ix <= 6 - len; ++ix) stm = "0" + stm;
+    for (int ix = 0; ix < 6 - len; ++ix) stm = "0" + stm;
   }
 
   string hs = stm.substr(0, 2);
@@ -41,63 +49,55 @@ void CYellowBtn::calcGPStime(int reftm, const string &lbl) {
   string ss = stm.substr(4, 2);
 
   string s;
-  if (reftm == 0)  // clock time
-    s = lbl + hs + ":" + ms;
-  else
-    s = lbl + ms + ":" + ss;
+  int hr = stoi(hs);
+  if (hr < 6)
+    hr += 12;
+  else if (hr > 16)
+    hr -= 12;
+  hr -= 5;
+  hs = to_string(hr);
+  s = lbl + hs + ":" + ms;
 
   value(s.c_str());
+  redraw();
+}
+
+void CYellowBtn::calcRoundGPStime(const string &lbl) {
+  if ((count != 2) && (gStartRoundGPStime == 0)) return;
+  CGPStime now(gNowGPStime);
+  CGPStime ref(gStartRoundGPStime);
+  int sec = now.seconds() - ref.seconds();
+  CGPStime val(sec);
+  value(val.sec2str(sec, lbl).c_str());
+  redraw();
+}
+
+void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
+  if ((count != 2) && (gStartRoundGPStime == 0)) return;
+  CGPStime now(gNowGPStime);
+  CGPStime ref(gStartRoundGPStime);
+  int sec = now.seconds() - ref.seconds();
+
+  if (CHoleBtn::holesPlayed > 0) sec /= CHoleBtn::holesPlayed;
+  CGPStime val(sec);
+  value(val.sec2str(sec, lbl).c_str());
   redraw();
 }
 
 void CYellowBtn::updateGPStime() {
   switch (count) {
     case 0:
-      calcGPStime(gStartHoleGPStime, "Hole\n");
+      calcRoundGPStime("Round\n");
       break;
     case 1:
-      calcGPStime(gStartRoundGPStime, "Round\n");
+      calcAvgHoleGPStime("Avg\n");
       break;
     case 2:
-      calcGPStime(0, "Clock\n");
+      calcGPStime("Time\n");
       break;
     default:;
   }
 }
-
-void CYellowBtn::updateClockTime() {}
-void CYellowBtn::calcClockTime(time_t reftm, string str) {}
-#else
-void CYellowBtn::updateClockTime() {
-  switch (count) {
-    case 0:
-      calcTime(gStartHoleClockTm, "     Hole\n     %M:%S");
-      break;
-    case 1:
-      calcTime(gStartRoundClockTm, "   Round\n     %M:%S");
-      break;
-    case 2:
-      calcTime(0, "    Clock\n  %I:%M:%S");
-      break;
-    default:;
-  }
-}
-
-void CYellowBtn::calcClockTime(time_t tm, string str) {
-  if (!bRoundStarted) return;
-
-  struct tm *timeinfo;
-  char buffer[80];
-
-  time_t seconds = time(&gNowClockTm) - tm;
-  timeinfo = localtime(&seconds);
-  strftime(buffer, sizeof(buffer), str.c_str(), timeinfo);
-  std::string s(buffer);
-
-  yellowBtn->value(s.c_str());
-  redraw();
-}
-#endif
 
 // Handle when user right clicks on our input widget
 int CYellowBtn::handle(int e) {
@@ -123,5 +123,5 @@ int CYellowBtn::handle(int e) {
 CYellowBtn::CYellowBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Multiline_Output(X, Y, W, H, L) {
   setAttributes();
-  count = 0;
+  count = 2;
 }
