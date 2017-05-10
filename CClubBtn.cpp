@@ -10,8 +10,8 @@
 
 using namespace std;
 
-string CClubBtn::lastHitClub = "";
-string CClubBtn::goingToHitClub = "";
+string CClubBtn::lastHitClub = "Dr";
+string CClubBtn::goingToHitClub = "Dr";
 
 CClubPopup *myClubPopup = nullptr;  // local instance of numeric keypad widget
 
