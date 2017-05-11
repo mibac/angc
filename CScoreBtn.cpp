@@ -19,7 +19,7 @@ void CScoreBtn::setBtnAttributes(Fl_Button *b) {
 
 void CScoreBtn::Button_CB() {
   // cll.writeAll();
-  DEBUG_LOG << "Score button hit" << endl;
+  //DEBUG_LOG << "Score button hit" << endl;
 }
 
 // Handle numeric keypad buttons pressed

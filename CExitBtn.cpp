@@ -37,7 +37,7 @@ const string path = "/home/pi/golf/angc/";
 void CExitBtn::setFileSuffix() {
   ostringstream oss;
   oss << gToday;
-suffix = oss.str() + ".txt";
+  suffix = oss.str() + ".txt";
 }
 
 void CExitBtn::writeGPS() {
@@ -59,7 +59,10 @@ void CExitBtn::writeClubsUsed() {
 void CExitBtn::writeStats() {
   string s = path + "aStats_" + suffix;
   gFileStats.open(s.c_str());
-  for (auto itr : cStats.statsRA) gFileStats << itr;
+  // for (auto itr : cStats.statsRA) gFileStats << itr;
+  for (int ix = 0; ix < k18; ++ix) {
+    if (bPlayedHole[ix]) gFileStats << cStats.statsRA[ix];
+  }
   gFileStats.close();
 }
 
@@ -82,7 +85,7 @@ void CExitBtn::Button_CB() {
     gFileGPS.close();
     if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
-   if (gpsin != nullptr) pclose(gpsin);
+    if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 1) {  // Save and close
     writeGPS();
@@ -90,7 +93,7 @@ void CExitBtn::Button_CB() {
     writeStats();
     if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
-   if (gpsin != nullptr) pclose(gpsin);
+    if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 2) {  // Cancel / don't close
                              // don't do anything

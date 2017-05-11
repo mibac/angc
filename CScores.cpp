@@ -6,6 +6,7 @@
 #include "globals.h"
 #endif
 
+
 CScores::CScores() : date(gToday), hole(0), updown(0), putts(0), score(0) {}
 
 CScores::CScores( const int h, const int u, const int p, const int s) {
@@ -31,6 +32,7 @@ void CScores::setPutts(int n) { putts = n; }
 string getAsciiDate(const time_t date) {
     return asctime(std::localtime(&date));
 }
+
 
 ostream& operator<<(ostream& strm, const CScores& cs) {
   strm << cs.hole << "\t"

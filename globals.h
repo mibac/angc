@@ -15,9 +15,9 @@ const int kPrecision = 9;
 extern int gCurrentHole;
 extern time_t gToday;
 
-extern int gNowGPStime;
-extern int gStartHoleGPStime;
-extern int gStartRoundGPStime;
+extern string gNowTimeStr;
+extern string gStartHoleTimeStr;
+extern string gStartRoundTimeStr;
 
 extern bool bRoundStarted;
 

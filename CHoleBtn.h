@@ -25,7 +25,6 @@ class CHoleBtn : public Fl_Output {
   int handle(int e);
 
  public:
-  static int holesPlayed;
   static string holeName;
 
   CHoleBtn(int X, int Y, int W, int H, const char *L = 0);

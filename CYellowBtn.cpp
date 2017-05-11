@@ -36,9 +36,8 @@ void CYellowBtn::yellowBtn_CB2() {}
 void CYellowBtn::yellowBtn_CB(Fl_Widget *, void *data) {}
 
 void CYellowBtn::calcGPStime(const string &lbl) {
-  if (gNowGPStime == 0) return;
-  int sec = gNowGPStime;
-  string stm = to_string(sec);
+  if (gNowTimeStr == "") return;
+  string stm = gNowTimeStr;
   int len = stm.length();
   if (len < 6) {
     for (int ix = 0; ix < 6 - len; ++ix) stm = "0" + stm;
@@ -55,6 +54,7 @@ void CYellowBtn::calcGPStime(const string &lbl) {
   else if (hr > 16)
     hr -= 12;
   hr -= 5;
+  if (hr == 0) hr = 12;
   hs = to_string(hr);
   s = lbl + hs + ":" + ms;
 
@@ -63,22 +63,27 @@ void CYellowBtn::calcGPStime(const string &lbl) {
 }
 
 void CYellowBtn::calcRoundGPStime(const string &lbl) {
-  if ((count != 2) && (gStartRoundGPStime == 0)) return;
-  CGPStime now(gNowGPStime);
-  CGPStime ref(gStartRoundGPStime);
-  int sec = now.seconds() - ref.seconds();
+  if ((count != 2) && (gStartRoundTimeStr == "")) return;
+  CGPStime tm;
+  int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
   CGPStime val(sec);
   value(val.sec2str(sec, lbl).c_str());
   redraw();
 }
 
-void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
-  if ((count != 2) && (gStartRoundGPStime == 0)) return;
-  CGPStime now(gNowGPStime);
-  CGPStime ref(gStartRoundGPStime);
-  int sec = now.seconds() - ref.seconds();
+int countHolesPlayed() {
+  int num = 0;
+  for (int ix = 0; ix < 18; ++ix)
+    if (bPlayedHole[ix]) num++;
+  return num;
+}
 
-  if (CHoleBtn::holesPlayed > 0) sec /= CHoleBtn::holesPlayed;
+void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
+  if ((count != 2) && (gStartRoundTimeStr == "")) return;
+  CGPStime tm;
+  int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
+  int num = countHolesPlayed();
+  if (num > 0) sec /= num;
   CGPStime val(sec);
   value(val.sec2str(sec, lbl).c_str());
   redraw();

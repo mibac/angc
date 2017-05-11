@@ -32,7 +32,8 @@ class CScoreStats {
   int getAccumPutts();
   int getAccumScore();
   int getAccumPar();
-
+  void printScores();
+  
   array<CScores, k18> statsRA;
   const array<int, k18> parRA = {{5,3,4,5,4,4,3,4,4,4,3,5,4,4,4,5,3,4}};
 

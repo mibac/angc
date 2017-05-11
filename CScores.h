@@ -1,45 +1,43 @@
 #ifndef CSCORES_H
 #define CSCORES_H
 
-#include <vector>
 #include <ctime>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-class CScores
-{
-public:
-    CScores();
-    CScores(const int hole, const int updown, const int putt, const int score);
+class CScores {
+ public:
+  CScores();
+  CScores(const int hole, const int updown, const int putt, const int score);
 
-    ~CScores() = default;
-    CScores(const CScores& other) = default;
-    CScores(CScores&& other) = default;
-    CScores& operator=(const CScores& other) = default;
-    CScores& operator=(CScores&& other) = default;
+  ~CScores() = default;
+  CScores(const CScores& other) = default;
+  CScores(CScores&& other) = default;
+  CScores& operator=(const CScores& other) = default;
+  CScores& operator=(CScores&& other) = default;
 
-    time_t getDate();
-    int getHole();
-    int getUpdown();
-    int getPutts();
-    int getScore();
+  time_t getDate();
+  int getHole();
+  int getUpdown();
+  int getPutts();
+  int getScore();
 
-    void setDate(time_t t);
-    void setHole(int n);
-    void setUpdown(int n);
-    void setPutts(int n);
-    void setScore(int n);
+  void setDate(time_t t);
+  void setHole(int n);
+  void setUpdown(int n);
+  void setPutts(int n);
+  void setScore(int n);
+  
+  friend ostream& operator<<(ostream& strm, const CScores& cs);
 
-
-friend ostream &operator<<(ostream &strm, const CScores &cs);
-
-private:
-    time_t date;
-    int hole;
-    int updown;
-    int putts;
-    int score;
+ private:
+  time_t date;
+  int hole;
+  int updown;
+  int putts;
+  int score;
 };
 
 extern string getAsciiDate(const time_t date);

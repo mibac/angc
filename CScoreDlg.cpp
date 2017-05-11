@@ -38,9 +38,15 @@ void hole_CB(Fl_Widget* w, void* v) {
   CScoreDlg* d = (CScoreDlg*)(w->parent());
   d->holeDisplay->value(holeStrs[holeindex].c_str());
   CScores cs = d->getCurrentScores(holeindex);
-  d->scoreCounter->value(cStats.statsRA[holeindex].getScore());
-  d->updownCounter->value(cStats.statsRA[holeindex].getUpdown());
-  d->puttCounter->value(cStats.statsRA[holeindex].getPutts());
+  if (bPlayedHole[holeindex]) {
+    d->scoreCounter->value(cStats.statsRA[holeindex].getScore());
+    d->updownCounter->value(cStats.statsRA[holeindex].getUpdown());
+    d->puttCounter->value(cStats.statsRA[holeindex].getPutts());
+  } else {
+    d->scoreCounter->value(cs.getScore());
+    d->updownCounter->value(cs.getUpdown());
+    d->puttCounter->value(cs.getPutts());
+  }
 }
 
 void score_CB(Fl_Widget* w, void* v) {
@@ -109,6 +115,7 @@ void CScoreDlg::cb_total_i(Fl_Button* b, void*) {
   updateAccumScore();
   updateAccumUpdowns();
   updateAccumPutts();
+  cStats.printScores();
 }
 
 void CScoreDlg::cb_total(Fl_Button* o, void* v) {
@@ -152,8 +159,7 @@ CScoreDlg::CScoreDlg(int X, int Y, int W, int H, const char* L)
     holeCounter->callback(hole_CB);
   }  // Fl_Counter* holeCounter
   {
-    holeDisplay =
-        new Fl_Output(kInfoL, kHoleY, kCounterW, kCounterH, 0);
+    holeDisplay = new Fl_Output(kInfoL, kHoleY, kCounterW, kCounterH, 0);
     holeDisplay->labeltype(FL_NORMAL_LABEL);
     holeDisplay->align(FL_ALIGN_CENTER);
     holeDisplay->textfont(1);

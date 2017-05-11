@@ -49,3 +49,8 @@ int CScoreStats::getAccumPar() {
     if (bPlayedHole[ii]) total += parRA[ii];
   return total;
 }
+
+void CScoreStats::printScores() {  for (int ix = 0; ix < k18; ++ix) {
+    if (bPlayedHole[ix]) cout << statsRA[ix];
+  }
+}

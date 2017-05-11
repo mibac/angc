@@ -11,9 +11,9 @@ using namespace std;
 int gCurrentHole;
 time_t gToday;
 
-int gNowGPStime;
-int gStartHoleGPStime;
-int gStartRoundGPStime;
+string gNowTimeStr;
+string gStartHoleTimeStr;
+string gStartRoundTimeStr;
 
 bool bRoundStarted;
 
@@ -29,9 +29,9 @@ array<bool, k18> bPlayedHole;
 void initGlobals() {
   gCurrentHole = 1;
   gToday = time(nullptr);
-  gNowGPStime = 0;
-  gStartHoleGPStime = 0;
-  gStartRoundGPStime = 0;
+  gNowTimeStr = "";
+  gStartHoleTimeStr = "";
+  gStartRoundTimeStr = "";
 
   bRoundStarted = false;
 

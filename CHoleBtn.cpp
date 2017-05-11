@@ -18,22 +18,14 @@ CHolesPopup *myHolePopup = nullptr;  // local instance of numeric keypad widget
 
 string CHoleBtn::holeName;
 
-int CHoleBtn::holesPlayed = 0;
-
-void CHoleBtn::countHolesPlayed() {
-  for (int ix = 0; ix < 18; ++ix)
-    if (bPlayedHole[ix]) CHoleBtn::holesPlayed += 1;
-}
-
 // Called when user finishes entering data with numeric keypad
 void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
   gCurrentHole = atoi(str.c_str());
   bPlayedHole[gCurrentHole] = true;
-  countHolesPlayed();
-  gStartHoleGPStime = gNowGPStime;
+  gStartHoleTimeStr = gNowTimeStr;
   if (bRoundStarted == false) {
-    gStartRoundGPStime = gNowGPStime;
+    gStartRoundTimeStr = gNowTimeStr;
     bRoundStarted = true;
   }
 
@@ -51,6 +43,7 @@ void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
   CHoleBtn *in = (CHoleBtn *)data;
   in->SetNumPadValue_CB2();
 }
+
 // Handle when user right clicks on our input widget
 int CHoleBtn::handle(int e) {
   int ret = 0;
