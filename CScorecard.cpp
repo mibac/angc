@@ -93,20 +93,23 @@
   CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
       : Fl_Table(X, Y, W, H, L) {
     // Fill data array
-    for (int r = 0; r < MAX_ROWS; r++)
-      for (int c = 0; c < MAX_COLS; c++) data[r][c] = 1000 + (r * 1000) + c;
+    for (int r = 0; r < MAX_ROWS; r++) {
+      for (int c = 0; c < MAX_COLS; c++) {
+        data[r][c] = 1000 + (r * 1000) + c;
+      }
+    }
     // Rows
     rows(MAX_ROWS);      // how many rows
     row_header(1);       // enable row headers (along left)
-    row_height_all(20);  // default height of rows
+    row_height_all(40);  // default height of rows
     row_resize(0);       // disable row resizing
     // Cols
     cols(MAX_COLS);     // how many columns
-    col_header(1);      // enable column headers (along top)
-    col_width_all(80);  // default width of columns
-    col_resize(1);      // enable column resizing
+    col_header(0);      // enable column headers (along top)
+    col_width_all(40);  // default width of columns
+    col_resize(0);      // enable column resizing
     end();              // end the Fl_Table group
-    show();
+    // show();
   }
 
 // void createScorecard() { scorecard = new CScorecard(10, 10, 460, 300); }
