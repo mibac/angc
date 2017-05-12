@@ -29,7 +29,9 @@ class CScores {
   void setUpdown(int n);
   void setPutts(int n);
   void setScore(int n);
-  
+
+  void setData(const int h, const int u, const int p, const int s);
+
   friend ostream& operator<<(ostream& strm, const CScores& cs);
 
  private:

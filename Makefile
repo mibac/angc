@@ -3,10 +3,10 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o $(LDFLAGS)
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o $(LDFLAGS)
 
-markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h
+markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg2.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -39,10 +39,10 @@ CClubPopup.o: CClubPopup.cpp CClubPopup.h
 CClubBtn.o: CClubBtn.cpp CClubBtn.h CClubPopup.h CLatLng.h
 			g++ -c $<  $(CXXFLAGS)
 
-CScoreDlg.o: CScoreDlg.cpp CScoreDlg.h CScoreStats.h globals.h
+CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h CScoreStats.h globals.h
 			g++ -c $<  $(CXXFLAGS)
 
-CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg.h
+CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
 			g++ -c $<  $(CXXFLAGS)
 
 CScores.o: CScores.cpp CScores.h globals.h

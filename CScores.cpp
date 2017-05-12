@@ -6,10 +6,9 @@
 #include "globals.h"
 #endif
 
-
 CScores::CScores() : date(gToday), hole(0), updown(0), putts(0), score(0) {}
 
-CScores::CScores( const int h, const int u, const int p, const int s) {
+CScores::CScores(const int h, const int u, const int p, const int s) {
   date = gToday;
   hole = h;
   updown = u;
@@ -29,17 +28,26 @@ void CScores::setScore(int n) { score = n; }
 void CScores::setUpdown(int n) { updown = n; }
 void CScores::setPutts(int n) { putts = n; }
 
-string getAsciiDate(const time_t date) {
-    return asctime(std::localtime(&date));
+void CScores::setData(const int h, const int u, const int p, const int s) {
+  date = gToday;
+  hole = h;
+  updown = u;
+  putts = p;
+  score = s;
 }
 
+string getAsciiDate(const time_t date) {
+  return asctime(std::localtime(&date));
+}
 
+// clang-format off
 ostream& operator<<(ostream& strm, const CScores& cs) {
-  strm << cs.hole << "\t"
-  << cs.updown << "\t"
-  << cs.putts << "\t"
-  << cs.score << "\t"
-  << getAsciiDate(cs.date);
+  strm  << cs.hole  << "\t"
+        << cs.score << "\t"
+        << cs.putts << "\t"
+        << cs.updown << "\t"
+        << getAsciiDate(cs.date);
 
   return strm;
 }
+// clang-format on

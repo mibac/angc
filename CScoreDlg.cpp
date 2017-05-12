@@ -24,12 +24,12 @@ const int kTextSz = 48;
 const int kDeltaY = 140;
 const int kHoleY = 10;
 const int kScoreY = kHoleY + kDeltaY;
-const int kUpDownY = kScoreY + kDeltaY;
-const int kPuttY = kUpDownY + kDeltaY;
-const int kOKBtnY = kPuttY + kDeltaY;
+const int kPuttY = kScoreY + kDeltaY;
+const int kUpDownY = kPuttY + kDeltaY;
+const int kOKBtnY = kUpDownY + kDeltaY;
 const int kInfoL = kWindowW - kCounterW - kCounterL;
 
-static int holeindex = 0;
+int holeindex = 0;
 
 void hole_CB(Fl_Widget* w, void* v) {
   Fl_Counter* c = (Fl_Counter*)w;
@@ -38,15 +38,15 @@ void hole_CB(Fl_Widget* w, void* v) {
   CScoreDlg* d = (CScoreDlg*)(w->parent());
   d->holeDisplay->value(holeStrs[holeindex].c_str());
   CScores cs = d->getCurrentScores(holeindex);
-  if (bPlayedHole[holeindex]) {
-    d->scoreCounter->value(cStats.statsRA[holeindex].getScore());
-    d->updownCounter->value(cStats.statsRA[holeindex].getUpdown());
-    d->puttCounter->value(cStats.statsRA[holeindex].getPutts());
-  } else {
-    d->scoreCounter->value(cs.getScore());
-    d->updownCounter->value(cs.getUpdown());
-    d->puttCounter->value(cs.getPutts());
-  }
+  // if (bPlayedHole[holeindex]) {
+  d->scoreCounter->value(cStats.statsRA[holeindex].getScore());
+  d->updownCounter->value(cStats.statsRA[holeindex].getUpdown());
+  d->puttCounter->value(cStats.statsRA[holeindex].getPutts());
+  // } else {
+  // d->scoreCounter->value(cs.getScore());
+  // d->updownCounter->value(cs.getUpdown());
+  // d->puttCounter->value(cs.getPutts());
+  // }
 }
 
 void score_CB(Fl_Widget* w, void* v) {
@@ -103,11 +103,16 @@ CScores CScoreDlg::getCurrentScores() {
 }
 
 CScores CScoreDlg::getCurrentScores(int hole) {
-  int h = cStats.statsRA[hole].getHole();
-  int s = cStats.statsRA[hole].getScore();
-  int u = cStats.statsRA[hole].getUpdown();
-  int p = cStats.statsRA[hole].getPutts();
-  CScores cs(h, u, p, s);
+  CScores cs;
+  if (bPlayedHole[hole]) {
+    int h = cStats.statsRA[hole].getHole();
+    int s = cStats.statsRA[hole].getScore();
+    int u = cStats.statsRA[hole].getUpdown();
+    int p = cStats.statsRA[hole].getPutts();
+    cs.setData(h, u, p, s);
+  } else
+    cs.setData(hole, 1, 1, 1);
+
   return cs;
 }
 
@@ -153,10 +158,10 @@ CScoreDlg::CScoreDlg(int X, int Y, int W, int H, const char* L)
     holeCounter->when(FL_WHEN_CHANGED);
     holeCounter->minimum(1);
     holeCounter->maximum(18);
-    holeCounter->value(int(holeindex + 1));
     holeCounter->step(int(1));
     holeCounter->type(1);
     holeCounter->callback(hole_CB);
+    holeCounter->value(int(gCurrentHole));
   }  // Fl_Counter* holeCounter
   {
     holeDisplay = new Fl_Output(kInfoL, kHoleY, kCounterW, kCounterH, 0);
@@ -168,67 +173,6 @@ CScoreDlg::CScoreDlg(int X, int Y, int W, int H, const char* L)
     holeDisplay->readonly(1);
     holeDisplay->value(holeStrs[holeindex].c_str());
   }  // Fl_Counter* holeDisplay
-  {
-    updownCounter =
-        new Fl_Counter(kCounterL, kUpDownY, kCounterW, kCounterH, "Up Down");
-    updownCounter->box(FL_UP_BOX);
-    updownCounter->color(FL_BACKGROUND_COLOR);
-    updownCounter->selection_color(FL_INACTIVE_COLOR);
-    updownCounter->labeltype(FL_NORMAL_LABEL);
-    updownCounter->labelfont(1);
-    updownCounter->labelsize(kLabelSz);
-    updownCounter->labelcolor(FL_FOREGROUND_COLOR);
-    updownCounter->textsize(kTextSz);
-    updownCounter->align(Fl_Align(FL_ALIGN_BOTTOM));
-    updownCounter->when(FL_WHEN_CHANGED);
-    updownCounter->minimum(1);
-    updownCounter->maximum(4);
-    updownCounter->value(cStats.statsRA[holeindex].getUpdown());
-    updownCounter->step(int(1));
-    updownCounter->type(1);
-    updownCounter->callback(updown_CB, this);
-
-  }  // Fl_Counter* updownCounter
-  {
-    updownDisplay = new Fl_Output(kInfoL, kUpDownY, kCounterW, kCounterH, 0);
-    updownDisplay->align(FL_ALIGN_CENTER);
-    updownDisplay->textfont(1);
-    updownDisplay->textsize(48);
-    updownDisplay->color(FL_YELLOW);
-    updownDisplay->readonly(1);
-    string s = to_string(cStats.statsRA[holeindex].getUpdown());
-    updownDisplay->value(s.c_str());
-  }  // Fl_Counter* updownDisplay
-  {
-    puttCounter =
-        new Fl_Counter(kCounterL, kPuttY, kCounterW, kCounterH, "Putts   ");
-    puttCounter->box(FL_UP_BOX);
-    puttCounter->color(FL_BACKGROUND_COLOR);
-    puttCounter->selection_color(FL_INACTIVE_COLOR);
-    puttCounter->labeltype(FL_NORMAL_LABEL);
-    puttCounter->labelfont(1);
-    puttCounter->labelsize(kLabelSz);
-    puttCounter->labelcolor(FL_FOREGROUND_COLOR);
-    puttCounter->textsize(kTextSz);
-    puttCounter->align(Fl_Align(FL_ALIGN_BOTTOM));
-    puttCounter->when(FL_WHEN_CHANGED);
-    puttCounter->minimum(0);
-    puttCounter->maximum(4);
-    puttCounter->value(cStats.statsRA[holeindex].getPutts());
-    puttCounter->step(int(1));
-    puttCounter->type(1);
-    puttCounter->callback(putt_CB, this);
-  }  // puttCounter
-  {
-    puttDisplay = new Fl_Output(kInfoL, kPuttY, kCounterW, kCounterH, 0);
-    puttDisplay->align(FL_ALIGN_CENTER);
-    puttDisplay->textfont(1);
-    puttDisplay->textsize(48);
-    puttDisplay->color(FL_YELLOW);
-    puttDisplay->readonly(1);
-    string s = to_string(cStats.statsRA[holeindex].getPutts());
-    puttDisplay->value(s.c_str());
-  }  // Fl_Counter* updownDisplay
   {
     scoreCounter =
         new Fl_Counter(kCounterL, kScoreY, kCounterW, kCounterH, "Score   ");
@@ -244,10 +188,10 @@ CScoreDlg::CScoreDlg(int X, int Y, int W, int H, const char* L)
     scoreCounter->when(FL_WHEN_CHANGED);
     scoreCounter->minimum(1);
     scoreCounter->maximum(8);
-    scoreCounter->value(cStats.statsRA[holeindex].getScore());
     scoreCounter->step(int(1));
     scoreCounter->type(1);
-    scoreCounter->callback(score_CB, this);
+    scoreCounter->callback(score_CB);
+    scoreCounter->value(cStats.statsRA[holeindex].getScore());
   }  // scoreCounter
   {
     scoreDisplay = new Fl_Output(kInfoL, kScoreY, kCounterW, kCounterH, 0);
@@ -259,6 +203,66 @@ CScoreDlg::CScoreDlg(int X, int Y, int W, int H, const char* L)
     string s = to_string(cStats.statsRA[holeindex].getScore());
     scoreDisplay->value(s.c_str());
   }  // Fl_Counter* scoreDisplay
+  {
+    puttCounter =
+        new Fl_Counter(kCounterL, kPuttY, kCounterW, kCounterH, "Putts   ");
+    puttCounter->box(FL_UP_BOX);
+    puttCounter->color(FL_BACKGROUND_COLOR);
+    puttCounter->selection_color(FL_INACTIVE_COLOR);
+    puttCounter->labeltype(FL_NORMAL_LABEL);
+    puttCounter->labelfont(1);
+    puttCounter->labelsize(kLabelSz);
+    puttCounter->labelcolor(FL_FOREGROUND_COLOR);
+    puttCounter->textsize(kTextSz);
+    puttCounter->align(Fl_Align(FL_ALIGN_BOTTOM));
+    puttCounter->when(FL_WHEN_CHANGED);
+    puttCounter->minimum(0);
+    puttCounter->maximum(4);
+    puttCounter->step(int(1));
+    puttCounter->type(1);
+    puttCounter->callback(putt_CB);
+    puttCounter->value(cStats.statsRA[holeindex].getPutts());
+  }  // puttCounter
+  {
+    puttDisplay = new Fl_Output(kInfoL, kPuttY, kCounterW, kCounterH, 0);
+    puttDisplay->align(FL_ALIGN_CENTER);
+    puttDisplay->textfont(1);
+    puttDisplay->textsize(48);
+    puttDisplay->color(FL_YELLOW);
+    puttDisplay->readonly(1);
+    string s = to_string(cStats.statsRA[holeindex].getPutts());
+    puttDisplay->value(s.c_str());
+  }  // Fl_Counter* updownDisplay
+  {
+    updownCounter =
+        new Fl_Counter(kCounterL, kUpDownY, kCounterW, kCounterH, "Up Down");
+    updownCounter->box(FL_UP_BOX);
+    updownCounter->color(FL_BACKGROUND_COLOR);
+    updownCounter->selection_color(FL_INACTIVE_COLOR);
+    updownCounter->labeltype(FL_NORMAL_LABEL);
+    updownCounter->labelfont(1);
+    updownCounter->labelsize(kLabelSz);
+    updownCounter->labelcolor(FL_FOREGROUND_COLOR);
+    updownCounter->textsize(kTextSz);
+    updownCounter->align(Fl_Align(FL_ALIGN_BOTTOM));
+    updownCounter->when(FL_WHEN_CHANGED);
+    updownCounter->minimum(1);
+    updownCounter->maximum(4);
+    updownCounter->step(int(1));
+    updownCounter->type(1);
+    updownCounter->callback(updown_CB);
+    updownCounter->value(cStats.statsRA[holeindex].getUpdown());
+  }  // Fl_Counter* updownCounter
+  {
+    updownDisplay = new Fl_Output(kInfoL, kUpDownY, kCounterW, kCounterH, 0);
+    updownDisplay->align(FL_ALIGN_CENTER);
+    updownDisplay->textfont(1);
+    updownDisplay->textsize(48);
+    updownDisplay->color(FL_YELLOW);
+    updownDisplay->readonly(1);
+    string s = to_string(cStats.statsRA[holeindex].getUpdown());
+    updownDisplay->value(s.c_str());
+  }  // Fl_Counter* updownDisplay
   {
     Fl_Button* totalsBtn =
         new Fl_Button(kCounterL, kOKBtnY, kCounterW, kCounterH, "Total");

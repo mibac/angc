@@ -5,7 +5,7 @@
 #include <FL/Fl_Button.H>
 
 #ifndef CSCOREDLG_H
-#include "CScoreDlg.h"
+#include "CScoreDlg2.h"
 #endif
 
 class CScoreBtn : public Fl_Button {
@@ -22,6 +22,6 @@ class CScoreBtn : public Fl_Button {
   CScoreBtn(int X, int Y, int W, int H, const char *L = 0);
 };
 
-extern CScoreDlg *scoreDlg;
+extern CScoreDlg2 *scoreDlg2;
 
 #endif  // CScoreBtn_H

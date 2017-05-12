@@ -8,7 +8,7 @@
 
 using namespace std;
 
-CScoreDlg *scoreDlg = nullptr;
+CScoreDlg2 *scoreDlg2 = nullptr;
 
 void CScoreBtn::setBtnAttributes(Fl_Button *b) {
   b->labelfont(1);
@@ -36,7 +36,7 @@ int CScoreBtn::handle(int e) {
     case FL_PUSH:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;
-        createScoreDlg();
+        createScoreDlg2();
       }
       break;
     case FL_RELEASE:

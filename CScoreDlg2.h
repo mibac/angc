@@ -3,34 +3,48 @@
 #ifndef CSCOREDLG2_H
 #define CSCOREDLG2_H
 #include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Double_Window.H>
 
-extern Fl_Box *holeBox;
-extern Fl_Box *yardsBox;
-extern Fl_Box *hdcpBox;
-extern Fl_Box *parBox;
-extern Fl_Box *scoreBox;
-extern Fl_Box *puttsBox;
-extern Fl_Box *udBox;
-extern Fl_Box *box0;
-extern Fl_Box *box1;
-extern Fl_Box *box2;
-extern Fl_Box *box3;
-extern Fl_Box *box4;
-extern Fl_Box *box5;
-extern Fl_Box *box6;
-extern Fl_Box *box7;
-extern Fl_Box *box8;
-extern Fl_Box *box9;
-extern Fl_Box *holeValue;
-extern Fl_Box *yardsValue;
-extern Fl_Box *hdcpValue;
-extern Fl_Box *parValue;
-extern Fl_Box *scoreValue;
-extern Fl_Box *puttsValue;
-extern Fl_Box *udValue;
-extern Fl_Button *bntOK;
-Fl_Double_Window* make_window();
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class CHoleDescription {
+ public:
+  string hole;
+  string yards;
+  string hdcp;
+  string par;
+  CHoleDescription() : hole(""), yards(""), hdcp(""), par("") {}
+  void setHoleDesc(const string h, const string y, const string c,
+                   const string p) {
+    hole = h;
+    yards = y;
+    hdcp = c;
+    par = p;
+  }
+};
+
+const int k19 = 19;
+
+extern vector<CHoleDescription> vHoleDesc;
+
+void initHoleDescVector();
+
+class CScoreDlg2 : public Fl_Window {
+ public:
+  CScoreDlg2(int X, int Y, int W, int H, const char *L = 0);
+  void updateHoleDescription(int n);
+
+ private:
+  int handle(int e);
+};
+
+extern void createScoreDlg2();
+extern CScoreDlg2 *scoreDlg2;
+
+// Fl_Double_Window* make_window();
 #endif

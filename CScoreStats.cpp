@@ -7,9 +7,9 @@ CScoreStats cStats;
 CScoreStats::CScoreStats() : totalUpdown(0), totalPutts(0), totalScore(0) {
   for (int ii = 0; ii < k18; ++ii) {
     statsRA[ii].setHole(ii + 1);
-    statsRA[ii].setUpdown(2);
-    statsRA[ii].setPutts(2);
     statsRA[ii].setScore(parRA[ii]);
+    statsRA[ii].setPutts(2);
+    statsRA[ii].setUpdown(2);
   }
 }
 
