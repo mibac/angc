@@ -8,6 +8,10 @@
 #include "globals.h"
 #endif
 
+#ifndef CSCORECARDDLG_H
+#include "CScorecardDlg.h"
+#endif
+
 Fl_Box *holeBox = nullptr;
 Fl_Box *yardsBox = nullptr;
 Fl_Box *hdcpBox = nullptr;
@@ -35,6 +39,7 @@ Fl_Box *udValue = nullptr;
 Fl_Box *prevBtn = nullptr;
 Fl_Box *nextBtn = nullptr;
 Fl_Button *okBtn = nullptr;
+Fl_Button *cardBtn = nullptr;
 
 Fl_Box *sel = scoreValue;
 
@@ -73,6 +78,12 @@ void btnOK_cb(Fl_Widget *w, void *data) {
   parent->hide();
 }
 
+void cardBtn_cb(Fl_Widget *w, void *data) {
+  createScorecardDlg();
+  Fl_Window *parent = (Fl_Window *)data;
+  parent->hide();
+}
+
 void toggleNumbers(Fl_Box *box) {
   box0->color(FL_WHITE);
   box1->color(FL_WHITE);
@@ -89,19 +100,21 @@ void toggleNumbers(Fl_Box *box) {
 
 void toggleSelection(Fl_Box *box) {
   if (box == scoreBox || box == scoreValue) {
-    scoreValue->color(FL_YELLOW);
-    puttValue->color(FL_WHITE);
-    udValue->color(FL_WHITE);
+    scoreBox->color(FL_YELLOW);
+    puttBox->color(FL_WHITE);
+    udBox->color(FL_WHITE);
+    sel = scoreValue;
   } else if (box == puttBox || box == puttValue) {
-    scoreValue->color(FL_WHITE);
-    puttValue->color(FL_YELLOW);
-    udValue->color(FL_WHITE);
+    scoreBox->color(FL_WHITE);
+    puttBox->color(FL_YELLOW);
+    udBox->color(FL_WHITE);
+    sel = puttValue;
   } else if (box == udBox || box == udValue) {
-    scoreValue->color(FL_WHITE);
-    puttValue->color(FL_WHITE);
-    udValue->color(FL_YELLOW);
+    scoreBox->color(FL_WHITE);
+    puttBox->color(FL_WHITE);
+    udBox->color(FL_YELLOW);
+    sel = udValue;
   }
-  sel = box;
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
@@ -125,11 +138,11 @@ int CScoreDlg2::handle(int e) {
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         Fl_Widget *w = Fl::belowmouse();
         if (w == scoreBox || w == scoreValue) {
-          toggleSelection(scoreValue);
+          toggleSelection(scoreBox);
         } else if (w == puttBox || w == puttValue) {
-          toggleSelection(puttValue);
+          toggleSelection(puttBox);
         } else if (w == udBox || w == udValue) {
-          toggleSelection(udValue);
+          toggleSelection(udBox);
         } else if (w == box0) {
           toggleNumbers(box0);
           sel->label("0");
@@ -482,10 +495,16 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     o->labelsize(32);
   }  // Fl_Box* o
   {
-    okBtn = new Fl_Button(174, 675, 140, 42, "OK");
+    okBtn = new Fl_Button(280, 675, 140, 42, "OK");
     okBtn->color(FL_BACKGROUND2_COLOR);
     okBtn->labelsize(32);
     okBtn->callback(btnOK_cb, this);
+  }  // Fl_Button* bntOK
+  {
+    cardBtn = new Fl_Button(120, 675, 140, 42, "Card");
+    cardBtn->color(FL_BACKGROUND2_COLOR);
+    cardBtn->labelsize(32);
+    cardBtn->callback(cardBtn_cb, this);
   }  // Fl_Button* bntOK
   color((Fl_Color)159);
   set_modal();
@@ -496,6 +515,8 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   hole = gCurrentHole;
   if (hole == 0) hole = 1;
   updateHoleDescription(hole);
+  clear_border();
+
   show();
 }
 

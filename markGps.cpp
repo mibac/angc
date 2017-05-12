@@ -160,7 +160,9 @@ int main(int argc, char **argv) {
   ngc->readCourse();
   int x = 480;
   int y = 674;
-  win = new Fl_Window(0, 40, 480, 800, "NGC Golf");
+  win = new Fl_Window(0, 0, 480, 800, "NGC Golf");
+  win->size_range(480, 800, 480, 800);
+
   win->color(fl_rgb_color(162, 255, 146));
   win->callback(window_cb);
   win->begin();

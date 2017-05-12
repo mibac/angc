@@ -3,10 +3,9 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o $(LDFLAGS)
-
-markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg2.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o CScorecard.o CScorecardDlg.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o  CScorecard.o CScorecardDlg.o $(LDFLAGS)
+markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg2.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h  CScorecard.h CScorecardDlg.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -39,7 +38,7 @@ CClubPopup.o: CClubPopup.cpp CClubPopup.h
 CClubBtn.o: CClubBtn.cpp CClubBtn.h CClubPopup.h CLatLng.h
 			g++ -c $<  $(CXXFLAGS)
 
-CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h CScoreStats.h globals.h
+CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h CScoreStats.h globals.h  CScorecard.h
 			g++ -c $<  $(CXXFLAGS)
 
 CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
@@ -58,6 +57,12 @@ globals.o: globals.cpp globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CGPStime.o: CGPStime.cpp CGPStime.h
+	g++ -c $<  $(CXXFLAGS)
+
+CScorecard.o: CScorecard.cpp CScorecard.h
+	g++ -c $<  $(CXXFLAGS)
+
+CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h
 	g++ -c $<  $(CXXFLAGS)
 
 clean:

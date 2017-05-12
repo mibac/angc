@@ -2,6 +2,7 @@
 
 #ifndef CSCOREDLG2_H
 #define CSCOREDLG2_H
+
 #include <FL/Fl.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
