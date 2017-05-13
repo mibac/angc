@@ -10,10 +10,6 @@
 #include "globals.h"
 #endif
 
-#ifndef UTILS_H
-#include "utils.h"
-#endif
-
 #ifndef CLATLNG_H
 #include "CLatLng.h"
 #endif
@@ -24,10 +20,6 @@
 
 #ifndef CCLUBBTN_H
 #include "CClubBtn.h"
-#endif
-
-#ifndef CSCORESTATS_H
-#include "CScoreStats.h"
 #endif
 
 using namespace std;
@@ -44,6 +36,7 @@ void CExitBtn::writeGPS() {
   string s = path + "aGPS_" + suffix;
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
+  gFileGPS << asctime(std::localtime(&gToday));
   for (auto itr : vGPS) gFileGPS << itr;
   gFileGPS.close();
 }
@@ -52,6 +45,7 @@ void CExitBtn::writeClubsUsed() {
   string s = path + "aClubs_" + suffix;
   gFileClub.open(s.c_str());
   gFileClub << setprecision(kPrecision);
+  gFileClub << asctime(std::localtime(&gToday));
   for (auto itr : vClubsUsed) gFileClub << itr;
   gFileClub.close();
 }
@@ -59,10 +53,8 @@ void CExitBtn::writeClubsUsed() {
 void CExitBtn::writeStats() {
   string s = path + "aStats_" + suffix;
   gFileStats.open(s.c_str());
-  // for (auto itr : cStats.statsRA) gFileStats << itr;
-  for (int ix = 0; ix < k18; ++ix) {
-    if (bPlayedHole[ix]) gFileStats << cStats.statsRA[ix];
-  }
+  gFileStats << asctime(std::localtime(&gToday));
+  for (auto itr : vNGCHoles) gFileStats << itr;
   gFileStats.close();
 }
 

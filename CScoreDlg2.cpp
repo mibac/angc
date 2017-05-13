@@ -48,12 +48,16 @@ Fl_Box *sel = scoreValue;
 int hole;
 
 void btnOK_cb(Fl_Widget *w, void *data) {
-  int score = stoi(scoreValue->label());
-  int putt = stoi(puttValue->label());
-  int ud = stoi(udValue->label());
-  vHoleScore[hole].setHoleScore(score, putt, ud);
+    string ss;
+    string pp;
+    string uu;
+  ss = scoreValue->label();
+  pp = puttValue->label();
+  uu = udValue->label();
+  vNGCHoles[hole].setHoleScore(ss, pp, uu);
   Fl_Window *parent = (Fl_Window *)data;
   parent->hide();
+  // for (auto itr : vNGCHoles) cout << itr;
 }
 
 void cardBtn_cb(Fl_Widget *w, void *data) {
@@ -113,11 +117,24 @@ void incrementSelection() {
   hdr->color(FL_YELLOW);
 }
 
+void CScoreDlg2::stuffData(int n) {
+  vNGCHoles[n].hole = holeValue->label();
+  vNGCHoles[n].yards = yardsValue->label();
+  vNGCHoles[n].hdcp = hdcpValue->label();
+  vNGCHoles[n].par = parValue->label();
+  vNGCHoles[n].score = scoreValue->label();
+  vNGCHoles[n].putts = puttValue->label();
+  vNGCHoles[n].uds = udValue->label();
+}
+
 void CScoreDlg2::updateHoleDescription(int n) {
-  holeValue->label(vHoleDesc[n].hole.c_str());
-  yardsValue->label(vHoleDesc[n].yards.c_str());
-  hdcpValue->label(vHoleDesc[n].hdcp.c_str());
-  parValue->label(vHoleDesc[n].par.c_str());
+  holeValue->label(vNGCHoles[n].hole.c_str());
+  yardsValue->label(vNGCHoles[n].yards.c_str());
+  hdcpValue->label(vNGCHoles[n].hdcp.c_str());
+  parValue->label(vNGCHoles[n].par.c_str());
+  scoreValue->label(vNGCHoles[n].score.c_str());
+  puttValue->label(vNGCHoles[n].putts.c_str());
+  udValue->label(vNGCHoles[n].uds.c_str());
 }
 
 // Handle when user right clicks on our input widget
@@ -180,10 +197,12 @@ int CScoreDlg2::handle(int e) {
           sel->label("9");
           incrementSelection();
         } else if (w == prevBtn) {
+          stuffData(hole);
           hole -= 1;
           if (hole < 0) hole = 0;
           updateHoleDescription(hole);
         } else if (w == nextBtn) {
+          stuffData(hole);
           hole += 1;
           if (hole == 18) hole = 17;
           updateHoleDescription(hole);

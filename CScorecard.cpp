@@ -30,8 +30,6 @@
 #include "globals.h"
 #endif
 
-// #include <FL/Fl_Window.H>
-// #include <FL/Fl_Table.H>
 #include <FL/fl_draw.H>
 
 #include <string>
@@ -76,69 +74,87 @@ void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
 }
 
 void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
-  string s;
   if (COL == 9) {
     DrawData("T\0", X, Y, W, H);
   } else if (front9) {
-    DrawData(vHoleDesc[COL].hole.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL].hole.c_str(), X, Y, W, H);
   } else {
-    DrawData(vHoleDesc[COL + 9].hole.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL + 9].hole.c_str(), X, Y, W, H);
   }
 }
 
 void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
-  string s;
   if (COL == 9) {
     DrawData("\0", X, Y, W, H);
   } else if (front9) {
-    DrawData(vHoleDesc[COL].hdcp.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
   } else {
-    DrawData(vHoleDesc[COL + 9].hdcp.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL + 9].hdcp.c_str(), X, Y, W, H);
   }
 }
 
 void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
-  string s;
   if (COL == 9) {
-    DrawData("36", X, Y, W, H);
+    DrawData("\0", X, Y, W, H);
   } else if (front9) {
-    DrawData(vHoleDesc[COL].par.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL].par.c_str(), X, Y, W, H);
   } else {
-    DrawData(vHoleDesc[COL + 9].par.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL + 9].par.c_str(), X, Y, W, H);
   }
 }
 
 void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
-  string s;
-  if (front9) {
-    s = to_string(vHoleScore[COL].score);
+  if (COL == 9) {
+    int total = 0;
+    string s;
+    if (front9) {
+      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].score);
+    } else {
+      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].score);
+    }
+    s = to_string(total);
     DrawData(s.c_str(), X, Y, W, H);
+  } else if (front9) {
+    DrawData(vNGCHoles[COL].score.c_str(), X, Y, W, H);
   } else {
-    s = to_string(vHoleScore[COL + 9].score);
-    DrawData(s.c_str(), X, Y, W, H);
+    DrawData(vNGCHoles[COL + 9].score.c_str(), X, Y, W, H);
   }
 }
 
 void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
+  if (COL == 9) {
+    int total = 0;
     string s;
     if (front9) {
-      s = to_string(vHoleScore[COL].putts);
-      DrawData(s.c_str(), X, Y, W, H);
+      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].putts);
     } else {
-      s = to_string(vHoleScore[COL + 9].putts);
-      DrawData(s.c_str(), X, Y, W, H);
+      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].putts);
     }
+    s = to_string(total);
+    DrawData(s.c_str(), X, Y, W, H);
+  } else if (front9) {
+    DrawData(vNGCHoles[COL].putts.c_str(), X, Y, W, H);
+  } else {
+    DrawData(vNGCHoles[COL + 9].putts.c_str(), X, Y, W, H);
+  }
 }
 
 void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
+  if (COL == 9) {
+    int total = 0;
     string s;
     if (front9) {
-      s = to_string(vHoleScore[COL].uds);
-      DrawData(s.c_str(), X, Y, W, H);
+      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].uds);
     } else {
-      s = to_string(vHoleScore[COL + 9].uds);
-      DrawData(s.c_str(), X, Y, W, H);
+      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].uds);
     }
+    s = to_string(total);
+    DrawData(s.c_str(), X, Y, W, H);
+  } else if (front9) {
+    DrawData(vNGCHoles[COL].uds.c_str(), X, Y, W, H);
+  } else {
+    DrawData(vNGCHoles[COL + 9].uds.c_str(), X, Y, W, H);
+  }
 }
 
 // Handle drawing table's cells
@@ -153,7 +169,7 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
   switch (context) {
     case CONTEXT_STARTPAGE:  // before page is drawn..
       fl_font(FL_HELVETICA_BOLD,
-              16);  // set the font for our drawing operations
+              18);  // set the font for our drawing operations
       return;
     case CONTEXT_COL_HEADER:        // Draw column headers
       sprintf(s, "%c", 'A' + COL);  // "A", "B", "C", etc.
@@ -200,7 +216,6 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
 //
 CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
     : Fl_Table(X, Y, W, H, L) {
-
   // Rows
   rows(MAX_ROWS);      // how many rows
   row_header(1);       // enable row headers (along left)
@@ -215,7 +230,6 @@ CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
 
   color((Fl_Color)159);
   end();  // end the Fl_Table group
-  // show();
 }
 
 //

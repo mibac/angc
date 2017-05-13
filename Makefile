@@ -3,18 +3,18 @@ LDFLAGS = /home/pi/projects/FLTK-master/lib/libfltk_gl.a -lGLU -lGL /home/pi/pro
 
 all: aNGCApp
 
-aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o CScorecard.o CScorecardDlg.o
-	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o CScores.o CScoreStats.o globals.o CYellowBtn.o CGPStime.o  CScorecard.o CScorecardDlg.o $(LDFLAGS)
-markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg2.h CScores.h CScoreStats.h globals.h CYellowBtn.h CGPStime.h  CScorecard.h CScorecardDlg.h
+aNGCApp: markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o  CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o  globals.o CYellowBtn.o CGPStime.o CScorecard.o CScorecardDlg.o
+	g++ -o aNGCApp markGps.o C2UTM.o CExitBtn.o CHoleBtn.o CHolesPopup.o CLatLng.o Course.o  gps.o HoleView.o CClubPopup.o CClubBtn.o CScoreBtn.o CScoreDlg2.o  globals.o CYellowBtn.o CGPStime.o  CScorecard.o CScorecardDlg.o $(LDFLAGS)
+markGps.o: markGps.cpp C2UTM.h CExitBtn.h CHoleBtn.h CHolesPopup.h CLatLng.h  Course.h gps.h HoleView.h CClubPopup.h CScoreBtn.h CScoreDlg2.h  globals.h CYellowBtn.h CGPStime.h  CScorecard.h CScorecardDlg.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
 	g++ -c $< $(CXXFLAGS)
 
-CLatLng.o: CLatLng.cpp CLatLng.h gps.h C2UTM.h utils.h globals.h
+CLatLng.o: CLatLng.cpp CLatLng.h gps.h C2UTM.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleBtn.h CClubBtn.h globals.h CScoreStats.h
+CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleBtn.h CClubBtn.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CHoleBtn.o: CHoleBtn.cpp CHoleBtn.h CHolesPopup.h CLatLng.h globals.h
@@ -38,16 +38,10 @@ CClubPopup.o: CClubPopup.cpp CClubPopup.h
 CClubBtn.o: CClubBtn.cpp CClubBtn.h CClubPopup.h CLatLng.h
 			g++ -c $<  $(CXXFLAGS)
 
-CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h CScoreStats.h globals.h  CScorecard.h
+CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h
 			g++ -c $<  $(CXXFLAGS)
 
 CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
-			g++ -c $<  $(CXXFLAGS)
-
-CScores.o: CScores.cpp CScores.h globals.h
-			g++ -c $<  $(CXXFLAGS)
-
-CScoresStats.o: CScoresStats.cpp CScoresStats.h CScores.h
 			g++ -c $<  $(CXXFLAGS)
 
 CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h CGPStime.h CHoleBtn.h
@@ -59,7 +53,7 @@ globals.o: globals.cpp globals.h
 CGPStime.o: CGPStime.cpp CGPStime.h
 	g++ -c $<  $(CXXFLAGS)
 
-CScorecard.o: CScorecard.cpp CScorecard.h
+CScorecard.o: CScorecard.cpp CScorecard.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h

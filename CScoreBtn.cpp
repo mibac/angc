@@ -2,10 +2,6 @@
 #include "CScoreBtn.h"
 #endif
 
-#ifndef UTILS_H
-#include "utils.h"
-#endif
-
 using namespace std;
 
 CScoreDlg2 *scoreDlg2 = nullptr;

@@ -10,7 +10,6 @@
 #define C2UTM_hpp
 
 #include <stdio.h>
-
 #include <string>
 
 
@@ -29,7 +28,7 @@ public:
     void setVariables();
     string getLongZone();
     //  string getLatZone(double latitude);
-    
+
     double getEast();
     double getNorth();
     void convert2UTM();

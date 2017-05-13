@@ -4,6 +4,8 @@
 #include <array>
 #include <ctime>
 #include <fstream>
+#include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -30,36 +32,38 @@ struct UtmLatLng {
   }
 };
 
-class CHoleDescription {
+class CNGCHoles {
  public:
   string hole;
   string yards;
   string hdcp;
   string par;
-  CHoleDescription() : hole(""), yards(""), hdcp(""), par("") {}
+  string score;
+  string putts;
+  string uds;
+
+  CNGCHoles()
+      : hole(""), yards(""), hdcp(""), par(""), score(""), putts(""), uds("") {}
+
   void setHoleDesc(const string h, const string y, const string c,
-                   const string p) {
+                   const string p, const string sc, const string pu,
+                   const string ud) {
     hole = h;
     yards = y;
     hdcp = c;
     par = p;
+    score = sc;
+    putts = pu;
+    uds = ud;
   }
-};
-extern vector<CHoleDescription> vHoleDesc;
-
-class CHoleScore {
-public:
-  int score;
-  int putts;
-  int uds;
-  CHoleScore() : score(0), putts(0), uds(0) {}
-  void setHoleScore(const int s, const int p, const int u) {
-      score = s;
-      putts = p;
-      uds = u;
+  void setHoleScore(const string s, const string p, const string u) {
+    score =s;
+    putts = p;
+    uds = u;
   }
+  friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
 };
-extern vector<CHoleScore> vHoleScore;
+extern vector<CNGCHoles> vNGCHoles;
 
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;

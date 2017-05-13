@@ -37,10 +37,6 @@
 #include "C2UTM.h"
 #endif
 
-#ifndef UTILS_H
-#include "utils.h"
-#endif
-
 #ifndef CHOLESPOPUP_H
 #include "CHolesPopup.h"
 #endif
@@ -63,10 +59,6 @@
 
 #ifndef CYELLOWBTN_H
 #include "CYellowBtn.h"
-#endif
-
-#ifndef CSCORES_H
-#include "CScores.h"
 #endif
 
 using namespace std;

@@ -15,10 +15,6 @@
 #include "libgpsmm.h"
 #endif
 
-#ifndef UTILS_H
-#include "utils.h"
-#endif
-
 const size_t kUTMpts = 3;  // number of UTM points to average
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;

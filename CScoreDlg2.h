@@ -21,6 +21,8 @@ class CScoreDlg2 : public Fl_Window {
 
  private:
   int handle(int e);
+  void stuffData(int n);
+
 };
 
 extern void createScoreDlg2();
