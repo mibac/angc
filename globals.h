@@ -45,8 +45,22 @@ class CHoleDescription {
     par = p;
   }
 };
-
 extern vector<CHoleDescription> vHoleDesc;
+
+class CHoleScore {
+public:
+  int score;
+  int putts;
+  int uds;
+  CHoleScore() : score(0), putts(0), uds(0) {}
+  void setHoleScore(const int s, const int p, const int u) {
+      score = s;
+      putts = p;
+      uds = u;
+  }
+};
+extern vector<CHoleScore> vHoleScore;
+
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
 extern vector<string> vClubsUsed;

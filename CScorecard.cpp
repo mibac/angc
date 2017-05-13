@@ -42,8 +42,10 @@ const int kHoleRow = 0;
 const int kHdcpRow = 1;
 const int kParRow = 2;
 const int kScoreRow = 3;
-const int kPutRow = 4;
+const int kPuttRow = 4;
 const int kUDRow = 5;
+
+bool front9 = true;
 // CScorecard *scorecard = nullptr;
 
 // Draw the row/col headings
@@ -106,9 +108,39 @@ void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
   }
 }
 
-void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {}
-void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {}
-void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {}
+void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
+  string s;
+  if (front9) {
+    s = to_string(vHoleScore[COL].score);
+    DrawData(s.c_str(), X, Y, W, H);
+  } else {
+    s = to_string(vHoleScore[COL + 9].score);
+    DrawData(s.c_str(), X, Y, W, H);
+  }
+}
+
+void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
+    string s;
+    if (front9) {
+      s = to_string(vHoleScore[COL].putts);
+      DrawData(s.c_str(), X, Y, W, H);
+    } else {
+      s = to_string(vHoleScore[COL + 9].putts);
+      DrawData(s.c_str(), X, Y, W, H);
+    }
+}
+
+void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
+    string s;
+    if (front9) {
+      s = to_string(vHoleScore[COL].uds);
+      DrawData(s.c_str(), X, Y, W, H);
+    } else {
+      s = to_string(vHoleScore[COL + 9].uds);
+      DrawData(s.c_str(), X, Y, W, H);
+    }
+}
+
 // Handle drawing table's cells
 //     Fl_Table calls this function to draw each visible cell in the
 //     table. It's up to us to use FLTK's drawing functions to draw the
@@ -140,7 +172,6 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         str = "Putt";
       else if (ROW == 5)
         str = "UD";
-      //   sprintf(s, "%03d:", ROW);  // "001:", "002:", etc
       DrawHeader(str.c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
@@ -150,12 +181,12 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         drawHdcpData(COL, X, Y, W, H);
       else if (ROW == kParRow)
         drawParData(COL, X, Y, W, H);
-      else if (ROW == kParRow)
-        drawParData(COL, X, Y, W, H);
-      else if (ROW == kParRow)
-        drawParData(COL, X, Y, W, H);
-      else if (ROW == kParRow)
-        drawParData(COL, X, Y, W, H);
+      else if (ROW == kScoreRow)
+        drawScoreData(COL, X, Y, W, H);
+      else if (ROW == kPuttRow)
+        drawPuttData(COL, X, Y, W, H);
+      else if (ROW == kUDRow)
+        drawUDData(COL, X, Y, W, H);
 
       return;  // CONTEXT_CELL
 
@@ -169,15 +200,6 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
 //
 CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
     : Fl_Table(X, Y, W, H, L) {
-  // Fill data array
-  // Holes
-
-  // for (int r = 0; r < MAX_ROWS; r++) {
-  //   for (int c = 0; c < MAX_COLS; c++) {
-  //     data[r][c] = 1000 + (r * 1000) + c;
-  //   }
-  // }
-  front9 = false;
 
   // Rows
   rows(MAX_ROWS);      // how many rows
@@ -195,9 +217,6 @@ CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
   end();  // end the Fl_Table group
   // show();
 }
-
-// void createScorecard() { scorecard = new CScorecard(10, 10, 460, 300);
-// }
 
 //
 // End of "$Id$".

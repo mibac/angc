@@ -34,7 +34,6 @@
 // Derive a class from Fl_Table
 class CScorecard : public Fl_Table {
   int data[MAX_ROWS][MAX_COLS];  // data array for cells
-  bool front9;
   // Draw the row/col headings
   //    Make this a dark thin upbox with the text inside.
   //
@@ -68,6 +67,7 @@ class CScorecard : public Fl_Table {
 
 // extern void createScorecard();
 // extern CScorecard *scorecard;
+extern bool front9;
 
 #endif
 //

@@ -12,6 +12,8 @@
 #include "CScorecardDlg.h"
 #endif
 
+#include <iostream>
+
 Fl_Box *holeBox = nullptr;
 Fl_Box *yardsBox = nullptr;
 Fl_Box *hdcpBox = nullptr;
@@ -45,8 +47,11 @@ Fl_Box *sel = scoreValue;
 
 int hole;
 
-
 void btnOK_cb(Fl_Widget *w, void *data) {
+  int score = stoi(scoreValue->label());
+  int putt = stoi(puttValue->label());
+  int ud = stoi(udValue->label());
+  vHoleScore[hole].setHoleScore(score, putt, ud);
   Fl_Window *parent = (Fl_Window *)data;
   parent->hide();
 }
@@ -90,6 +95,24 @@ void toggleSelection(Fl_Box *box) {
   }
 }
 
+void incrementSelection() {
+  Fl_Box *hdr;
+  if (sel == scoreValue) {
+    sel = puttValue;
+    hdr = puttBox;
+  } else if (sel == puttValue) {
+    sel = udValue;
+    hdr = udBox;
+  } else if (sel == udValue) {
+    sel = scoreValue;
+    hdr = scoreBox;
+  }
+  scoreBox->color(FL_WHITE);
+  puttBox->color(FL_WHITE);
+  udBox->color(FL_WHITE);
+  hdr->color(FL_YELLOW);
+}
+
 void CScoreDlg2::updateHoleDescription(int n) {
   holeValue->label(vHoleDesc[n].hole.c_str());
   yardsValue->label(vHoleDesc[n].yards.c_str());
@@ -119,40 +142,50 @@ int CScoreDlg2::handle(int e) {
         } else if (w == box0) {
           toggleNumbers(box0);
           sel->label("0");
+          incrementSelection();
         } else if (w == box1) {
           toggleNumbers(box1);
           sel->label("1");
+          incrementSelection();
         } else if (w == box2) {
           toggleNumbers(box2);
           sel->label("2");
+          incrementSelection();
         } else if (w == box3) {
           toggleNumbers(box3);
           sel->label("3");
+          incrementSelection();
         } else if (w == box4) {
           toggleNumbers(box4);
           sel->label("4");
+          incrementSelection();
         } else if (w == box5) {
           toggleNumbers(box5);
           sel->label("5");
+          incrementSelection();
         } else if (w == box6) {
           toggleNumbers(box6);
           sel->label("6");
+          incrementSelection();
         } else if (w == box7) {
           toggleNumbers(box7);
           sel->label("7");
+          incrementSelection();
         } else if (w == box8) {
           toggleNumbers(box8);
           sel->label("8");
+          incrementSelection();
         } else if (w == box9) {
           toggleNumbers(box9);
           sel->label("9");
+          incrementSelection();
         } else if (w == prevBtn) {
           hole -= 1;
-          if (hole == 0) hole = 1;
+          if (hole < 0) hole = 0;
           updateHoleDescription(hole);
         } else if (w == nextBtn) {
           hole += 1;
-          if (hole == 19) hole = 18;
+          if (hole == 18) hole = 17;
           updateHoleDescription(hole);
         }
         redraw();
@@ -485,8 +518,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   end();
 
   toggleSelection(scoreValue);
-  hole = gCurrentHole;
-  if (hole == 0) hole = 1;
+  hole = gCurrentHole - 1;
   updateHoleDescription(hole);
   clear_border();
 

@@ -27,6 +27,7 @@ vector<string> vClubsUsed;
 array<bool, k18> bPlayedHole;
 
 vector<CHoleDescription> vHoleDesc;
+vector<CHoleScore> vHoleScore;
 
 void initHoleDescVector() {
   for (int ix = 0; ix < k18; ++ix) {
@@ -53,6 +54,13 @@ void initHoleDescVector() {
   vHoleDesc[17].setHoleDesc("18", "337", "10", "4");
 }
 
+void initHoleScoreVector() {
+    for (int ix = 0; ix < k18; ++ix) {
+      CHoleScore chs;
+      vHoleScore.push_back(chs);
+    }
+}
+
 void initGlobals() {
   gCurrentHole = 1;
   gToday = time(nullptr);
@@ -65,4 +73,5 @@ void initGlobals() {
   for (int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;
 
   initHoleDescVector();
+  initHoleScoreVector();
 }
