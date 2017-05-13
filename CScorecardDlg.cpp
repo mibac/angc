@@ -20,7 +20,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
       okB->labelsize(32);
     }  // Fl_Button* bntOK
     {
-         card = new CScorecard(10, 10, 460, 300);;
+         card = new CScorecard(2, 10, 476, 260);
     //   card = new CScorecard(10, 10, 460, 300);
     //   card->color(FL_WHITE);
     //   card->cols(10);

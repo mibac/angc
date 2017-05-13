@@ -26,95 +26,178 @@
 #include "CScorecard.h"
 #endif
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 // #include <FL/Fl_Window.H>
 // #include <FL/Fl_Table.H>
 #include <FL/fl_draw.H>
 
+#include <string>
+
+using namespace std;
+
+const int kHoleRow = 0;
+const int kHdcpRow = 1;
+const int kParRow = 2;
+const int kScoreRow = 3;
+const int kPutRow = 4;
+const int kUDRow = 5;
 // CScorecard *scorecard = nullptr;
 
-  // Draw the row/col headings
-  //    Make this a dark thin upbox with the text inside.
-  //
-  void CScorecard::DrawHeader(const char *s, int X, int Y, int W, int H) {
-    fl_push_clip(X, Y, W, H);
-    fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, row_header_color());
-    fl_color(FL_BLACK);
-    fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
-    fl_pop_clip();
-  }
-  // Draw the cell data
-  //    Dark gray text on white background with subtle border
-  //
-  void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
-    fl_push_clip(X, Y, W, H);
-    // Draw cell bg
-    fl_color(FL_WHITE);
-    fl_rectf(X, Y, W, H);
-    // Draw cell data
-    fl_color(FL_GRAY0);
-    fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
-    // Draw box border
-    fl_color(color());
-    fl_rect(X, Y, W, H);
-    fl_pop_clip();
-  }
-  // Handle drawing table's cells
-  //     Fl_Table calls this function to draw each visible cell in the table.
-  //     It's up to us to use FLTK's drawing functions to draw the cells the way
-  //     we want.
-  //
-  void CScorecard::draw_cell(TableContext context, int ROW, int COL,
-                             int X, int Y, int W, int H) {
-    static char s[40];
-    switch (context) {
-      case CONTEXT_STARTPAGE:       // before page is drawn..
-        fl_font(FL_HELVETICA, 16);  // set the font for our drawing operations
-        return;
-      case CONTEXT_COL_HEADER:        // Draw column headers
-        sprintf(s, "%c", 'A' + COL);  // "A", "B", "C", etc.
-        DrawHeader(s, X, Y, W, H);
-        return;
-      case CONTEXT_ROW_HEADER:     // Draw row headers
-        sprintf(s, "%03d:", ROW);  // "001:", "002:", etc
-        DrawHeader(s, X, Y, W, H);
-        return;
-      case CONTEXT_CELL:  // Draw data in cells
-        sprintf(s, "%d", data[ROW][COL]);
-        DrawData(s, X, Y, W, H);
-        return;
-      default:
-        return;
-    }
-  }
+// Draw the row/col headings
+//    Make this a dark thin upbox with the text inside.
+//
+void CScorecard::DrawHeader(const char *s, int X, int Y, int W, int H) {
+  fl_push_clip(X, Y, W, H);
+  fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, row_header_color());
+  fl_color(FL_BLACK);
+  fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+  fl_pop_clip();
+}
+// Draw the cell data
+//    Dark gray text on white background with subtle border
+//
+void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
+  fl_push_clip(X, Y, W, H);
+  // Draw cell bg
+  fl_color(FL_WHITE);
+  fl_rectf(X, Y, W, H);
+  // Draw cell data
+  fl_color(FL_GRAY0);
+  fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+  // Draw box border
+  fl_color(color());
+  fl_rect(X, Y, W, H);
+  fl_pop_clip();
+}
 
-  // Constructor
-  //     Make our data array, and initialize the table options.
-  //
-  CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
-      : Fl_Table(X, Y, W, H, L) {
-    // Fill data array
-    for (int r = 0; r < MAX_ROWS; r++) {
-      for (int c = 0; c < MAX_COLS; c++) {
-        data[r][c] = 1000 + (r * 1000) + c;
-      }
-    }
-    // Rows
-    rows(MAX_ROWS);      // how many rows
-    row_header(1);       // enable row headers (along left)
-    row_height_all(40);  // default height of rows
-    row_resize(0);       // disable row resizing
-    // Cols
-    cols(MAX_COLS);     // how many columns
-    col_header(0);      // enable column headers (along top)
-    col_width_all(40);  // default width of columns
-    col_resize(0);      // enable column resizing
-    end();              // end the Fl_Table group
-    // show();
+void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
+  string s;
+  if (COL == 9) {
+    DrawData("T\0", X, Y, W, H);
+  } else if (front9) {
+    DrawData(vHoleDesc[COL].hole.c_str(), X, Y, W, H);
+  } else {
+    DrawData(vHoleDesc[COL + 9].hole.c_str(), X, Y, W, H);
   }
+}
 
-// void createScorecard() { scorecard = new CScorecard(10, 10, 460, 300); }
+void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
+  string s;
+  if (COL == 9) {
+    DrawData("\0", X, Y, W, H);
+  } else if (front9) {
+    DrawData(vHoleDesc[COL].hdcp.c_str(), X, Y, W, H);
+  } else {
+    DrawData(vHoleDesc[COL + 9].hdcp.c_str(), X, Y, W, H);
+  }
+}
 
+void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
+  string s;
+  if (COL == 9) {
+    DrawData("36", X, Y, W, H);
+  } else if (front9) {
+    DrawData(vHoleDesc[COL].par.c_str(), X, Y, W, H);
+  } else {
+    DrawData(vHoleDesc[COL + 9].par.c_str(), X, Y, W, H);
+  }
+}
 
+void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {}
+void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {}
+void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {}
+// Handle drawing table's cells
+//     Fl_Table calls this function to draw each visible cell in the
+//     table. It's up to us to use FLTK's drawing functions to draw the
+//     cells the way we want.
+//
+void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
+                           int W, int H) {
+  static char s[40];
+  string str;
+  switch (context) {
+    case CONTEXT_STARTPAGE:  // before page is drawn..
+      fl_font(FL_HELVETICA_BOLD,
+              16);  // set the font for our drawing operations
+      return;
+    case CONTEXT_COL_HEADER:        // Draw column headers
+      sprintf(s, "%c", 'A' + COL);  // "A", "B", "C", etc.
+      DrawHeader(s, X, Y, W, H);
+      return;
+    case CONTEXT_ROW_HEADER:  // Draw row headers
+      if (ROW == 0)
+        str = "Hole";
+      else if (ROW == 1)
+        str = "Hdcp";
+      else if (ROW == 2)
+        str = "Par";
+      else if (ROW == 3)
+        str = "Score";
+      else if (ROW == 4)
+        str = "Putt";
+      else if (ROW == 5)
+        str = "UD";
+      //   sprintf(s, "%03d:", ROW);  // "001:", "002:", etc
+      DrawHeader(str.c_str(), X, Y, W, H);
+      return;
+    case CONTEXT_CELL:  // Draw data in cells
+      if (ROW == kHoleRow)
+        drawHoleData(COL, X, Y, W, H);
+      else if (ROW == kHdcpRow)
+        drawHdcpData(COL, X, Y, W, H);
+      else if (ROW == kParRow)
+        drawParData(COL, X, Y, W, H);
+      else if (ROW == kParRow)
+        drawParData(COL, X, Y, W, H);
+      else if (ROW == kParRow)
+        drawParData(COL, X, Y, W, H);
+      else if (ROW == kParRow)
+        drawParData(COL, X, Y, W, H);
+
+      return;  // CONTEXT_CELL
+
+    default:
+      return;
+  }
+}
+
+// Constructor
+//     Make our data array, and initialize the table options.
+//
+CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
+    : Fl_Table(X, Y, W, H, L) {
+  // Fill data array
+  // Holes
+
+  // for (int r = 0; r < MAX_ROWS; r++) {
+  //   for (int c = 0; c < MAX_COLS; c++) {
+  //     data[r][c] = 1000 + (r * 1000) + c;
+  //   }
+  // }
+  front9 = false;
+
+  // Rows
+  rows(MAX_ROWS);      // how many rows
+  row_header(1);       // enable row headers (along left)
+  row_height_all(40);  // default height of rows
+  row_header_width(60);
+  row_resize(0);  // disable row resizing
+  // Cols
+  cols(MAX_COLS);     // how many columns
+  col_header(0);      // enable column headers (along top)
+  col_width_all(40);  // default width of columns
+  col_resize(0);      // enable column resizing
+
+  color((Fl_Color)159);
+  end();  // end the Fl_Table group
+  // show();
+}
+
+// void createScorecard() { scorecard = new CScorecard(10, 10, 460, 300);
+// }
 
 //
 // End of "$Id$".

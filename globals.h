@@ -30,6 +30,23 @@ struct UtmLatLng {
   }
 };
 
+class CHoleDescription {
+ public:
+  string hole;
+  string yards;
+  string hdcp;
+  string par;
+  CHoleDescription() : hole(""), yards(""), hdcp(""), par("") {}
+  void setHoleDesc(const string h, const string y, const string c,
+                   const string p) {
+    hole = h;
+    yards = y;
+    hdcp = c;
+    par = p;
+  }
+};
+
+extern vector<CHoleDescription> vHoleDesc;
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
 extern vector<string> vClubsUsed;

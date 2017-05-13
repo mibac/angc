@@ -45,33 +45,6 @@ Fl_Box *sel = scoreValue;
 
 int hole;
 
-vector<CHoleDescription> vHoleDesc;
-
-void initHoleDescVector() {
-  for (int ix = 0; ix < k19; ++ix) {
-    CHoleDescription chd;
-    vHoleDesc.push_back(chd);
-  }
-  vHoleDesc[0].setHoleDesc("", "", "", "");
-  vHoleDesc[1].setHoleDesc("1", "492", "7", "5");
-  vHoleDesc[2].setHoleDesc("2", "185", "13", "3");
-  vHoleDesc[3].setHoleDesc("3", "421", "1", "4");
-  vHoleDesc[4].setHoleDesc("4", "510", "3", "5");
-  vHoleDesc[5].setHoleDesc("5", "395", "5", "4");
-  vHoleDesc[6].setHoleDesc("6", "383", "11", "4");
-  vHoleDesc[7].setHoleDesc("7", "135", "17", "3");
-  vHoleDesc[8].setHoleDesc("8", "368", "9", "4");
-  vHoleDesc[9].setHoleDesc("9", "312", "5", "4");
-  vHoleDesc[10].setHoleDesc("10", "342", "8", "4");
-  vHoleDesc[11].setHoleDesc("11", "145", "16", "3");
-  vHoleDesc[12].setHoleDesc("12", "471", "12", "5");
-  vHoleDesc[13].setHoleDesc("13", "380", "6", "4");
-  vHoleDesc[14].setHoleDesc("14", "365", "4", "4");
-  vHoleDesc[15].setHoleDesc("15", "331", "18", "4");
-  vHoleDesc[16].setHoleDesc("16", "521", "2", "5");
-  vHoleDesc[17].setHoleDesc("17", "168", "14", "3");
-  vHoleDesc[18].setHoleDesc("18", "337", "10", "4");
-}
 
 void btnOK_cb(Fl_Widget *w, void *data) {
   Fl_Window *parent = (Fl_Window *)data;
@@ -510,7 +483,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   set_modal();
   size_range(480, 800, 480, 800);
   end();
-  initHoleDescVector();
+
   toggleSelection(scoreValue);
   hole = gCurrentHole;
   if (hole == 0) hole = 1;

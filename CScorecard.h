@@ -34,7 +34,7 @@
 // Derive a class from Fl_Table
 class CScorecard : public Fl_Table {
   int data[MAX_ROWS][MAX_COLS];  // data array for cells
-
+  bool front9;
   // Draw the row/col headings
   //    Make this a dark thin upbox with the text inside.
   //
@@ -50,6 +50,14 @@ class CScorecard : public Fl_Table {
   //
   void draw_cell(TableContext context, int ROW = 0, int COL = 0, int X = 0,
                  int Y = 0, int W = 0, int H = 0);
+
+  void drawHoleData(int COL, int X, int Y, int W, int H);
+  void drawHdcpData(int COL, int X, int Y, int W, int H);
+  void drawParData(int COL, int X, int Y, int W, int H);
+  void drawScoreData(int COL, int X, int Y, int W, int H);
+  void drawPuttData(int COL, int X, int Y, int W, int H);
+  void drawUDData(int COL, int X, int Y, int W, int H);
+
  public:
   // Constructor
   //     Make our data array, and initialize the table options.

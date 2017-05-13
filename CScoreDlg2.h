@@ -13,27 +13,6 @@
 
 using namespace std;
 
-class CHoleDescription {
- public:
-  string hole;
-  string yards;
-  string hdcp;
-  string par;
-  CHoleDescription() : hole(""), yards(""), hdcp(""), par("") {}
-  void setHoleDesc(const string h, const string y, const string c,
-                   const string p) {
-    hole = h;
-    yards = y;
-    hdcp = c;
-    par = p;
-  }
-};
-
-const int k19 = 19;
-
-extern vector<CHoleDescription> vHoleDesc;
-
-void initHoleDescVector();
 
 class CScoreDlg2 : public Fl_Window {
  public:
