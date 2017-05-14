@@ -27,6 +27,7 @@ struct greenData {
     Vector currentP,Pin,Front,Back,Center;
     Vector PinRot,FrontRot,BackRot;
     double pinYardage,frontYardage,backYardage;
+    bool pinOnGreen;
     Feature *green;
 };
 
@@ -55,6 +56,7 @@ class Hole {
     double yardDistance(Vector p1,Vector p2); 
     void findGreenYardage();
     greenData gd;
+    bool  isOnGreen();
     string currentYardageToHoleStr;
     string currentYardageFromTeeStr;
     Vector pathPoint[1000];
