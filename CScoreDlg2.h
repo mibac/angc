@@ -17,11 +17,11 @@ using namespace std;
 class CScoreDlg2 : public Fl_Window {
  public:
   CScoreDlg2(int X, int Y, int W, int H, const char *L = 0);
+  void stuffData(int n);
   void updateHoleDescription(int n);
 
  private:
   int handle(int e);
-  void stuffData(int n);
 
 };
 

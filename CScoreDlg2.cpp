@@ -48,21 +48,15 @@ Fl_Box *sel = scoreValue;
 int hole;
 
 void btnOK_cb(Fl_Widget *w, void *data) {
-    string ss;
-    string pp;
-    string uu;
-  ss = scoreValue->label();
-  pp = puttValue->label();
-  uu = udValue->label();
-  vNGCHoles[hole].setHoleScore(ss, pp, uu);
-  Fl_Window *parent = (Fl_Window *)data;
+  CScoreDlg2 *parent = (CScoreDlg2 *)data;
+  parent->stuffData(hole);
   parent->hide();
-  // for (auto itr : vNGCHoles) cout << itr;
 }
 
 void cardBtn_cb(Fl_Widget *w, void *data) {
+  CScoreDlg2 *parent = (CScoreDlg2 *)data;
+  parent->stuffData(hole);
   createScorecardDlg();
-  Fl_Window *parent = (Fl_Window *)data;
   parent->hide();
 }
 

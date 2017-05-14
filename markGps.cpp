@@ -78,8 +78,8 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-// const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";  // john
-const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";  // jack
+const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";  // john
+// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";  // jack
 // const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";  // john
 
 void HandleFD(FL_SOCKET fd, void *data) {

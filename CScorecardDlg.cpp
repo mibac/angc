@@ -14,6 +14,10 @@ Fl_Button *frontBtn = nullptr;
 Fl_Button *backBtn = nullptr;
 CScorecard *card = nullptr;
 
+void okB_cb(Fl_Widget *w, void *data) {
+  scorecardDlg->hide();
+}
+
 void frontBtn_cb(Fl_Widget *w, void *data) {
   front9 = true;
   scorecardDlg->redraw();
@@ -30,14 +34,10 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     okB = new Fl_Button(174, 675, 140, 42, "OK");
     okB->color(FL_BACKGROUND2_COLOR);
     okB->labelsize(32);
+    okB->callback(okB_cb, this);
   }  // Fl_Button* bntOK
   {
     card = new CScorecard(2, 20, 476, 260);
-    //   card = new CScorecard(10, 10, 460, 300);
-    //   card->color(FL_WHITE);
-    //   card->cols(10);
-    //   card->rows(6);
-    //   card->end();
   }  // Fl_Table* o
   {
     frontBtn = new Fl_Button(150, 300, 100, 42, "Front 9");
