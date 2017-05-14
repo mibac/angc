@@ -173,7 +173,39 @@ void Hole::computeYardageFromTee() {
    currentYardageFromTeeStr = to_string(yardageFromTee);
 }
  
- 
+bool Hole::isOnGreen() {
+   int i,j,pos,neg;
+   double x1,x2,y1,y2,x,y;
+   double d;
+
+   x = gd.Pin.v[0];
+   y = gd.Pin.v[1];
+
+   for (j=0;j<gd.green->polyNum;j++)  {
+        pos=neg=0;
+        for (i=0;i<gd.green->poly[j].vertNum;i++) {
+                if (i<gd.green->poly[j].vertNum-1) {
+                    x1 = gd.green->poly[j].UTM[i].v[0];
+                    y1 = gd.green->poly[j].UTM[i].v[1];
+                    x2 = gd.green->poly[j].UTM[i+1].v[0];
+                    y2 = gd.green->poly[j].UTM[i+1].v[1];
+                 }
+                else {
+                    x1 = gd.green->poly[j].UTM[i].v[0];
+                    y1 = gd.green->poly[j].UTM[i].v[1];
+                    x2 = gd.green->poly[j].UTM[0].v[0];
+                    y2 = gd.green->poly[j].UTM[0].v[1];
+                }
+               d = (x-x1)*(y2-y1)-(y-y1)*(x2-x1);
+               if (d>0) pos++;
+               if (d<0) neg++;
+          }
+          if ((pos==0)||(neg==0)) return true;
+     }
+  return false; 
+} 
+
+
 Course::Course(int mh) {
   maxHole = mh;
 }
@@ -211,6 +243,7 @@ void Course::readCourse() {
         }
         hole[h].gd.Pin.v[0] = hole[h].gd.Center.v[0] = hole[h].startOrient[1].v[0];
         hole[h].gd.Pin.v[1] = hole[h].gd.Center.v[1] = hole[h].startOrient[1].v[1];
+        hole[h].gd.pinOnGreen=true;
         hole[h].walk = 0.0;
       //  hole[h].currentPoint.v[0] = (1-hole[h].walk)*hole[h].startOrient[0].v[0]+
       //                              hole[h].walk*hole[h].startOrient[1].v[0];
@@ -236,29 +269,5 @@ void Course::readCourse() {
             fin.close();
         }
        finlist.close();
-/*
-       string walkpath = pathprefix+"EllingerPath/"+"H"+holenum[h]+"Path.txt";
-      // cout << walkpath << endl;
-
-        fin.open(walkpath);
-        int sk = 10;
-        double xx,yy;
-        t = 0;
-        hole[h].pathPointNum = 0;
-        while (!fin.eof()) {
-           fin >> xx>>yy;
-           t++;
-           if (t==sk){
-              hole[h].pathPoint[hole[h].pathPointNum].v[0] = xx;
-              hole[h].pathPoint[hole[h].pathPointNum].v[1] = yy;
-              hole[h].pathPointNum++;
-              t=0;
-           }
-        }
-//cout << "stored " << hole[h].pathPointNum << " points" << endl;
-        hole[h].currentPathIndex = 0;
-        fin.close();
-*/
-   
     }
 }

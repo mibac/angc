@@ -122,7 +122,10 @@ void HandleFD(FL_SOCKET fd, void *data) {
       cll.updateLatLng(gpsStr.c_str());
       string s = cll.distanceFromLastMark();
        UtmLatLng u = cll.getNowMark();
-      hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
+      if ((fabs(u.lng-hv->ngc->hole[gCurrentHole].startOrient[0].v[0])>3000.0)||
+	 ((fabs(u.lat-hv->ngc->hole[gCurrentHole].startOrient[0].v[1])>3000.0)))
+	hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].startOrient[0].v[0],hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);       
+      else hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
     }
   }
