@@ -78,9 +78,14 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";  // john
-// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";  // jack
-// const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";  // john
+#define JACK 1
+#if JACK
+ const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+#else
+const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";  
+// const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+// const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
+#endif
 
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
@@ -113,7 +118,10 @@ void HandleFD(FL_SOCKET fd, void *data) {
       yellowBtn->updateGPStime();
       cll.updateLatLng(gpsStr.c_str());
       UtmLatLng u = cll.getNowMark();
-      hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
+      if ((fabs(u.lng-hv->ngc->hole[gCurrentHole].startOrient[0].v[0])>3000.0)||
+	 ((fabs(u.lat-hv->ngc->hole[gCurrentHole].startOrient[0].v[1])>3000.0)))
+	hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].startOrient[0].v[0],hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);       
+      else hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
     }
   }
