@@ -162,7 +162,7 @@ void Hole::computeYardageToHole() {
    yardageToHole  = (int) (1.0936*sqrt(x*x+y*y));
    currentYardageToHoleStr = to_string(yardageToHole);
 }
- 
+
 void Hole::computeYardageFromTee() {
 
    double x,y;
@@ -172,7 +172,7 @@ void Hole::computeYardageFromTee() {
    yardageFromTee  = (int) (1.0936*sqrt(x*x+y*y));
    currentYardageFromTeeStr = to_string(yardageFromTee);
 }
- 
+
 bool Hole::isOnGreen() {
    int i,j,pos,neg;
    double x1,x2,y1,y2,x,y;
@@ -202,10 +202,9 @@ bool Hole::isOnGreen() {
           }
           if ((pos==0)||(neg==0)) return true;
      }
-  return false; 
-} 
+  return false;
+}
 
- 
 Course::Course(int mh) {
   maxHole = mh;
 }
@@ -216,13 +215,13 @@ void Course::readCourse() {
     double east,north;
     string holeprefix,flistname,orient,fn,fname;
     string holenum[] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"};
-    LL2UTM latlon;	  
-    	
+    LL2UTM latlon;
+
     for (h=1;h<=maxHole;h++) {
         hole[h].showMarkPoint=false;
         hole[h].zoomPointSelected=false;
         hole[h].viewType = 0;
-        hole[h].zoomScale = 3.0; 
+        hole[h].zoomScale = 3.0;
         holeprefix = pathprefix+"Hole"+holenum[h]+"/";
         flistname = holeprefix+ "list.txt";
         finlist.open(flistname);
