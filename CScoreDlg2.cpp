@@ -13,14 +13,24 @@
 #endif
 
 #include <iostream>
+#include <string>
+
+using namespace std;
 
 Fl_Box *holeBox = nullptr;
+Fl_Box *holeValue = nullptr;
 Fl_Box *yardsBox = nullptr;
+Fl_Box *yardsValue = nullptr;
 Fl_Box *hdcpBox = nullptr;
+Fl_Box *hdcpValue = nullptr;
 Fl_Box *parBox = nullptr;
+Fl_Box *parValue = nullptr;
 Fl_Box *scoreBox = nullptr;
+Fl_Box *scoreValue = nullptr;
 Fl_Box *puttBox = nullptr;
+Fl_Box *puttValue = nullptr;
 Fl_Box *udBox = nullptr;
+Fl_Box *udValue = nullptr;
 Fl_Box *box0 = nullptr;
 Fl_Box *box1 = nullptr;
 Fl_Box *box2 = nullptr;
@@ -31,13 +41,6 @@ Fl_Box *box6 = nullptr;
 Fl_Box *box7 = nullptr;
 Fl_Box *box8 = nullptr;
 Fl_Box *box9 = nullptr;
-Fl_Box *holeValue = nullptr;
-Fl_Box *yardsValue = nullptr;
-Fl_Box *hdcpValue = nullptr;
-Fl_Box *parValue = nullptr;
-Fl_Box *scoreValue = nullptr;
-Fl_Box *puttValue = nullptr;
-Fl_Box *udValue = nullptr;
 Fl_Box *prevBtn = nullptr;
 Fl_Box *nextBtn = nullptr;
 Fl_Button *okBtn = nullptr;
@@ -105,6 +108,7 @@ void incrementSelection() {
     sel = scoreValue;
     hdr = scoreBox;
   }
+
   scoreBox->color(FL_WHITE);
   puttBox->color(FL_WHITE);
   udBox->color(FL_WHITE);
@@ -510,10 +514,6 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     nextBtn->labelsize(28);
   }  // Fl_Box* o
   {
-    Fl_Box *o = new Fl_Box(195, 25, 90, 65, "Hole");
-    o->labelsize(32);
-  }  // Fl_Box* o
-  {
     okBtn = new Fl_Button(280, 675, 140, 42, "OK");
     okBtn->color(FL_BACKGROUND2_COLOR);
     okBtn->labelsize(32);
@@ -525,6 +525,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     cardBtn->labelsize(32);
     cardBtn->callback(cardBtn_cb, this);
   }  // Fl_Button* bntOK
+
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);

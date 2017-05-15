@@ -14,6 +14,8 @@ using namespace std;
 const int k18 = 18;
 const int kPrecision = 9;
 
+extern int gGpsAvgNum;  // number of UTM points to average
+
 extern int gCurrentHole;
 extern time_t gToday;
 

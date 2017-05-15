@@ -5,6 +5,7 @@
 using namespace std;
 
 int gCurrentHole;
+int gGpsAvgNum;
 time_t gToday;
 
 string gNowTimeStr;
@@ -64,6 +65,7 @@ void initNGCHolesVector() {
 
 void initGlobals() {
   gCurrentHole = 1;
+  gGpsAvgNum = 3; 
   gToday = time(nullptr);
   gNowTimeStr = "";
   gStartHoleTimeStr = "";

@@ -15,7 +15,6 @@
 #include "libgpsmm.h"
 #endif
 
-const size_t kUTMpts = 3;  // number of UTM points to average
 const int RETRY_TIME = 5;
 const int ONE_SECOND = 1000000;
 
@@ -91,9 +90,9 @@ UtmLatLng CLatLng::getMark(size_t avg) {
   return ull;
 }
 
-void CLatLng::setRefMark() { lastMark = getMark(kUTMpts); }
+void CLatLng::setRefMark() { lastMark = getMark(gGpsAvgNum); }
 
-UtmLatLng CLatLng::getNowMark() { return getMark(kUTMpts); }
+UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
 
 string CLatLng::distance(const UtmLatLng& now,
                                      const UtmLatLng& prev) {
@@ -145,7 +144,7 @@ UtmLatLng CLatLng::getMark(size_t avg) {
 
 void CLatLng::setRefMark() {}
 
-UtmLatLng CLatLng::getNowMark() { return getMark(kUTMpts); }
+UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
 
 string CLatLng::distance() { return ""; }
 

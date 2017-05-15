@@ -78,7 +78,7 @@ Course *ngc;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
-#define JACK 1
+#define JACK 0
 #if JACK
  const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 #else
