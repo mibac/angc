@@ -16,6 +16,7 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
+#include <FL/fl_ask.H>
 
 #ifndef CGLOBALS_H
 #include "globals.h"
@@ -76,11 +77,13 @@ FILE *gpsin = nullptr;
 HoleView *hv;
 Course *ngc;
 
+Fl_Button *avgBtn;
+
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
 #define JACK 0
 #if JACK
- const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
+const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 #else
 const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";
 // const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
@@ -118,10 +121,15 @@ void HandleFD(FL_SOCKET fd, void *data) {
       yellowBtn->updateGPStime();
       cll.updateLatLng(gpsStr.c_str());
       UtmLatLng u = cll.getNowMark();
-      if ((fabs(u.lng-hv->ngc->hole[gCurrentHole].startOrient[0].v[0])>3000.0)||
-	 ((fabs(u.lat-hv->ngc->hole[gCurrentHole].startOrient[0].v[1])>3000.0)))
-	hv->ngc->hole[gCurrentHole].setCurrentPoint(hv->ngc->hole[gCurrentHole].startOrient[0].v[0],hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);
-      else hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
+      if ((fabs(u.lng - hv->ngc->hole[gCurrentHole].startOrient[0].v[0]) >
+           3000.0) ||
+          ((fabs(u.lat - hv->ngc->hole[gCurrentHole].startOrient[0].v[1]) >
+            3000.0)))
+        hv->ngc->hole[gCurrentHole].setCurrentPoint(
+            hv->ngc->hole[gCurrentHole].startOrient[0].v[0],
+            hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);
+      else
+        hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
       hv->redraw();
     }
   }
@@ -130,6 +138,23 @@ void HandleFD(FL_SOCKET fd, void *data) {
 
 // This window callback allows the user to save & exit, don't save, or cancel.
 static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
+
+static void avgBtn_cb(Fl_Widget *widget, void *) {
+    char buf[64];
+    sprintf(buf, "Current gGpsAvgNum: %d", gGpsAvgNum);
+    switch ( fl_choice(buf, "++", "Cancel", "--") ) {
+    case 0: // One
+        gGpsAvgNum++;
+        if (gGpsAvgNum > 10) gGpsAvgNum = 10;
+        break;
+    case 1: // Two (default)
+        break;
+      case 2:  // Three
+          gGpsAvgNum--;
+          if (gGpsAvgNum <= 0) gGpsAvgNum = 1;
+          break;
+    }
+}
 
 int main(int argc, char **argv) {
 #if USEGPS
@@ -169,7 +194,7 @@ int main(int argc, char **argv) {
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  yellowBtn = new CYellowBtn(3, kBtnRow1Top, kYardageWid+1, kBoxSize, 0);
+  yellowBtn = new CYellowBtn(3, kBtnRow1Top, kYardageWid + 1, kBoxSize, 0);
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);
@@ -180,7 +205,16 @@ int main(int argc, char **argv) {
   // holeBtn->color(FL_GRAY);
   holeBtn->cursor_color(FL_GRAY);
 
-  clubBtn = new CClubBtn(kClubLeft, kBtnRow1Top, kClubWid, kBoxSize, "Club");
+  clubBtn =
+      new CClubBtn(kClubLeft, kBtnRow1Top, kClubWid, kBoxSize / 2, "Club");
+
+  avgBtn = new Fl_Button(kClubLeft, kBtnRow1Top + 2 + kBoxSize / 2, kClubWid,
+                         kBoxSize / 2 - 2, "Avg");
+  avgBtn->labelfont(1);
+  avgBtn->labelsize(24);
+  avgBtn->color(FL_WHITE);
+  avgBtn->down_color(FL_YELLOW);
+  avgBtn->callback(avgBtn_cb);
 
   scoreBtn =
       new CScoreBtn(kWriteLeft, kBtnRow1Top, kWriteWid, kBoxSize, "Score");
