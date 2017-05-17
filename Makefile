@@ -34,23 +34,23 @@ LDFLAGS = -lGLU \
 all: aNGCApp
 
 aNGCApp: markGps.o \
- C2UTM.o \
- CExitBtn.o \
- CHoleBtn.o \
- CHolesPopup.o \
- CLatLng.o \
- Course.o \
- gps.o \
- HoleView.o \
- CClubPopup.o \
- CClubBtn.o \
- CScoreBtn.o \
- CScoreDlg2.o \
- globals.o \
- CYellowBtn.o \
- CGPStime.o \
- CScorecard.o \
- CScorecardDlg.o
+C2UTM.o \
+CExitBtn.o \
+CHoleBtn.o \
+CHolesPopup.o \
+CLatLng.o \
+Course.o \
+gps.o \
+HoleView.o \
+CClubPopup.o \
+CClubBtn.o \
+CScoreBtn.o \
+CScoreDlg2.o \
+globals.o \
+CYellowBtn.o \
+CGPStime.o \
+CScorecard.o \
+CScorecardDlg.o
 	g++ -o aNGCApp \
 		markGps.o \
 		C2UTM.o \
@@ -71,23 +71,24 @@ aNGCApp: markGps.o \
 		CScorecard.o \
 		CScorecardDlg.o \
 		$(LDFLAGS)
+
 markGps.o: markGps.cpp \
-		C2UTM.h \
-		CExitBtn.h \
-		CHoleBtn.h \
-		CHolesPopup.h \
-		CLatLng.h \
-		Course.h \
-		gps.h \
-		HoleView.h \
-		CClubPopup.h \
-		CScoreBtn.h \
-		CScoreDlg2.h \
-		globals.h \
-		CYellowBtn.h \
-		CGPStime.h \
-		CScorecard.h \
-		CScorecardDlg.h
+C2UTM.h \
+CExitBtn.h \
+CHoleBtn.h \
+CHolesPopup.h \
+CLatLng.h \
+Course.h \
+gps.h \
+HoleView.h \
+CClubPopup.h \
+CScoreBtn.h \
+CScoreDlg2.h \
+globals.h \
+CYellowBtn.h \
+CGPStime.h \
+CScorecard.h \
+CScorecardDlg.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
