@@ -44,6 +44,17 @@ const int kPuttRow = 4;
 const int kUDRow = 5;
 
 bool front9 = true;
+
+struct frontBackResults {
+  int fscore;
+  int bscore;
+  int fputts;
+  int bputts;
+  int fuds;
+  int buds;
+};
+
+frontBackResults results;
 // CScorecard *scorecard = nullptr;
 
 // Draw the row/col headings
@@ -75,7 +86,9 @@ void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
 
 void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
-    DrawData("T\0", X, Y, W, H);
+    DrawData("T", X, Y, W, H);
+  } else if (COL == 10) {
+    DrawData("TT", X, Y, W, H);
   } else if (front9) {
     DrawData(vNGCHoles[COL].hole.c_str(), X, Y, W, H);
   } else {
@@ -84,8 +97,8 @@ void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
 }
 
 void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
-  if (COL == 9) {
-    DrawData("\0", X, Y, W, H);
+  if ((COL == 9) || (COL == 10)) {
+    DrawData(" ", X, Y, W, H);
   } else if (front9) {
     DrawData(vNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
   } else {
@@ -95,7 +108,13 @@ void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
 
 void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
-    DrawData("\0", X, Y, W, H);
+    DrawData(sumRow(kParRow).c_str(), X, Y, W, H);
+  } else if (COL == 10) {
+    if (front9) {
+      DrawData(" ", X, Y, W, H);
+    } else {
+      DrawData("72", X, Y, W, H);
+    }
   } else if (front9) {
     DrawData(vNGCHoles[COL].par.c_str(), X, Y, W, H);
   } else {
@@ -103,16 +122,59 @@ void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
   }
 }
 
+string CScorecard::sumRow(const int row) {
+  int total = 0;
+  string s;
+
+  switch (row) {
+    case kParRow:
+      if (front9) {
+        for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].par);
+      } else {
+        for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].par);
+      }
+      break;
+    case kScoreRow:
+      if (front9) {
+        for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].score);
+        results.fscore = total;
+      } else {
+        for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].score);
+        results.bscore = total;
+      }
+      break;
+    case kPuttRow:
+      if (front9) {
+        for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].putts);
+        results.fputts = total;
+      } else {
+        for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].putts);
+        results.bputts = total;
+      }
+      break;
+    case kUDRow:
+      if (front9) {
+        for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].uds);
+        results.fuds = total;
+      } else {
+        for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].uds);
+        results.buds = total;
+      }
+      break;
+    default:
+      /* code */
+      break;
+  }
+  s = to_string(total);
+  return s;
+}
+
 void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
-    int total = 0;
-    string s;
-    if (front9) {
-      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].score);
-    } else {
-      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].score);
-    }
-    s = to_string(total);
+    DrawData(sumRow(kScoreRow).c_str(), X, Y, W, H);
+  } else if ((COL == 10) && (!front9)) {
+    int n = results.fscore + results.bscore;
+    string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
   } else if (front9) {
     DrawData(vNGCHoles[COL].score.c_str(), X, Y, W, H);
@@ -123,14 +185,10 @@ void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
 
 void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
-    int total = 0;
-    string s;
-    if (front9) {
-      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].putts);
-    } else {
-      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].putts);
-    }
-    s = to_string(total);
+    DrawData(sumRow(kPuttRow).c_str(), X, Y, W, H);
+  } else if ((COL == 10) && (!front9)) {
+    int n = results.fputts + results.bputts;
+    string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
   } else if (front9) {
     DrawData(vNGCHoles[COL].putts.c_str(), X, Y, W, H);
@@ -141,14 +199,10 @@ void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
 
 void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
-    int total = 0;
-    string s;
-    if (front9) {
-      for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].uds);
-    } else {
-      for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].uds);
-    }
-    s = to_string(total);
+    DrawData(sumRow(kUDRow).c_str(), X, Y, W, H);
+  } else if ((COL == 10) && (!front9)) {
+    int n = results.fuds + results.buds;
+    string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
   } else if (front9) {
     DrawData(vNGCHoles[COL].uds.c_str(), X, Y, W, H);
@@ -191,6 +245,8 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
       DrawHeader(str.c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
+      fl_font(FL_HELVETICA_BOLD,24);  // set the font for our drawing operations
+      if (COL == 10) DrawData(" ", X, Y, W, H);
       if (ROW == kHoleRow)
         drawHoleData(COL, X, Y, W, H);
       else if (ROW == kHdcpRow)
@@ -225,7 +281,7 @@ CScorecard::CScorecard(int X, int Y, int W, int H, const char *L)
   // Cols
   cols(MAX_COLS);     // how many columns
   col_header(0);      // enable column headers (along top)
-  col_width_all(40);  // default width of columns
+  col_width_all(36);  // default width of columns
   col_resize(0);      // enable column resizing
 
   color((Fl_Color)159);

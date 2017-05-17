@@ -37,7 +37,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     okB->callback(okB_cb, this);
   }  // Fl_Button* bntOK
   {
-    card = new CScorecard(2, 20, 476, 260);
+    card = new CScorecard(2, 20, 472, 244);
   }  // Fl_Table* o
   {
     frontBtn = new Fl_Button(150, 300, 100, 42, "Front 9");

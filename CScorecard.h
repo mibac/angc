@@ -28,8 +28,12 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Table.H>
 
+#include <string>
+
+using namespace std;
+
 #define MAX_ROWS 6
-#define MAX_COLS 10  // A-Z
+#define MAX_COLS 11  // A-Z
 
 // Derive a class from Fl_Table
 class CScorecard : public Fl_Table {
@@ -56,6 +60,7 @@ class CScorecard : public Fl_Table {
   void drawScoreData(int COL, int X, int Y, int W, int H);
   void drawPuttData(int COL, int X, int Y, int W, int H);
   void drawUDData(int COL, int X, int Y, int W, int H);
+  string sumRow(const int row);
 
  public:
   // Constructor
