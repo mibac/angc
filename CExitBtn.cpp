@@ -24,7 +24,7 @@
 
 using namespace std;
 
-const string path = "/home/pi/golf/angc/";
+const string path = "/home/pi/golf/angc/stats/";
 
 void CExitBtn::setFileSuffix() {
   ostringstream oss;
