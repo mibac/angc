@@ -24,6 +24,7 @@ extern string gStartHoleTimeStr;
 extern string gStartRoundTimeStr;
 
 extern bool bRoundStarted;
+extern bool gFront9;
 
 struct UtmLatLng {
   double lat;

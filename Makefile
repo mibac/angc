@@ -50,7 +50,8 @@ globals.o \
 CYellowBtn.o \
 CGPStime.o \
 CScorecard.o \
-CScorecardDlg.o
+CScorecardDlg.o \
+CFrontBackBtn.o
 	g++ -o aNGCApp \
 		markGps.o \
 		C2UTM.o \
@@ -70,6 +71,7 @@ CScorecardDlg.o
 		CGPStime.o \
 		CScorecard.o \
 		CScorecardDlg.o \
+		CFrontBackBtn.o \
 		$(LDFLAGS)
 
 markGps.o: markGps.cpp \
@@ -136,11 +138,14 @@ globals.o: globals.cpp globals.h
 CGPStime.o: CGPStime.cpp CGPStime.h
 	g++ -c $<  $(CXXFLAGS)
 
-CScorecard.o: CScorecard.cpp CScorecard.h globals.h
+CScorecard.o: CScorecard.cpp CScorecard.h globals.h CFrontBackBtn.h
 	g++ -c $<  $(CXXFLAGS)
 
 CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h
 	g++ -c $<  $(CXXFLAGS)
+
+CFrontBackBtn.o: CFrontBackBtn.cpp CFrontBackBtn.h globals.h
+		g++ -c $<  $(CXXFLAGS)
 
 clean:
 	rm *.o

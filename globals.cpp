@@ -13,6 +13,7 @@ string gStartHoleTimeStr;
 string gStartRoundTimeStr;
 
 bool bRoundStarted;
+bool gFront9;
 
 ofstream gFileStats;
 ofstream gFileClub;
@@ -65,13 +66,14 @@ void initNGCHolesVector() {
 
 void initGlobals() {
   gCurrentHole = 1;
-  gGpsAvgNum = 3; 
+  gGpsAvgNum = 3;
   gToday = time(nullptr);
   gNowTimeStr = "";
   gStartHoleTimeStr = "";
   gStartRoundTimeStr = "";
 
   bRoundStarted = false;
+  gFront9 = true;
 
   for (int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;
 

@@ -8,25 +8,20 @@
 #include "CScorecard.h"
 #endif
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
+#ifndef CFRONTBACKBTN_H
+#include "CFrontBackBtn.h"
+#endif
+
 CScorecardDlg *scorecardDlg = nullptr;
 Fl_Button *okB = nullptr;
-Fl_Button *frontBtn = nullptr;
-Fl_Button *backBtn = nullptr;
+CFrontBackBtn *fbBtn = nullptr;
 CScorecard *card = nullptr;
 
-void okB_cb(Fl_Widget *w, void *data) {
-  scorecardDlg->hide();
-}
-
-void frontBtn_cb(Fl_Widget *w, void *data) {
-  front9 = true;
-  scorecardDlg->redraw();
-}
-
-void backBtn_cb(Fl_Widget *w, void *data) {
-  front9 = false;
-  scorecardDlg->redraw();
-}
+void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
 
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
@@ -35,22 +30,15 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     okB->color(FL_BACKGROUND2_COLOR);
     okB->labelsize(32);
     okB->callback(okB_cb, this);
-  }  // Fl_Button* bntOK
-  {
-    card = new CScorecard(2, 20, 472, 244);
-  }  // Fl_Table* o
-  {
-    frontBtn = new Fl_Button(150, 300, 100, 42, "Front 9");
-    frontBtn->color((Fl_Color)159);
-    frontBtn->labelsize(24);
-    frontBtn->callback(frontBtn_cb, this);
-  }  // Fl_Button* bntOK
-  {
-    backBtn = new Fl_Button(300, 300, 100, 42, "Back 9");
-    backBtn->color((Fl_Color)159);
-    backBtn->labelsize(24);
-    backBtn->callback(backBtn_cb, this);
-  }  // Fl_Button* bntOK
+  }
+  { card = new CScorecard(2, 20, 472, 244); }
+  { fbBtn = new CFrontBackBtn(190, 300, 100, 42); }
+  // {
+  //   backBtn = new Fl_Button(300, 300, 100, 42, "Back 9");
+  //   backBtn->color((Fl_Color)159);
+  //   backBtn->labelsize(24);
+  //   backBtn->callback(backBtn_cb, this);
+  // }  // Fl_Button* bntOK
 
   color((Fl_Color)159);
   set_modal();

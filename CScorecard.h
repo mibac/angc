@@ -70,10 +70,6 @@ class CScorecard : public Fl_Table {
   ~CScorecard() {}
 };
 
-// extern void createScorecard();
-// extern CScorecard *scorecard;
-extern bool front9;
-
 #endif
 //
 // End of "$Id$".

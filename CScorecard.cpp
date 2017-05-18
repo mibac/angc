@@ -43,7 +43,6 @@ const int kScoreRow = 3;
 const int kPuttRow = 4;
 const int kUDRow = 5;
 
-bool front9 = true;
 
 struct frontBackResults {
   int fscore;
@@ -89,7 +88,7 @@ void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
     DrawData("T", X, Y, W, H);
   } else if (COL == 10) {
     DrawData("TT", X, Y, W, H);
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].hole.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].hole.c_str(), X, Y, W, H);
@@ -99,7 +98,7 @@ void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
 void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
   if ((COL == 9) || (COL == 10)) {
     DrawData(" ", X, Y, W, H);
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].hdcp.c_str(), X, Y, W, H);
@@ -110,12 +109,12 @@ void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kParRow).c_str(), X, Y, W, H);
   } else if (COL == 10) {
-    if (front9) {
+    if (gFront9) {
       DrawData(" ", X, Y, W, H);
     } else {
       DrawData("72", X, Y, W, H);
     }
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].par.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].par.c_str(), X, Y, W, H);
@@ -128,14 +127,14 @@ string CScorecard::sumRow(const int row) {
 
   switch (row) {
     case kParRow:
-      if (front9) {
+      if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].par);
       } else {
         for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].par);
       }
       break;
     case kScoreRow:
-      if (front9) {
+      if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].score);
         results.fscore = total;
       } else {
@@ -144,7 +143,7 @@ string CScorecard::sumRow(const int row) {
       }
       break;
     case kPuttRow:
-      if (front9) {
+      if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].putts);
         results.fputts = total;
       } else {
@@ -153,7 +152,7 @@ string CScorecard::sumRow(const int row) {
       }
       break;
     case kUDRow:
-      if (front9) {
+      if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].uds);
         results.fuds = total;
       } else {
@@ -172,11 +171,11 @@ string CScorecard::sumRow(const int row) {
 void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kScoreRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!front9)) {
+  } else if ((COL == 10) && (!gFront9)) {
     int n = results.fscore + results.bscore;
     string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].score.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].score.c_str(), X, Y, W, H);
@@ -186,11 +185,11 @@ void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
 void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kPuttRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!front9)) {
+  } else if ((COL == 10) && (!gFront9)) {
     int n = results.fputts + results.bputts;
     string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].putts.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].putts.c_str(), X, Y, W, H);
@@ -200,11 +199,11 @@ void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
 void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kUDRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!front9)) {
+  } else if ((COL == 10) && (!gFront9)) {
     int n = results.fuds + results.buds;
     string s = to_string(n);
     DrawData(s.c_str(), X, Y, W, H);
-  } else if (front9) {
+  } else if (gFront9) {
     DrawData(vNGCHoles[COL].uds.c_str(), X, Y, W, H);
   } else {
     DrawData(vNGCHoles[COL + 9].uds.c_str(), X, Y, W, H);
