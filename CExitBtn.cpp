@@ -28,8 +28,16 @@ const string path = "/home/pi/golf/angc/stats/";
 
 void CExitBtn::setFileSuffix() {
   ostringstream oss;
-  oss << gToday;
-  suffix = oss.str() + ".txt";
+  struct tm * t;
+  t = localtime(&gToday);
+  string y = to_string(t->tm_year - 100);
+  string m = to_string(t->tm_mon);
+  if (m.length() == 1)
+    m = "0" + m;
+  string d = to_string(t->tm_mday);
+  if (d.length() == 1)
+    d = "0" + d;
+  suffix =  y + m + d + ".txt";
 }
 
 void CExitBtn::writeGPS() {
