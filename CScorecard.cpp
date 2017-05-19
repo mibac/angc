@@ -76,7 +76,10 @@ void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
   fl_rectf(X, Y, W, H);
   // Draw cell data
   fl_color(FL_GRAY0);
-  fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+  string str(s);
+  if (str == "0")
+    str = " ";
+  fl_draw(str.c_str(), X, Y, W, H, FL_ALIGN_CENTER);
   // Draw box border
   fl_color(color());
   fl_rect(X, Y, W, H);
