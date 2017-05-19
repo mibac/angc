@@ -30,9 +30,9 @@ void CFrontBackBtn::staticfbBtn_CB(Fl_Widget *w, void *data) {
 
 void CFrontBackBtn::draw() {
   if (gFront9)
-    label("Front 9");
-  else
     label("Back 9");
+  else
+    label("Front 9");
   Fl_Button::draw();
 }
 

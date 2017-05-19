@@ -60,17 +60,49 @@ class CNGCHoles {
     uds = ud;
   }
   void setHoleScore(const string s, const string p, const string u) {
-    score =s;
+    score = s;
     putts = p;
     uds = u;
   }
   friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
 };
+
+const int kDr = 0;
+const int k3w = 1;
+const int k5w = 2;
+const int k7w = 3;
+const int kHy = 4;
+const int k2 = 5;
+const int k3 = 6;
+const int k4 = 7;
+const int k5 = 8;
+const int k6 = 9;
+const int k7 = 10;
+const int k8 = 11;
+const int k9 = 12;
+const int kPW = 13;
+const int kGW = 14;
+const int kSW = 15;
+const int kLW = 16;
+const int kx = 17;
+
+extern array<string, k18> clubNamesRA;
+
+struct ShotStats {
+  string club;
+  UtmLatLng utm;
+};
+const int kMAX_SHOTS = 6;
+extern int gShotCount;
+extern array<ShotStats, kMAX_SHOTS> shotsRA;
+extern void initShotStats();
+
 extern vector<CNGCHoles> vNGCHoles;
 
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
 extern vector<string> vClubsUsed;
+
 extern array<bool, k18> bPlayedHole;
 
 extern ofstream gFileStats;

@@ -16,12 +16,22 @@
 #include "CFrontBackBtn.h"
 #endif
 
+#ifndef CCLUBDLG_H
+#include "CClubDlg.h"
+#endif
+
 CScorecardDlg *scorecardDlg = nullptr;
 Fl_Button *okB = nullptr;
 CFrontBackBtn *fbBtn = nullptr;
 CScorecard *card = nullptr;
+CClubDlg *clubDlg = nullptr;
+Fl_Button *clubB = nullptr;
 
 void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
+
+void clubB_cb(Fl_Widget *w, void *data) {
+  clubDlg = new CClubDlg(0, 0, 480, 800);
+}
 
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
@@ -33,13 +43,12 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   }
   { card = new CScorecard(2, 20, 472, 244); }
   { fbBtn = new CFrontBackBtn(190, 300, 100, 42); }
-  // {
-  //   backBtn = new Fl_Button(300, 300, 100, 42, "Back 9");
-  //   backBtn->color((Fl_Color)159);
-  //   backBtn->labelsize(24);
-  //   backBtn->callback(backBtn_cb, this);
-  // }  // Fl_Button* bntOK
-
+  {
+    clubB = new Fl_Button(190, 358, 100, 42, "Clubs");
+    clubB->color(FL_BACKGROUND2_COLOR);
+    clubB->labelsize(32);
+    clubB->callback(clubB_cb, this);
+  }
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);

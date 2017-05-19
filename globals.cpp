@@ -25,6 +25,10 @@ vector<string> vClubsUsed;
 array<bool, k18> bPlayedHole;
 
 vector<CNGCHoles> vNGCHoles;
+array<string, k18> clubNamesRA;
+
+int gShotCount;
+array<ShotStats, kMAX_SHOTS> shotsRA;
 
 // clang-format off
 ostream& operator<<(ostream& strm, const CNGCHoles& h) {
@@ -44,7 +48,7 @@ void initNGCHolesVector() {
     CNGCHoles h;
     vNGCHoles.push_back(h);
   }
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "0", "0", "0");
+      vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "0", "0", "0");
   vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "0", "0", "0");
   vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "0", "0", "0");
   vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "0", "0", "0");
@@ -64,6 +68,36 @@ void initNGCHolesVector() {
   vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "0", "0", "0");
 }
 
+void initClubNames() {
+  clubNamesRA[kDr] = "Dr";
+  clubNamesRA[k3w] = "3w";
+  clubNamesRA[k5w] = "5w";
+  clubNamesRA[k7w] = "7w";
+  clubNamesRA[kHy] = "Hy";
+  clubNamesRA[k2] = "2";
+  clubNamesRA[k3] = "3";
+  clubNamesRA[k4] = "4";
+  clubNamesRA[k5] = "5";
+  clubNamesRA[k6] = "6";
+  clubNamesRA[k7] = "7";
+  clubNamesRA[k8] = "8";
+  clubNamesRA[k9] = "9";
+  clubNamesRA[kPW] = "PW";
+  clubNamesRA[kGW] = "GW";
+  clubNamesRA[kSW] = "SW";
+  clubNamesRA[kLW] = "LW";
+  clubNamesRA[kx] = "x";
+}
+
+void initShotStats() {
+    gShotCount = 0;
+    for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
+        shotsRA[ix].club = "";
+        shotsRA[ix].utm.lat = 0.0;
+        shotsRA[ix].utm.lng = 0.0;
+    }
+}
+
 void initGlobals() {
   gCurrentHole = 1;
   gGpsAvgNum = 3;
@@ -78,4 +112,6 @@ void initGlobals() {
   for (int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;
 
   initNGCHolesVector();
+  initClubNames();
+  initShotStats();
 }

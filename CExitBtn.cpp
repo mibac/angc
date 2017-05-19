@@ -18,9 +18,9 @@
 #include "CHoleBtn.h"
 #endif
 
-#ifndef CCLUBBTN_H
-#include "CClubBtn.h"
-#endif
+// #ifndef CCLUBBTN_H
+// #include "CClubBtn.h"
+// #endif
 
 using namespace std;
 
@@ -83,7 +83,7 @@ void CExitBtn::Button_CB() {
     gFileClub.close();
     gFileStats.close();
     gFileGPS.close();
-    if (myClubPopup != nullptr) myClubPopup->hide();
+    // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
@@ -91,7 +91,7 @@ void CExitBtn::Button_CB() {
     writeGPS();
     writeClubsUsed();
     writeStats();
-    if (myClubPopup != nullptr) myClubPopup->hide();
+    // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();

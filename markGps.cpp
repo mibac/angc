@@ -15,8 +15,8 @@
 #include <FL/Fl_Timer.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
 #include <FL/fl_ask.H>
+#include <FL/fl_draw.H>
 
 #ifndef CGLOBALS_H
 #include "globals.h"
@@ -46,9 +46,9 @@
 #include "CHoleBtn.h"  //CHoleBtn *holeBtn
 #endif
 
-#ifndef CCLUBBTN_H
-#include "CClubBtn.h"
-#endif
+// #ifndef CCLUBBTN_H
+// #include "CClubBtn.h"
+// #endif
 
 #ifndef CScoreBtn_H
 #include "CScoreBtn.h"
@@ -66,18 +66,17 @@ using namespace std;
 
 Fl_Window *win;
 Fl_Output *my_input;
-Fl_Button *btnMark;
-Fl_Button *btnWrite;
+Fl_Button *markBtn;
 CYellowBtn *yellowBtn;
 CHoleBtn *holeBtn;
-CClubBtn *clubBtn;
+// CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
 CExitBtn *exitBtn;
 FILE *gpsin = nullptr;
 HoleView *hv;
 Course *ngc;
 
-Fl_Button *avgBtn;
+// Fl_Button *avgBtn;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
@@ -89,6 +88,17 @@ const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";
 // const char *GPS_CMD = "gpspipe -r /dev/ttyACM0";
 // const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
 #endif
+
+// This window callback allows the user to save & exit, don't save, or cancel.
+static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
+
+static void markBtn_cb(Fl_Widget *widget, void *) {
+    UtmLatLng u = cll.getNowMark();
+    shotsRA[gShotCount].utm = u;
+    gShotCount++;
+    if (gShotCount > kMAX_SHOTS)
+        gShotCount = kMAX_SHOTS;
+}
 
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
@@ -136,26 +146,6 @@ void HandleFD(FL_SOCKET fd, void *data) {
 #endif
 }
 
-// This window callback allows the user to save & exit, don't save, or cancel.
-static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
-
-static void avgBtn_cb(Fl_Widget *widget, void *) {
-    char buf[64];
-    sprintf(buf, "Current gGpsAvgNum: %d", gGpsAvgNum);
-    switch ( fl_choice(buf, "++", "Cancel", "--") ) {
-    case 0: // One
-        gGpsAvgNum++;
-        if (gGpsAvgNum > 10) gGpsAvgNum = 10;
-        break;
-    case 1: // Two (default)
-        break;
-      case 2:  // Three
-          gGpsAvgNum--;
-          if (gGpsAvgNum <= 0) gGpsAvgNum = 1;
-          break;
-    }
-}
-
 int main(int argc, char **argv) {
 #if USEGPS
   if (!(gpsin = popen(GPS_CMD, "r"))) {
@@ -172,11 +162,11 @@ int main(int argc, char **argv) {
   const int kYardageWid = 130;
   const int kHoleLeft = kYardageLeft + kYardageWid + kXDelta;
   const int kHoleWid = kBoxSize + kXDelta;
-  const int kClubLeft = kHoleLeft + kHoleWid + kXDelta;
-  const int kClubWid = kBoxSize + kXDelta;
-  const int kWriteLeft = kClubLeft + kClubWid + kXDelta;
-  const int kWriteWid = kBoxSize + kXDelta;
-  const int kExitLeft = kWriteLeft + kWriteWid + kXDelta;
+  const int kMarkLeft = kHoleLeft + kHoleWid + kXDelta;
+  const int kMarkWid = kBoxSize + kXDelta;
+  const int kScoreLeft = kMarkLeft + kMarkWid + kXDelta;
+  const int kScoreWid = kBoxSize + kXDelta;
+  const int kExitLeft = kScoreLeft + kScoreWid + kXDelta;
   const int kExitWid = kBoxSize;
 
   initGlobals();  // in globals.h
@@ -205,19 +195,15 @@ int main(int argc, char **argv) {
   // holeBtn->color(FL_GRAY);
   holeBtn->cursor_color(FL_GRAY);
 
-  clubBtn =
-      new CClubBtn(kClubLeft, kBtnRow1Top, kClubWid, kBoxSize / 2, "Club");
-
-  avgBtn = new Fl_Button(kClubLeft, kBtnRow1Top + 2 + kBoxSize / 2, kClubWid,
-                         kBoxSize / 2 - 2, "Avg");
-  avgBtn->labelfont(1);
-  avgBtn->labelsize(24);
-  avgBtn->color(FL_WHITE);
-  avgBtn->down_color(FL_YELLOW);
-  avgBtn->callback(avgBtn_cb);
+  markBtn = new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark");
+  markBtn->labelfont(1);
+  markBtn->labelsize(24);
+  markBtn->color(FL_WHITE);
+  markBtn->down_color(FL_YELLOW);
+  markBtn->callback(markBtn_cb);
 
   scoreBtn =
-      new CScoreBtn(kWriteLeft, kBtnRow1Top, kWriteWid, kBoxSize, "Score");
+      new CScoreBtn(kScoreLeft, kBtnRow1Top, kScoreWid, kBoxSize, "Score");
 
   exitBtn = new CExitBtn(kExitLeft, kBtnRow1Top, kExitWid, kBoxSize, "Exit");
   exitBtn->mainwin = win;

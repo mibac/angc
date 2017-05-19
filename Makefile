@@ -42,8 +42,7 @@ CLatLng.o \
 Course.o \
 gps.o \
 HoleView.o \
-CClubPopup.o \
-CClubBtn.o \
+CClubPopup2.o \
 CScoreBtn.o \
 CScoreDlg2.o \
 globals.o \
@@ -51,7 +50,9 @@ CYellowBtn.o \
 CGPStime.o \
 CScorecard.o \
 CScorecardDlg.o \
-CFrontBackBtn.o
+CFrontBackBtn.o \
+CClubDlg.o \
+CClubcard.o
 	g++ -o aNGCApp \
 		markGps.o \
 		C2UTM.o \
@@ -62,8 +63,7 @@ CFrontBackBtn.o
 		Course.o \
 		gps.o \
 		HoleView.o \
-		CClubPopup.o \
-		CClubBtn.o \
+		CClubPopup2.o \
 		CScoreBtn.o \
 		CScoreDlg2.o \
 		globals.o \
@@ -72,6 +72,8 @@ CFrontBackBtn.o
 		CScorecard.o \
 		CScorecardDlg.o \
 		CFrontBackBtn.o \
+		CClubDlg.o \
+		CClubcard.o \
 		$(LDFLAGS)
 
 markGps.o: markGps.cpp \
@@ -83,14 +85,16 @@ CLatLng.h \
 Course.h \
 gps.h \
 HoleView.h \
-CClubPopup.h \
+CClubPopup2.h \
 CScoreBtn.h \
 CScoreDlg2.h \
 globals.h \
 CYellowBtn.h \
 CGPStime.h \
 CScorecard.h \
-CScorecardDlg.h
+CScorecardDlg.h \
+CClubDlg.h \
+CClubcard.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -99,7 +103,7 @@ C2UTM.o: C2UTM.cpp C2UTM.h
 CLatLng.o: CLatLng.cpp CLatLng.h gps.h C2UTM.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleBtn.h CClubBtn.h globals.h
+CExitBtn.o: CExitBtn.cpp CExitBtn.h CLatLng.h CHoleBtn.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CHoleBtn.o: CHoleBtn.cpp CHoleBtn.h CHolesPopup.h CLatLng.h globals.h
@@ -117,11 +121,8 @@ gps.o: gps.cpp gps.h
 HoleView.o: HoleView.cpp HoleView.h Course.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CClubPopup.o: CClubPopup.cpp CClubPopup.h
+CClubPopup2.o: CClubPopup2.cpp CClubPopup2.h globals.h CClubcard.h
 		g++ -c $<  $(CXXFLAGS)
-
-CClubBtn.o: CClubBtn.cpp CClubBtn.h CClubPopup.h CLatLng.h
-			g++ -c $<  $(CXXFLAGS)
 
 CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h
 			g++ -c $<  $(CXXFLAGS)
@@ -145,7 +146,13 @@ CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h
 	g++ -c $<  $(CXXFLAGS)
 
 CFrontBackBtn.o: CFrontBackBtn.cpp CFrontBackBtn.h globals.h
-		g++ -c $<  $(CXXFLAGS)
+	g++ -c $<  $(CXXFLAGS)
+
+CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h CClubcard.h CClubPopup2.h
+	g++ -c $<  $(CXXFLAGS)
+
+CClubcard.o: CClubcard.cpp CClubcard.h globals.h
+	g++ -c $<  $(CXXFLAGS)
 
 clean:
 	rm *.o
