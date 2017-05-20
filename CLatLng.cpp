@@ -22,7 +22,8 @@ GPS myGPS;
 CLatLng cll;
 
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
-  strm << "(" << ull.lng << ",E," << ull.lat << ",N)";
+
+  strm << setprecision(10) << ull.lng << "\t" << ull.lat;
   return strm;
 }
 

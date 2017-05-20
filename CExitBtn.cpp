@@ -24,24 +24,8 @@
 
 using namespace std;
 
-const string path = "/home/pi/golf/angc/stats/";
-
-void CExitBtn::setFileSuffix() {
-  ostringstream oss;
-  struct tm * t;
-  t = localtime(&gToday);
-  string y = to_string(t->tm_year - 100);
-  string m = to_string(t->tm_mon);
-  if (m.length() == 1)
-    m = "0" + m;
-  string d = to_string(t->tm_mday);
-  if (d.length() == 1)
-    d = "0" + d;
-  suffix =  y + m + d + ".txt";
-}
-
 void CExitBtn::writeGPS() {
-  string s = path + "aGPS_" + suffix;
+  string s = path + "aGPS_" + getFileSuffix();
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
   gFileGPS << asctime(std::localtime(&gToday));
@@ -49,21 +33,12 @@ void CExitBtn::writeGPS() {
   gFileGPS.close();
 }
 
-void CExitBtn::writeClubsUsed() {
-  // string s = path + "aClubs_" + suffix;
-  // gFileClub.open(s.c_str());
-  // gFileClub << setprecision(kPrecision);
-  // gFileClub << asctime(std::localtime(&gToday));
-  // for (auto itr : vClubsUsed) gFileClub << itr;
-  // gFileClub.close();
-}
-
-void CExitBtn::writeStats() {
-  string s = path + "aStats_" + suffix;
-  gFileStats.open(s.c_str());
-  gFileStats << asctime(std::localtime(&gToday));
-  for (auto itr : vNGCHoles) gFileStats << itr;
-  gFileStats.close();
+void CExitBtn::writeScoreStats() {
+  string s = path + "aStats_" + getFileSuffix();
+  gFileScoreStats.open(s.c_str());
+  gFileScoreStats << asctime(std::localtime(&gToday));
+  for (auto itr : vNGCHoles) gFileScoreStats << itr;
+  gFileScoreStats.close();
 }
 
 void CExitBtn::Button_CB() {
@@ -73,8 +48,8 @@ void CExitBtn::Button_CB() {
                          "Cancel"       // 2
                          );
   if (result == 0) {  // Close without saving
-    gFileClub.close();
-    gFileStats.close();
+    gFileShotStats.close();
+    gFileScoreStats.close();
     gFileGPS.close();
     // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
@@ -82,8 +57,8 @@ void CExitBtn::Button_CB() {
     mainwin->hide();
   } else if (result == 1) {  // Save and close
     writeGPS();
-    writeClubsUsed();
-    writeStats();
+    writeScoreStats();
+    gFileScoreStats.close();
     // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
@@ -101,6 +76,5 @@ void CExitBtn::staticButton_CB(Fl_Widget *, void *data) {
 
 CExitBtn::CExitBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-  setFileSuffix();
   callback(staticButton_CB, (void *)this);
 }

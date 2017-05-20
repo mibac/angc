@@ -91,11 +91,16 @@ const int kx = 17;
 
 extern array<string, k18> clubNamesRA;
 
+const string path = "/home/pi/golf/angc/stats/";
+
 struct ShotStats {
   string club;
+  int yards;
   UtmLatLng utm;
+  friend ostream& operator<<(ostream& strm, const ShotStats& sra);
 };
-const int kMAX_SHOTS = 6;
+
+const int kMAX_SHOTS = 7;
 extern int gShotCount;
 extern array<ShotStats, kMAX_SHOTS> shotsRA;
 extern void initShotStats();
@@ -108,13 +113,14 @@ extern vector<UtmLatLng> vUTM;
 
 extern array<bool, k18> bPlayedHole;
 
-extern ofstream gFileStats;
-extern ofstream gFileClub;
+extern ofstream gFileScoreStats;
+extern ofstream gFileShotStats;
 extern ofstream gFileGPS;
 
 extern void initGlobals();
-extern int countValidDistances();
+extern int getValidDistancesCount();
 extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button * b);
+extern string getFileSuffix();
 
 #endif  // CGLOBALS_H

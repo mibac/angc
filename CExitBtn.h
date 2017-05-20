@@ -10,11 +10,8 @@
 using namespace std;
 
 class CExitBtn : public Fl_Button {
-  string suffix;
-  void setFileSuffix();
   void writeGPS();
-  void writeClubsUsed();
-  void writeStats();
+  void writeScoreStats();
 
   // Handle numeric keypad buttons pressed
   static void staticButton_CB(Fl_Widget *w, void *data);

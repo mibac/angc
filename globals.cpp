@@ -17,8 +17,8 @@ string gStartRoundTimeStr;
 bool bRoundStarted;
 bool gFront9;
 
-ofstream gFileStats;
-ofstream gFileClub;
+ofstream gFileScoreStats;
+ofstream gFileShotStats;
 ofstream gFileGPS;
 
 vector<string> vGPS;  // the complete round of nmea GPGGA sentences
@@ -41,6 +41,16 @@ ostream& operator<<(ostream& strm, const CNGCHoles& h) {
         << h.score << "\t"
         << h.putts << "\t"
         << h.uds << endl;
+  return strm;
+}
+// clang-format on
+
+// clang-format off
+ostream& operator<<(ostream& strm, const ShotStats& sra) {
+  strm << sra.club << "\t"
+       << sra.yards << "\t"
+        << sra.utm.lat << "\t"
+        << sra.utm.lng;
   return strm;
 }
 // clang-format on
@@ -95,9 +105,17 @@ void initShotStats() {
     gShotCount = 0;
     for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
         shotsRA[ix].club = "";
+        shotsRA[ix].yards = 0;
         shotsRA[ix].utm.lat = 0.0;
         shotsRA[ix].utm.lng = 0.0;
     }
+}
+
+void writeShotStatsFileHeader() {
+    string s = path + "aShots_" + getFileSuffix();
+    gFileShotStats.open(s.c_str());
+    gFileShotStats << asctime(std::localtime(&gToday));
+    gFileShotStats.flush();
 }
 
 void initGlobals() {
@@ -116,9 +134,10 @@ void initGlobals() {
   initNGCHolesVector();
   initClubNames();
   initShotStats();
+  writeShotStatsFileHeader();
 }
 
-int countValidDistances() {
+int getValidDistancesCount() {
   int num = 0;
   for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
     if (shotsRA[ix].utm.lat != 0) num++;
@@ -141,4 +160,20 @@ void setButtonStyle(Fl_Button * b) {
     b->down_color(FL_YELLOW);
     b->labelfont(1);
     b->labelsize(36);
+}
+
+string getFileSuffix() {
+  string suffix;
+  ostringstream oss;
+  struct tm * t;
+  t = localtime(&gToday);
+  string y = to_string(t->tm_year - 100);
+  string m = to_string(t->tm_mon);
+  if (m.length() == 1)
+    m = "0" + m;
+  string d = to_string(t->tm_mday);
+  if (d.length() == 1)
+    d = "0" + d;
+  suffix =  y + m + d + ".txt";
+  return suffix;
 }

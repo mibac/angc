@@ -25,6 +25,10 @@
 #ifndef CCLUBCARD_H
 #define CCLUBCARD_H
 
+#ifndef CGLOBALS_H
+#include "globals.h"
+#endif
+
 #include <FL/Fl.H>
 #include <FL/Fl_Table.H>
 
@@ -32,8 +36,8 @@
 
 using namespace std;
 
-#define MAX_R 6
-#define MAX_C 2  // A-Z
+const int MAX_R = kMAX_SHOTS;
+const int MAX_C = 2;  // A-Z
 
 // Derive a class from Fl_Table
 class CClubcard : public Fl_Table {

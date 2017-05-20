@@ -26,12 +26,12 @@
 #include "CClubcard.h"
 #endif
 
-#ifndef CGLOBALS_H
-#include "globals.h"
-#endif
-
 #ifndef CLATLNG_H
 #include "CLatLng.h"
+#endif
+
+#ifndef CGLOBALS_H
+#include "globals.h"
 #endif
 
 #include <FL/fl_draw.H>
@@ -46,6 +46,8 @@ const int kRow3 = 2;
 const int kRow4 = 3;
 const int kRow5 = 4;
 const int kRow6 = 5;
+
+int validDist = 0;
 
 void setupTestClubVector() {
   LatLng ll;
@@ -81,7 +83,6 @@ void setupTestClubVector() {
   utm = cll.NMEA2UTM(ll);
   shotsRA[4].utm = utm;
 
-
   shotsRA[5].club = "";
   shotsRA[5].utm.lat = 0;
   shotsRA[5].utm.lng = 0;
@@ -100,10 +101,12 @@ void CClubcard::DrawHeader(const char *s, int X, int Y, int W, int H) {
 // Draw the cell data
 //    Dark gray text on white background with subtle border
 //
-void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW, int COL) {
+void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
+                         int COL) {
   fl_push_clip(X, Y, W, H);
   // Draw cell bg
-  fl_color(is_selected(ROW,COL)?FL_YELLOW:FL_WHITE); fl_rectf(X,Y,W,H);
+  fl_color(is_selected(ROW, COL) ? FL_YELLOW : FL_WHITE);
+  fl_rectf(X, Y, W, H);
   // fl_color(FL_WHITE);
   fl_rectf(X, Y, W, H);
   // Draw cell data
@@ -116,17 +119,18 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW, int
 }
 
 void CClubcard::drawClubData(int ROW, int COL, int X, int Y, int W, int H) {
-  int num = countValidDistances();
-  if ((COL == 0) && (ROW < num)) {
+  getValidDistancesCount();
+  if ((COL == 0) && (ROW < validDist)) {
     DrawData(shotsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
   }
 }
 
 void CClubcard::drawDistanceData(int ROW, int COL, int X, int Y, int W, int H) {
   int d = 0;
-  int num = countValidDistances();
-  if ((COL == 1) && (ROW < num)) {
+  getValidDistancesCount();
+  if ((COL == 1) && (ROW < validDist)) {
     d = calcUTMdistance(shotsRA[ROW + 1].utm, shotsRA[ROW].utm);
+    shotsRA[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
   }
 }
@@ -154,18 +158,21 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         DrawHeader("Distance", X, Y, W, H);
       return;
     case CONTEXT_ROW_HEADER:  // Draw row headers
-      if (ROW == 0)
-        DrawHeader("1", X, Y, W, H);
-      else if (ROW == 1)
-        DrawHeader("2", X, Y, W, H);
-      else if (ROW == 2)
-        DrawHeader("3", X, Y, W, H);
-      else if (ROW == 3)
-        DrawHeader("4", X, Y, W, H);
-      else if (ROW == 4)
-        DrawHeader("5", X, Y, W, H);
-      else if (ROW == 5)
-        DrawHeader("6", X, Y, W, H);
+                              //   if (ROW == 0)
+                              //     DrawHeader("1", X, Y, W, H);
+                              //   else if (ROW == 1)
+                              //     DrawHeader("2", X, Y, W, H);
+                              //   else if (ROW == 2)
+                              //     DrawHeader("3", X, Y, W, H);
+                              //   else if (ROW == 3)
+                              //     DrawHeader("4", X, Y, W, H);
+                              //   else if (ROW == 4)
+                              //     DrawHeader("5", X, Y, W, H);
+                              //   else if (ROW == 5)
+                              //     DrawHeader("6", X, Y, W, H);
+                              //   return;
+      if (ROW < validDist)
+        DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
                         // set the font for our drawing operations
@@ -201,8 +208,8 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   end();  // end the Fl_Table group
 
   setupTestClubVector();
+  validDist = getValidDistancesCount();
   set_selection(0, 0, 0, 0);
-
 }
 
 //

@@ -38,7 +38,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   const int kBtnW = 140;
   { card = new CScorecard(2, 20, 472, 244); }
   {
-    okB = new Fl_Button(174, 675, kBtnW, kBtnH, "OK");
+    okB = new Fl_Button(174, 665, kBtnW, kBtnH, "OK");
     setButtonStyle(okB);
     okB->callback(okB_cb, this);
   }
@@ -47,7 +47,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     setButtonStyle(fbBtn);
   }
   {
-    clubB = new Fl_Button(190, 358, kBtnW, kBtnH, "Clubs");
+    clubB = new Fl_Button(190, 358, kBtnW, kBtnH, "Shots");
     setButtonStyle(clubB);
     clubB->callback(clubB_cb, this);
   }
