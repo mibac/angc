@@ -14,4 +14,7 @@ aStats*
 aGPS*
 .DS_Store
 *.gch
-stats/*
+aGPS*
+aClubs*
+aStats*
+aShots*
