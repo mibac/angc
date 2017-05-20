@@ -36,6 +36,10 @@ struct UtmLatLng {
     lat = 0.0;
     lng = 0.0;
   }
+  UtmLatLng(const double latitude, const double longitude) {
+    lat = latitude;
+    lng = longitude;
+  }
 };
 
 class CNGCHoles {

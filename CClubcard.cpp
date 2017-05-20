@@ -49,43 +49,41 @@ const int kRow6 = 5;
 
 int validDist = 0;
 
+
 void setupTestClubVector() {
-  LatLng ll;
-  UtmLatLng utm;
-  CLatLng cll;
+  UtmLatLng utm(4922170, 488471);
   shotsRA[0].club = "";
-  ll.lat = 4427.3217;
-  ll.lng = 9308.4802;
-  utm = cll.NMEA2UTM(ll);
   shotsRA[0].utm = utm;
 
+  utm.lat = 4922290;
+  utm.lng = 488590;
   shotsRA[1].club = "";
-  ll.lat = 4427.3286;
-  ll.lng = 9308.3422;
-  utm = cll.NMEA2UTM(ll);
   shotsRA[1].utm = utm;
 
+  utm.lat = 4922490;
+  utm.lng =  488520;
   shotsRA[2].club = "";
-  ll.lat = 4427.2769;
-  ll.lng = 9308.1559;
-  utm = cll.NMEA2UTM(ll);
   shotsRA[2].utm = utm;
 
+  utm.lat = 4922510;
+  utm.lng =  488547;
   shotsRA[3].club = "";
-  ll.lat = 4427.2658;
-  ll.lng = 9308.1697;
-  utm = cll.NMEA2UTM(ll);
   shotsRA[3].utm = utm;
 
+  utm.lat = 4922550;
+  utm.lng =  488680;
   shotsRA[4].club = "";
-  ll.lat = 4427.3286;
-  ll.lng = 9308.3422;
-  utm = cll.NMEA2UTM(ll);
   shotsRA[4].utm = utm;
 
-  shotsRA[5].club = "";
-  shotsRA[5].utm.lat = 0;
-  shotsRA[5].utm.lng = 0;
+  // utm.lat = 4922570;
+  // utm.lng =  488731;
+  // shotsRA[5].club = "";
+  // shotsRA[5].utm = utm;
+  //
+  // utm.lat = 4922600;
+  // utm.lng =  488888;
+  // shotsRA[6].club = "";
+  // shotsRA[6].utm = utm;
 }
 
 // Draw the row/col headings
@@ -171,8 +169,7 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
                               //   else if (ROW == 5)
                               //     DrawHeader("6", X, Y, W, H);
                               //   return;
-      if (ROW < validDist)
-        DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
+      if (ROW < validDist) DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
                         // set the font for our drawing operations
