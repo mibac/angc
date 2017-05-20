@@ -6,13 +6,6 @@ using namespace std;
 
 CScoreDlg2 *scoreDlg2 = nullptr;
 
-void CScoreBtn::setBtnAttributes(Fl_Button *b) {
-  b->labelfont(1);
-  b->labelsize(24);
-  b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
-}
-
 void CScoreBtn::Button_CB() {
   // cll.writeAll();
   //DEBUG_LOG << "Score button hit" << endl;
@@ -46,6 +39,5 @@ int CScoreBtn::handle(int e) {
 
 CScoreBtn::CScoreBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-  setBtnAttributes(this);
   callback(staticButton_CB, (void *)this);
 }

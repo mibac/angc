@@ -13,7 +13,6 @@ class CFrontBackBtn : public Fl_Button {
 
  public:
   CFrontBackBtn(int X, int Y, int W, int H, const char *L = 0);
-  void setBtnAttributes();
 };
 
 #endif  // CFRONTBACKBTN_H

@@ -1,6 +1,8 @@
 #ifndef CGLOBALS_H
 #define CGLOBALS_H
 
+#include <FL/Fl_Button.H>
+
 #include <array>
 #include <ctime>
 #include <fstream>
@@ -8,11 +10,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
 using namespace std;
 
 const int k18 = 18;
 const int kPrecision = 9;
+const int kBtnH = 48;
+const int kBtnW = 140;
 
 extern int gGpsAvgNum;  // number of UTM points to average
 
@@ -112,6 +115,6 @@ extern ofstream gFileGPS;
 extern void initGlobals();
 extern int countValidDistances();
 extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
-
+extern void setButtonStyle(Fl_Button * b);
 
 #endif  // CGLOBALS_H

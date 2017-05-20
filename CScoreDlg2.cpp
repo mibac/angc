@@ -513,17 +513,18 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     nextBtn->labelfont(1);
     nextBtn->labelsize(28);
   }  // Fl_Box* o
+  const int kWid =  140;
+  const int kCardL = 240 - kWid -10;
+  const int kOkL = 240 + 10;
   {
-    okBtn = new Fl_Button(280, 675, 140, 42, "OK");
-    okBtn->color(FL_BACKGROUND2_COLOR);
-    okBtn->labelsize(32);
-    okBtn->callback(btnOK_cb, this);
+    cardBtn = new Fl_Button(kCardL, 675, 140, kBtnH, "Card");
+    setButtonStyle(cardBtn);
+    cardBtn->callback(cardBtn_cb, this);
   }  // Fl_Button* bntOK
   {
-    cardBtn = new Fl_Button(120, 675, 140, 42, "Card");
-    cardBtn->color(FL_BACKGROUND2_COLOR);
-    cardBtn->labelsize(32);
-    cardBtn->callback(cardBtn_cb, this);
+    okBtn = new Fl_Button(kOkL, 675, 140, kBtnH, "OK");
+    setButtonStyle(okBtn);
+    okBtn->callback(btnOK_cb, this);
   }  // Fl_Button* bntOK
 
   color((Fl_Color)159);

@@ -134,3 +134,11 @@ int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
   // cout << "Yards: " << d << endl;
   return (int)round(d);
 }
+
+void setButtonStyle(Fl_Button * b) {
+    b->resize(b->x(), b->y(), kBtnW, kBtnH);
+    b->color(FL_WHITE);
+    b->down_color(FL_YELLOW);
+    b->labelfont(1);
+    b->labelsize(36);
+}

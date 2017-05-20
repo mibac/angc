@@ -35,19 +35,20 @@ void clubB_cb(Fl_Widget *w, void *data) {
 
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
+  const int kBtnW = 140;
+  { card = new CScorecard(2, 20, 472, 244); }
   {
-    okB = new Fl_Button(174, 675, 140, 42, "OK");
-    okB->color(FL_BACKGROUND2_COLOR);
-    okB->labelsize(32);
+    okB = new Fl_Button(174, 675, kBtnW, kBtnH, "OK");
+    setButtonStyle(okB);
     okB->callback(okB_cb, this);
   }
-  { card = new CScorecard(2, 20, 472, 244); }
-  { fbBtn = new CFrontBackBtn(190, 300, 100, 42); }
   {
-    clubB = new Fl_Button(190, 358, 100, 42, "Clubs");
-    clubB->color(FL_BACKGROUND2_COLOR);
-    clubB->labelfont(1);
-    clubB->labelsize(24);
+    fbBtn = new CFrontBackBtn(190, 300, 0, 0);
+    setButtonStyle(fbBtn);
+  }
+  {
+    clubB = new Fl_Button(190, 358, kBtnW, kBtnH, "Clubs");
+    setButtonStyle(clubB);
     clubB->callback(clubB_cb, this);
   }
   color((Fl_Color)159);

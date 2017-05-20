@@ -66,13 +66,6 @@ void CExitBtn::writeStats() {
   gFileStats.close();
 }
 
-void CExitBtn::setBtnAttributes(Fl_Button *b) {
-  b->labelfont(1);
-  b->labelsize(24);
-  b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
-}
-
 void CExitBtn::Button_CB() {
   int result = fl_choice("Do you want to save before quitting?",
                          "Don't Save",  // 0
@@ -108,7 +101,6 @@ void CExitBtn::staticButton_CB(Fl_Widget *, void *data) {
 
 CExitBtn::CExitBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-  setBtnAttributes(this);
   setFileSuffix();
   callback(staticButton_CB, (void *)this);
 }

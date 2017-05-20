@@ -20,7 +20,7 @@ public:
 
 private:
 
-    void setBtnAttributes(Fl_Button *b);
+    void setClubBtnStyle(Fl_Button *b);
     // int handle(int e);
 };
 

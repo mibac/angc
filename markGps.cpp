@@ -89,15 +89,21 @@ const char *GPS_CMD = "gpspipe -r /dev/ttyAMA0";
 // const char *GPS_CMD = "gpspipe -r /dev/ttyUSB0";
 #endif
 
+void setMainBtnStyle(Fl_Button *b) {
+  b->labelfont(1);
+  b->labelsize(24);
+  b->color(FL_WHITE);
+  b->down_color(FL_YELLOW);
+}
+
 // This window callback allows the user to save & exit, don't save, or cancel.
 static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
 
 static void markBtn_cb(Fl_Widget *widget, void *) {
-    UtmLatLng u = cll.getNowMark();
-    shotsRA[gShotCount].utm = u;
-    gShotCount++;
-    if (gShotCount > kMAX_SHOTS)
-        gShotCount = kMAX_SHOTS;
+  UtmLatLng u = cll.getNowMark();
+  shotsRA[gShotCount].utm = u;
+  gShotCount++;
+  if (gShotCount > kMAX_SHOTS) gShotCount = kMAX_SHOTS;
 }
 
 void HandleFD(FL_SOCKET fd, void *data) {
@@ -196,16 +202,15 @@ int main(int argc, char **argv) {
   holeBtn->cursor_color(FL_GRAY);
 
   markBtn = new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark");
-  markBtn->labelfont(1);
-  markBtn->labelsize(24);
-  markBtn->color(FL_WHITE);
-  markBtn->down_color(FL_YELLOW);
+  setMainBtnStyle(markBtn);
   markBtn->callback(markBtn_cb);
 
   scoreBtn =
       new CScoreBtn(kScoreLeft, kBtnRow1Top, kScoreWid, kBoxSize, "Score");
+      setMainBtnStyle(scoreBtn);
 
   exitBtn = new CExitBtn(kExitLeft, kBtnRow1Top, kExitWid, kBoxSize, "Exit");
+  setMainBtnStyle(exitBtn);
   exitBtn->mainwin = win;
   win->end();
 

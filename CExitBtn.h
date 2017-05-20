@@ -12,7 +12,6 @@ using namespace std;
 class CExitBtn : public Fl_Button {
   string suffix;
   void setFileSuffix();
-  void setBtnAttributes(Fl_Button *b);
   void writeGPS();
   void writeClubsUsed();
   void writeStats();

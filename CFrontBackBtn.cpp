@@ -9,13 +9,6 @@
 #include "FL/Fl_Window.H"
 using namespace std;
 
-void CFrontBackBtn::setBtnAttributes() {
-  labelfont(1);
-  labelsize(24);
-  color(FL_WHITE);
-  down_color(FL_YELLOW);
-}
-
 void CFrontBackBtn::fbBtn_CB(Fl_Widget *w, void *data) {
   gFront9 = !gFront9;
   Fl_Window *win = window();
@@ -38,6 +31,6 @@ void CFrontBackBtn::draw() {
 
 CFrontBackBtn::CFrontBackBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-  setBtnAttributes();
+  setButtonStyle(this);
   callback(staticfbBtn_CB, (void *)this);
 }

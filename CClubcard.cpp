@@ -188,7 +188,7 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   // Rows
   rows(MAX_R);         // how many rows
   row_header(1);       // enable row headers (along left)
-  row_height_all(48);  // default height of rows
+  row_height_all(40);  // default height of rows
   row_header_width(48);
   row_resize(0);  // disable row resizing
   // Cols

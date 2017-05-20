@@ -18,7 +18,6 @@
 #include "Fl_Image_Button.h"
 #endif
 
-
 #include <iostream>
 using namespace std;
 
@@ -132,7 +131,7 @@ void clubBtn_cb(Fl_Widget *w, void *data) {
   // cout << "btnIndex " << btnIndex << " " << clubNamesRA[btnIndex] << endl;
 }
 
-void CClubDlg::setBtnAttributes(Fl_Button *b) {
+void CClubDlg::setClubBtnStyle(Fl_Button *b) {
   b->labelfont(1);
   b->labelsize(32);
   b->color(FL_WHITE);
@@ -141,155 +140,170 @@ void CClubDlg::setBtnAttributes(Fl_Button *b) {
 
 CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
+  const int kLMargin = 12;
+  const int kBSize = 72;
+  const int kDeltaX = 4;
+  const int kUpDownSz = 60;
+
+  int col = kLMargin;
+  int row = 392;
+  // for up and down buttons
+  int upX = 0;
+  int downX = 0;
   {
-    oKBtn = new Fl_Button(174, 675, 140, 42, "OK");
-    oKBtn->color(FL_BACKGROUND2_COLOR);
-    oKBtn->labelfont(1);
-    oKBtn->labelsize(36);
+    oKBtn = new Fl_Button(174, 675, 140, kBtnH, "OK");
+    setButtonStyle(oKBtn);
     oKBtn->callback(oKBtn_cb, this);
   }
-  { clubcard = new CClubcard(10, 20, 456, 260); }
-  {
-    upBtn = new Fl_Image_Button(150, 300, 48, 48);
-    Fl_JPEG_Image *iup = new Fl_JPEG_Image("up-arrow.jpg");
-    if (iup->Fl_Image::fail()) cout << "up-arrow.jpg could not be loaded" << endl;
-    Fl_JPEG_Image *iup_down = new Fl_JPEG_Image("up-arrow-down.jpg");
-    if (iup_down->Fl_Image::fail()) cout << "up-arrow-down.jpg could not be loaded" << endl;
-    upBtn->up_image(iup); // buttons default image is up image
-    upBtn->down_image(iup_down); // the identifyable name as described above
-    upBtn->image(NULL);
-    upBtn->callback(upBtn_cb, this);
-  }
-  {
-      downBtn = new Fl_Image_Button(250, 300, 48, 48);
-      Fl_JPEG_Image *idown = new Fl_JPEG_Image("down-arrow.jpg");
-      if (idown->Fl_Image::fail()) cout << "down-arrow.jpg could not be loaded" << endl;
-      Fl_JPEG_Image *idown_down = new Fl_JPEG_Image("down-arrow-down.jpg");
-      if (idown_down->Fl_Image::fail()) cout << "down-arrow-down.jpg could not be loaded" << endl;
-      downBtn->up_image(idown); // buttons default image is down image
-      downBtn->down_image(idown_down); // the identifyable name as described above
-      downBtn->image(NULL);
-      downBtn->callback(downBtn_cb, this);
-  }
+  { clubcard = new CClubcard(kLMargin, 20, 456, 260); }
 
-  const int bsize = 72;
-  const int kDeltaX = 4;
-
-  int colstart = 10;
-  int col = colstart;
-  int row = 362;
   // Row 1
   {
-    btnDr = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kDr].c_str());
+    btnDr = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kDr].c_str());
     btnDr->callback(clubBtn_cb, this);
-    setBtnAttributes(btnDr);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnDr);
+    col += kBSize + kDeltaX;
   }
   {
-    btn3w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k3w].c_str());
+    btn3w = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k3w].c_str());
     btn3w->callback(clubBtn_cb, this);
-    setBtnAttributes(btn3w);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn3w);
+    upX = col;
+    col += kBSize + kDeltaX;
   }
   {
-    btn5w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k5w].c_str());
+    btn5w = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k5w].c_str());
     btn5w->callback(clubBtn_cb, this);
-    setBtnAttributes(btn5w);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn5w);
+    downX = col;
+    col += kBSize + kDeltaX;
   }
   {
-    btn7w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k7w].c_str());
+    btn7w = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k7w].c_str());
     btn7w->callback(clubBtn_cb, this);
-    setBtnAttributes(btn7w);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn7w);
+    col += kBSize + kDeltaX;
   }
   {
-    btnHy = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kHy].c_str());
+    btnHy = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kHy].c_str());
     btnHy->callback(clubBtn_cb, this);
-    setBtnAttributes(btnHy);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnHy);
+    col += kBSize + kDeltaX;
   }
   {
-    btn2 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k2].c_str());
+    btn2 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k2].c_str());
     btn2->callback(clubBtn_cb, this);
-    setBtnAttributes(btn2);
-    col = colstart;
-    row += bsize;
+    setClubBtnStyle(btn2);
+    col = kLMargin;
+    row += kBSize;
   }
   // Row 2
   {
-    btn3 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k3].c_str());
+    btn3 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k3].c_str());
     btn3->callback(clubBtn_cb, this);
-    setBtnAttributes(btn3);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn3);
+    col += kBSize + kDeltaX;
   }
   {
-    btn4 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k4].c_str());
+    btn4 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k4].c_str());
     btn4->callback(clubBtn_cb, this);
-    setBtnAttributes(btn4);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn4);
+    col += kBSize + kDeltaX;
   }
   {
-    btn5 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k5].c_str());
+    btn5 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k5].c_str());
     btn5->callback(clubBtn_cb, this);
-    setBtnAttributes(btn5);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn5);
+    col += kBSize + kDeltaX;
   }
   {
-    btn6 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k6].c_str());
+    btn6 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k6].c_str());
     btn6->callback(clubBtn_cb, this);
-    setBtnAttributes(btn6);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn6);
+    col += kBSize + kDeltaX;
   }
   {
-    btn7 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k7].c_str());
+    btn7 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k7].c_str());
     btn7->callback(clubBtn_cb, this);
-    setBtnAttributes(btn7);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn7);
+    col += kBSize + kDeltaX;
   }
   {
-    btn8 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k8].c_str());
+    btn8 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k8].c_str());
     btn8->callback(clubBtn_cb, this);
-    setBtnAttributes(btn8);
-    col = colstart;
-    row += bsize;
+    setClubBtnStyle(btn8);
+    col = kLMargin;
+    row += kBSize;
   }
   // Row 3
   {
-    btn9 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k9].c_str());
+    btn9 = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[k9].c_str());
     btn9->callback(clubBtn_cb, this);
-    setBtnAttributes(btn9);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btn9);
+    col += kBSize + kDeltaX;
   }
   {
-    btnPW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kPW].c_str());
+    btnPW = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kPW].c_str());
     btnPW->callback(clubBtn_cb, this);
-    setBtnAttributes(btnPW);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnPW);
+    col += kBSize + kDeltaX;
   }
   {
-    btnGW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kGW].c_str());
+    btnGW = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kGW].c_str());
     btnGW->callback(clubBtn_cb, this);
-    setBtnAttributes(btnGW);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnGW);
+    col += kBSize + kDeltaX;
   }
   {
-    btnSW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kSW].c_str());
+    btnSW = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kSW].c_str());
     btnSW->callback(clubBtn_cb, this);
-    setBtnAttributes(btnSW);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnSW);
+    col += kBSize + kDeltaX;
   }
   {
-    btnLW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kLW].c_str());
+    btnLW = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kLW].c_str());
     btnLW->callback(clubBtn_cb, this);
-    setBtnAttributes(btnLW);
-    col += bsize + kDeltaX;
+    setClubBtnStyle(btnLW);
+    col += kBSize + kDeltaX;
   }
   {
-    btnX = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kx].c_str());
+    btnX = new Fl_Button(col, row, kBSize, kBSize, clubNamesRA[kx].c_str());
     btnX->callback(clubBtn_cb, this);
-    setBtnAttributes(btnX);
+    setClubBtnStyle(btnX);
   }
+  // order important upX, downX set above
+  {
+    upBtn = new Fl_Image_Button(upX, 300, kUpDownSz, kUpDownSz);
+    Fl_JPEG_Image *iup = new Fl_JPEG_Image("up-arrow.jpg");
+    if (iup->Fl_Image::fail())
+      cout << "up-arrow.jpg could not be loaded" << endl;
+    Fl_JPEG_Image *iup_down = new Fl_JPEG_Image("up-arrow-down.jpg");
+    if (iup_down->Fl_Image::fail())
+      cout << "up-arrow-down.jpg could not be loaded" << endl;
+    upBtn->up_image(iup);         // buttons default image is up image
+    upBtn->down_image(iup_down);  // the identifyable name as described above
+    upBtn->image(NULL);
+    upBtn->color(FL_WHITE);
+    upBtn->down_color(FL_YELLOW);
+    upBtn->callback(upBtn_cb, this);
+  }
+  {
+    downBtn = new Fl_Image_Button(downX, 300, kUpDownSz, kUpDownSz);
+    Fl_JPEG_Image *idown = new Fl_JPEG_Image("down-arrow.jpg");
+    if (idown->Fl_Image::fail())
+      cout << "down-arrow.jpg could not be loaded" << endl;
+    Fl_JPEG_Image *idown_down = new Fl_JPEG_Image("down-arrow-down.jpg");
+    if (idown_down->Fl_Image::fail())
+      cout << "down-arrow-down.jpg could not be loaded" << endl;
+    downBtn->up_image(idown);  // buttons default image is down image
+    downBtn->down_image(
+        idown_down);  // the identifyable name as described above
+    downBtn->image(NULL);
+    downBtn->color(FL_WHITE);
+    downBtn->down_color(FL_YELLOW);
+    downBtn->callback(downBtn_cb, this);
+  }
+
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);
