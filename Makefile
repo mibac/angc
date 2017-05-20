@@ -28,6 +28,7 @@ LDFLAGS = -lGLU \
 	-lm \
 	-lX11 \
 	-lgps \
+	-lfltk_images \
 	/home/pi/projects/FLTK-master/lib/libfltk_gl.a \
 	/home/pi/projects/FLTK-master/lib/libfltk.a
 
@@ -42,7 +43,6 @@ CLatLng.o \
 Course.o \
 gps.o \
 HoleView.o \
-CClubPopup2.o \
 CScoreBtn.o \
 CScoreDlg2.o \
 globals.o \
@@ -52,7 +52,8 @@ CScorecard.o \
 CScorecardDlg.o \
 CFrontBackBtn.o \
 CClubDlg.o \
-CClubcard.o
+CClubcard.o \
+Fl_Image_Button.o
 	g++ -o aNGCApp \
 		markGps.o \
 		C2UTM.o \
@@ -63,7 +64,6 @@ CClubcard.o
 		Course.o \
 		gps.o \
 		HoleView.o \
-		CClubPopup2.o \
 		CScoreBtn.o \
 		CScoreDlg2.o \
 		globals.o \
@@ -74,6 +74,7 @@ CClubcard.o
 		CFrontBackBtn.o \
 		CClubDlg.o \
 		CClubcard.o \
+		Fl_Image_Button.o \
 		$(LDFLAGS)
 
 markGps.o: markGps.cpp \
@@ -85,7 +86,6 @@ CLatLng.h \
 Course.h \
 gps.h \
 HoleView.h \
-CClubPopup2.h \
 CScoreBtn.h \
 CScoreDlg2.h \
 globals.h \
@@ -94,7 +94,8 @@ CGPStime.h \
 CScorecard.h \
 CScorecardDlg.h \
 CClubDlg.h \
-CClubcard.h
+CClubcard.h \
+Fl_Image_Button.h
 	g++ -c $<  $(CXXFLAGS)
 
 C2UTM.o: C2UTM.cpp C2UTM.h
@@ -121,9 +122,6 @@ gps.o: gps.cpp gps.h
 HoleView.o: HoleView.cpp HoleView.h Course.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CClubPopup2.o: CClubPopup2.cpp CClubPopup2.h globals.h CClubcard.h
-		g++ -c $<  $(CXXFLAGS)
-
 CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h
 			g++ -c $<  $(CXXFLAGS)
 
@@ -148,10 +146,13 @@ CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h
 CFrontBackBtn.o: CFrontBackBtn.cpp CFrontBackBtn.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h CClubcard.h CClubPopup2.h
+CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h CClubcard.h
 	g++ -c $<  $(CXXFLAGS)
 
-CClubcard.o: CClubcard.cpp CClubcard.h globals.h
+CClubcard.o: CClubcard.cpp CClubcard.h globals.h Fl_Image_Button.h
+	g++ -c $<  $(CXXFLAGS)
+
+Fl_Image_Button.o: Fl_Image_Button.cpp Fl_Image_Button.h
 	g++ -c $<  $(CXXFLAGS)
 
 clean:

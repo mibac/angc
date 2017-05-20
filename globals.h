@@ -101,7 +101,7 @@ extern vector<CNGCHoles> vNGCHoles;
 
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
-extern vector<string> vClubsUsed;
+// extern vector<string> vClubsUsed;
 
 extern array<bool, k18> bPlayedHole;
 
@@ -110,5 +110,8 @@ extern ofstream gFileClub;
 extern ofstream gFileGPS;
 
 extern void initGlobals();
+extern int countValidDistances();
+extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
+
 
 #endif  // CGLOBALS_H

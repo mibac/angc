@@ -30,10 +30,6 @@
 
 #include <string>
 
-#ifndef CCLUBPOPUP2_H
-#include "CClubPopup2.h"
-#endif
-
 using namespace std;
 
 #define MAX_R 6
@@ -41,7 +37,6 @@ using namespace std;
 
 // Derive a class from Fl_Table
 class CClubcard : public Fl_Table {
-  int popCount;
   int data[MAX_R][MAX_C];  // data array for cells
   // Draw the row/col headings
   //    Make this a dark thin upbox with the text inside.
@@ -50,7 +45,7 @@ class CClubcard : public Fl_Table {
   // Draw the cell data
   //    Dark gray text on white background with subtle border
   //
-  void DrawData(const char *s, int X, int Y, int W, int H);
+  void DrawData(const char *s, int X, int Y, int W, int H, int ROW, int COL);
   // Handle drawing table's cells
   //     Fl_Table calls this function to draw each visible cell in the table.
   //     It's up to us to use FLTK's drawing functions to draw the cells the way
@@ -69,8 +64,6 @@ class CClubcard : public Fl_Table {
   //
   CClubcard(int X, int Y, int W, int H, const char *L = 0);
   ~CClubcard() {}
-
-  CClubPopup2 *cpop;
 };
 
 #endif

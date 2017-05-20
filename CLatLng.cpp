@@ -94,28 +94,6 @@ void CLatLng::setRefMark() { lastMark = getMark(gGpsAvgNum); }
 
 UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
 
-string CLatLng::distance(const UtmLatLng& now,
-                                     const UtmLatLng& prev) {
-  double x = now.lng - prev.lng;
-  double y = now.lat - prev.lat;
-  double d = sqrt(x * x + y * y);
-  d *= 1.0936139;  // meters to yards
-
-  ostringstream oss;
-  oss << (int)round(d);
-  return oss.str();
-}
-
-void CLatLng::updateClubVec(const string& s) {
-  UtmLatLng nowMark = getNowMark();
-  ostringstream oss;
-  oss.clear();
-  oss << gCurrentHole << "\t" << s << "\t" << distance(nowMark, lastMark)
-      << "\t" << lastMark << "\t" << nowMark << endl;
-  vClubsUsed.push_back(oss.str());
-  lastMark = nowMark;
-}
-
 #else
 CLatLng::CLatLng() {}
 
@@ -145,9 +123,5 @@ UtmLatLng CLatLng::getMark(size_t avg) {
 void CLatLng::setRefMark() {}
 
 UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
-
-string CLatLng::distance() { return ""; }
-
-void CLatLng::updateClubVec(const string& s) {}
 
 #endif

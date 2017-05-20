@@ -12,13 +12,131 @@
 #include "globals.h"
 #endif
 
-#ifndef CCLUBPOPUP2_H
-#include "CClubPopup2.h"
+#include <FL/Fl_JPEG_Image.H>
+
+#ifndef FL_IMAGE_BUTTON_H
+#include "Fl_Image_Button.h"
 #endif
+
+
+#include <iostream>
+using namespace std;
+
+CClubDlg *clubcardDlg;
+Fl_Button *oKBtn;
+Fl_Image_Button *upBtn;
+Fl_Image_Button *downBtn;
+CClubcard *clubcard;
+
+Fl_Button *btnDr = nullptr;
+Fl_Button *btn3w = nullptr;
+Fl_Button *btn5w = nullptr;
+Fl_Button *btn7w = nullptr;
+Fl_Button *btnHy = nullptr;
+Fl_Button *btn2 = nullptr;
+Fl_Button *btn3 = nullptr;
+Fl_Button *btn4 = nullptr;
+Fl_Button *btn5 = nullptr;
+Fl_Button *btn6 = nullptr;
+Fl_Button *btn7 = nullptr;
+Fl_Button *btn8 = nullptr;
+Fl_Button *btn9 = nullptr;
+Fl_Button *btnPW = nullptr;
+Fl_Button *btnGW = nullptr;
+Fl_Button *btnSW = nullptr;
+Fl_Button *btnLW = nullptr;
+Fl_Button *btnX = nullptr;
+
+int btnIndex = 0;
+int numDistances = 0;
+int btnPresses = 0;
 
 static void oKBtn_cb(Fl_Widget *w, void *data) {
   CClubDlg *ccd = (CClubDlg *)data;
   ccd->hide();
+}
+
+static void upBtn_cb(Fl_Widget *w, void *data) {
+  int row_top;
+  int col_left;
+  int row_bot;
+  int col_right;
+  clubcard->get_selection(row_top, col_left, row_bot, col_right);
+  btnPresses = row_top;
+  btnPresses--;
+  if (btnPresses < 0) btnPresses = numDistances - 1;
+  clubcard->set_selection(btnPresses, 0, btnPresses, 0);
+  clubcard->redraw();
+}
+
+static void downBtn_cb(Fl_Widget *w, void *data) {
+  int row_top;
+  int col_left;
+  int row_bot;
+  int col_right;
+  clubcard->get_selection(row_top, col_left, row_bot, col_right);
+  btnPresses = row_top;
+  btnPresses++;
+  if (btnPresses >= numDistances) btnPresses = 0;
+  clubcard->set_selection(btnPresses, 0, btnPresses, 0);
+  clubcard->redraw();
+}
+
+void updateClubCard(int btnIndex) {
+  shotsRA[btnPresses].club = clubNamesRA[btnIndex];
+  btnPresses++;
+  if (btnPresses >= numDistances) btnPresses = 0;
+  clubcard->set_selection(btnPresses, 0, btnPresses, 0);
+  clubcard->redraw();
+}
+
+void clubBtn_cb(Fl_Widget *w, void *data) {
+  if (w == btnDr) {
+    btnIndex = 0;
+  } else if (w == btn3w) {
+    btnIndex = 1;
+  } else if (w == btn5w) {
+    btnIndex = 2;
+  } else if (w == btn7w) {
+    btnIndex = 3;
+  } else if (w == btnHy) {
+    btnIndex = 4;
+  } else if (w == btn2) {
+    btnIndex = 5;
+  } else if (w == btn3) {
+    btnIndex = 6;
+  } else if (w == btn4) {
+    btnIndex = 7;
+  } else if (w == btn5) {
+    btnIndex = 8;
+  } else if (w == btn6) {
+    btnIndex = 9;
+  } else if (w == btn7) {
+    btnIndex = 10;
+  } else if (w == btn8) {
+    btnIndex = 11;
+  } else if (w == btn9) {
+    btnIndex = 12;
+  } else if (w == btnPW) {
+    btnIndex = 13;
+  } else if (w == btnGW) {
+    btnIndex = 14;
+  } else if (w == btnSW) {
+    btnIndex = 15;
+  } else if (w == btnLW) {
+    btnIndex = 16;
+  } else if (w == btnX) {
+    btnIndex = 17;
+  }
+  updateClubCard(btnIndex);
+  // cout << "btnIndex " << btnIndex << " " << clubNamesRA[btnIndex] << endl;
+}
+
+void CClubDlg::setBtnAttributes(Fl_Button *b) {
+  b->labelfont(1);
+  b->labelsize(32);
+  b->color(FL_WHITE);
+  b->down_color(FL_YELLOW);
 }
 
 CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
@@ -26,19 +144,157 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
   {
     oKBtn = new Fl_Button(174, 675, 140, 42, "OK");
     oKBtn->color(FL_BACKGROUND2_COLOR);
-    oKBtn->labelsize(32);
+    oKBtn->labelfont(1);
+    oKBtn->labelsize(36);
     oKBtn->callback(oKBtn_cb, this);
   }
-  { clubPopup = new CClubPopup2(20, 350, 72 * 6 + 8, 72 * 3 + 4); }
-  { // order important
-    clubcard = new CClubcard(2, 20, 472, 260);
-    clubcard->cpop = clubPopup;
+  { clubcard = new CClubcard(10, 20, 456, 260); }
+  {
+    upBtn = new Fl_Image_Button(150, 300, 48, 48);
+    Fl_JPEG_Image *iup = new Fl_JPEG_Image("up-arrow.jpg");
+    if (iup->Fl_Image::fail()) cout << "up-arrow.jpg could not be loaded" << endl;
+    Fl_JPEG_Image *iup_down = new Fl_JPEG_Image("up-arrow-down.jpg");
+    if (iup_down->Fl_Image::fail()) cout << "up-arrow-down.jpg could not be loaded" << endl;
+    upBtn->up_image(iup); // buttons default image is up image
+    upBtn->down_image(iup_down); // the identifyable name as described above
+    upBtn->image(NULL);
+    upBtn->callback(upBtn_cb, this);
   }
-  { skipBtn = new Fl_Button(190, 300, 100, 42); }
+  {
+      downBtn = new Fl_Image_Button(250, 300, 48, 48);
+      Fl_JPEG_Image *idown = new Fl_JPEG_Image("down-arrow.jpg");
+      if (idown->Fl_Image::fail()) cout << "down-arrow.jpg could not be loaded" << endl;
+      Fl_JPEG_Image *idown_down = new Fl_JPEG_Image("down-arrow-down.jpg");
+      if (idown_down->Fl_Image::fail()) cout << "down-arrow-down.jpg could not be loaded" << endl;
+      downBtn->up_image(idown); // buttons default image is down image
+      downBtn->down_image(idown_down); // the identifyable name as described above
+      downBtn->image(NULL);
+      downBtn->callback(downBtn_cb, this);
+  }
 
+  const int bsize = 72;
+  const int kDeltaX = 4;
+
+  int colstart = 10;
+  int col = colstart;
+  int row = 362;
+  // Row 1
+  {
+    btnDr = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kDr].c_str());
+    btnDr->callback(clubBtn_cb, this);
+    setBtnAttributes(btnDr);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn3w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k3w].c_str());
+    btn3w->callback(clubBtn_cb, this);
+    setBtnAttributes(btn3w);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn5w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k5w].c_str());
+    btn5w->callback(clubBtn_cb, this);
+    setBtnAttributes(btn5w);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn7w = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k7w].c_str());
+    btn7w->callback(clubBtn_cb, this);
+    setBtnAttributes(btn7w);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnHy = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kHy].c_str());
+    btnHy->callback(clubBtn_cb, this);
+    setBtnAttributes(btnHy);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn2 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k2].c_str());
+    btn2->callback(clubBtn_cb, this);
+    setBtnAttributes(btn2);
+    col = colstart;
+    row += bsize;
+  }
+  // Row 2
+  {
+    btn3 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k3].c_str());
+    btn3->callback(clubBtn_cb, this);
+    setBtnAttributes(btn3);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn4 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k4].c_str());
+    btn4->callback(clubBtn_cb, this);
+    setBtnAttributes(btn4);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn5 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k5].c_str());
+    btn5->callback(clubBtn_cb, this);
+    setBtnAttributes(btn5);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn6 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k6].c_str());
+    btn6->callback(clubBtn_cb, this);
+    setBtnAttributes(btn6);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn7 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k7].c_str());
+    btn7->callback(clubBtn_cb, this);
+    setBtnAttributes(btn7);
+    col += bsize + kDeltaX;
+  }
+  {
+    btn8 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k8].c_str());
+    btn8->callback(clubBtn_cb, this);
+    setBtnAttributes(btn8);
+    col = colstart;
+    row += bsize;
+  }
+  // Row 3
+  {
+    btn9 = new Fl_Button(col, row, bsize, bsize, clubNamesRA[k9].c_str());
+    btn9->callback(clubBtn_cb, this);
+    setBtnAttributes(btn9);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnPW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kPW].c_str());
+    btnPW->callback(clubBtn_cb, this);
+    setBtnAttributes(btnPW);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnGW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kGW].c_str());
+    btnGW->callback(clubBtn_cb, this);
+    setBtnAttributes(btnGW);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnSW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kSW].c_str());
+    btnSW->callback(clubBtn_cb, this);
+    setBtnAttributes(btnSW);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnLW = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kLW].c_str());
+    btnLW->callback(clubBtn_cb, this);
+    setBtnAttributes(btnLW);
+    col += bsize + kDeltaX;
+  }
+  {
+    btnX = new Fl_Button(col, row, bsize, bsize, clubNamesRA[kx].c_str());
+    btnX->callback(clubBtn_cb, this);
+    setBtnAttributes(btnX);
+  }
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);
   end();
   show();
+
+  numDistances = countValidDistances();
 }

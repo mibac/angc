@@ -46,7 +46,8 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   {
     clubB = new Fl_Button(190, 358, 100, 42, "Clubs");
     clubB->color(FL_BACKGROUND2_COLOR);
-    clubB->labelsize(32);
+    clubB->labelfont(1);
+    clubB->labelsize(24);
     clubB->callback(clubB_cb, this);
   }
   color((Fl_Color)159);

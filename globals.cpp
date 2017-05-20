@@ -2,6 +2,8 @@
 #include "globals.h"
 #endif
 
+#include <cmath>
+
 using namespace std;
 
 int gCurrentHole;
@@ -21,7 +23,7 @@ ofstream gFileGPS;
 
 vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 vector<UtmLatLng> vUTM;
-vector<string> vClubsUsed;
+// vector<string> vClubsUsed;
 array<bool, k18> bPlayedHole;
 
 vector<CNGCHoles> vNGCHoles;
@@ -114,4 +116,21 @@ void initGlobals() {
   initNGCHolesVector();
   initClubNames();
   initShotStats();
+}
+
+int countValidDistances() {
+  int num = 0;
+  for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
+    if (shotsRA[ix].utm.lat != 0) num++;
+  }
+  return --num;
+}
+
+int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
+  double x = now.lng - prev.lng;
+  double y = now.lat - prev.lat;
+  double d = sqrt(x * x + y * y);
+  d *= 1.0936139;  // meters to yards
+  // cout << "Yards: " << d << endl;
+  return (int)round(d);
 }

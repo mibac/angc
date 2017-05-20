@@ -62,10 +62,6 @@ class CLatLng {
 
   // Utility functions
   void updateLatLng(const string &s);
-  string distance(const UtmLatLng &now, const UtmLatLng &prev);
-
-  // void writeMark(const string &s);
-  void updateClubVec(const string &s);
 
  private:
   UtmLatLng lastMark;
@@ -82,5 +78,4 @@ extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
 extern GPS myGPS;
 
 extern CLatLng cll;
-
 #endif  // CLATLNG_H

@@ -10,20 +10,18 @@
 #include "CClubcard.h"
 #endif
 
-#ifndef CCLUBPOPUP2_H
-#include "CClubPopup2.h"
-#endif
-
 class CClubDlg : public Fl_Window {
 public:
     CClubDlg(int X, int Y, int W, int H, const char *L = 0);
 
+    // Handle numeric keypad buttons pressed
+    void popupBtn_CB(Fl_Widget *w);
+    static void staticPopup_CB(Fl_Widget *w, void *data);
+
 private:
-    CClubDlg *clubcardDlg;
-    Fl_Button *oKBtn;
-    Fl_Button *skipBtn;
-    CClubcard *clubcard;
-    CClubPopup2 *clubPopup;
+
+    void setBtnAttributes(Fl_Button *b);
+    // int handle(int e);
 };
 
 extern void createClubcardDlg();

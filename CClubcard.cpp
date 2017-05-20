@@ -30,6 +30,10 @@
 #include "globals.h"
 #endif
 
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 #include <FL/fl_draw.H>
 
 #include <string>
@@ -43,17 +47,45 @@ const int kRow4 = 3;
 const int kRow5 = 4;
 const int kRow6 = 5;
 
-// struct frontBackResults {
-//   int fscore;
-//   int bscore;
-//   int fputts;
-//   int bputts;
-//   int fuds;
-//   int buds;
-// };
+void setupTestClubVector() {
+  LatLng ll;
+  UtmLatLng utm;
+  CLatLng cll;
+  shotsRA[0].club = "";
+  ll.lat = 4427.3217;
+  ll.lng = 9308.4802;
+  utm = cll.NMEA2UTM(ll);
+  shotsRA[0].utm = utm;
 
-// frontBackResults results;
-// CClubcard *clubcard = nullptr;
+  shotsRA[1].club = "";
+  ll.lat = 4427.3286;
+  ll.lng = 9308.3422;
+  utm = cll.NMEA2UTM(ll);
+  shotsRA[1].utm = utm;
+
+  shotsRA[2].club = "";
+  ll.lat = 4427.2769;
+  ll.lng = 9308.1559;
+  utm = cll.NMEA2UTM(ll);
+  shotsRA[2].utm = utm;
+
+  shotsRA[3].club = "";
+  ll.lat = 4427.2658;
+  ll.lng = 9308.1697;
+  utm = cll.NMEA2UTM(ll);
+  shotsRA[3].utm = utm;
+
+  shotsRA[4].club = "";
+  ll.lat = 4427.3286;
+  ll.lng = 9308.3422;
+  utm = cll.NMEA2UTM(ll);
+  shotsRA[4].utm = utm;
+
+
+  shotsRA[5].club = "";
+  shotsRA[5].utm.lat = 0;
+  shotsRA[5].utm.lng = 0;
+}
 
 // Draw the row/col headings
 //    Make this a dark thin upbox with the text inside.
@@ -68,10 +100,11 @@ void CClubcard::DrawHeader(const char *s, int X, int Y, int W, int H) {
 // Draw the cell data
 //    Dark gray text on white background with subtle border
 //
-void CClubcard::DrawData(const char *s, int X, int Y, int W, int H) {
+void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW, int COL) {
   fl_push_clip(X, Y, W, H);
   // Draw cell bg
-  fl_color(FL_WHITE);
+  fl_color(is_selected(ROW,COL)?FL_YELLOW:FL_WHITE); fl_rectf(X,Y,W,H);
+  // fl_color(FL_WHITE);
   fl_rectf(X, Y, W, H);
   // Draw cell data
   fl_color(FL_GRAY0);
@@ -82,33 +115,23 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H) {
   fl_pop_clip();
 }
 
-
 void CClubcard::drawClubData(int ROW, int COL, int X, int Y, int W, int H) {
-  if (COL == 0) {
-    DrawData(shotsRA[ROW].club.c_str(), X, Y, W, H);
-  }  //   DrawData(vNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
-     //   DrawData(vNGCHoles[COL + 9].hdcp.c_str(), X, Y, W, H);
+  int num = countValidDistances();
+  if ((COL == 0) && (ROW < num)) {
+    DrawData(shotsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
+  }
 }
 
 void CClubcard::drawDistanceData(int ROW, int COL, int X, int Y, int W, int H) {
-  // if (COL == 9) {
-  //   DrawData(sumRow(kParRow).c_str(), X, Y, W, H);
-  // } else if (COL == 10) {
-  //   if (gFront9) {
-  //     DrawData(" ", X, Y, W, H);
-  //   } else {
-  //     DrawData("72", X, Y, W, H);
-  //   }
-  // } else if (gFront9) {
-  //   DrawData(vNGCHoles[COL].par.c_str(), X, Y, W, H);
-  // } else {
-  //   DrawData(vNGCHoles[COL + 9].par.c_str(), X, Y, W, H);
-  // }
+  int d = 0;
+  int num = countValidDistances();
+  if ((COL == 1) && (ROW < num)) {
+    d = calcUTMdistance(shotsRA[ROW + 1].utm, shotsRA[ROW].utm);
+    DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
+  }
 }
 
-void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
-
-}
+void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {}
 
 // Handle drawing table's cells
 //     Fl_Table calls this function to draw each visible cell in the
@@ -149,6 +172,7 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
       fl_font(FL_HELVETICA_BOLD, 24);
 
       drawClubData(ROW, COL, X, Y, W, H);
+      drawDistanceData(ROW, COL, X, Y, W, H);
       return;  // CONTEXT_CELL
 
     default:
@@ -164,7 +188,7 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   // Rows
   rows(MAX_R);         // how many rows
   row_header(1);       // enable row headers (along left)
-  row_height_all(40);  // default height of rows
+  row_height_all(48);  // default height of rows
   row_header_width(48);
   row_resize(0);  // disable row resizing
   // Cols
@@ -176,7 +200,9 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   color((Fl_Color)159);
   end();  // end the Fl_Table group
 
-  popCount = 0;
+  setupTestClubVector();
+  set_selection(0, 0, 0, 0);
+
 }
 
 //

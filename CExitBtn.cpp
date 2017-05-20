@@ -50,12 +50,12 @@ void CExitBtn::writeGPS() {
 }
 
 void CExitBtn::writeClubsUsed() {
-  string s = path + "aClubs_" + suffix;
-  gFileClub.open(s.c_str());
-  gFileClub << setprecision(kPrecision);
-  gFileClub << asctime(std::localtime(&gToday));
-  for (auto itr : vClubsUsed) gFileClub << itr;
-  gFileClub.close();
+  // string s = path + "aClubs_" + suffix;
+  // gFileClub.open(s.c_str());
+  // gFileClub << setprecision(kPrecision);
+  // gFileClub << asctime(std::localtime(&gToday));
+  // for (auto itr : vClubsUsed) gFileClub << itr;
+  // gFileClub.close();
 }
 
 void CExitBtn::writeStats() {
