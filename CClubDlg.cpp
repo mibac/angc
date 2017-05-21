@@ -201,7 +201,7 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
   ////
   const int kOkY = 665;
   const int kOkX = 174;
-  const int kOkW = 140;
+  const int kOkW = kBtnW;
 
 {
   btnPrev = new Fl_Image_Button(kbtnPrevX, kNavBtnY, kNavBtnSz, kNavBtnSz);

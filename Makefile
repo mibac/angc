@@ -122,7 +122,7 @@ gps.o: gps.cpp gps.h
 HoleView.o: HoleView.cpp HoleView.h Course.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h
+CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h  CClubcard.h
 			g++ -c $<  $(CXXFLAGS)
 
 CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
@@ -146,7 +146,7 @@ CScorecardDlg.o: CScorecardDlg.cpp CScorecardDlg.h CScorecard.h
 CFrontBackBtn.o: CFrontBackBtn.cpp CFrontBackBtn.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
-CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h CClubcard.h
+CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CClubcard.o: CClubcard.cpp CClubcard.h globals.h Fl_Image_Button.h

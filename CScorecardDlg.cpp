@@ -16,9 +16,9 @@
 #include "CFrontBackBtn.h"
 #endif
 
-#ifndef CCLUBDLG_H
-#include "CClubDlg.h"
-#endif
+// #ifndef CCLUBDLG_H
+// #include "CClubDlg.h"
+// #endif
 
 CScorecardDlg *scorecardDlg = nullptr;
 Fl_Button *okB = nullptr;
@@ -35,7 +35,6 @@ void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
 
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
-  const int kBtnW = 140;
   { card = new CScorecard(2, 20, 472, 244); }
   {
     okB = new Fl_Button(174, 665, kBtnW, kBtnH, "OK");

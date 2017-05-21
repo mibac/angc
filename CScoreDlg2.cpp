@@ -12,6 +12,10 @@
 #include "CScorecardDlg.h"
 #endif
 
+#ifndef CCLUBDLG_H
+#include "CClubDlg.h"
+#endif
+
 #include <iostream>
 #include <string>
 
@@ -225,6 +229,7 @@ int CScoreDlg2::handle(int e) {
 
 CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
+const int kLeftX = 12;
   {
     holeBox = new Fl_Box(60, 101, 90, 56, "Hole");
     holeBox->box(FL_BORDER_BOX);
@@ -310,7 +315,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     udBox->when(FL_WHEN_RELEASE);
   }  // Fl_Box* udBox
   {
-    box0 = new Fl_Box(12, 410, 84, 100, "0");
+    box0 = new Fl_Box(kLeftX, 410, 84, 100, "0");
     box0->box(FL_BORDER_BOX);
     box0->color(FL_BACKGROUND2_COLOR);
     box0->selection_color(FL_BACKGROUND_COLOR);
@@ -370,7 +375,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     box4->when(FL_WHEN_RELEASE);
   }  // Fl_Box* box4
   {
-    box5 = new Fl_Box(12, 545, 84, 100, "5");
+    box5 = new Fl_Box(kLeftX, 545, 84, 100, "5");
     box5->box(FL_BORDER_BOX);
     box5->color(FL_BACKGROUND2_COLOR);
     box5->selection_color(FL_BACKGROUND_COLOR);
@@ -524,23 +529,23 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     nextBtn->labelsize(28);
   }  // Fl_Box* o
 
-  const int kClubX = 20;
-  const int kBtnY = 675;
-  const int kdx =  20;
-  const int kCardL = kClubX + kBtnW + kdx;
-  const int kOkL = kCardL + kBtnW;
+  const int kCardX = kLeftX;
+  const int kBtnY = 665;
+  const int kdx =  17;
+  const int kClubX = kCardX + kBtnW + kdx;
+  const int kOkX = kClubX + kBtnW + kdx;
   {
-    clubB = new Fl_Button(kClubX, kBY, kBtnW, kBtnH, "Shots");
+    clubB = new Fl_Button(kClubX, kBtnY, kBtnW, kBtnH, "Shots");
     setButtonStyle(clubB);
     clubB->callback(clubB_cb, this);
   }
   {
-    cardBtn = new Fl_Button(kCardL, 675, 140, kBtnH, "Card");
+    cardBtn = new Fl_Button(kCardX, kBtnY, kBtnW, kBtnH, "Card");
     setButtonStyle(cardBtn);
     cardBtn->callback(cardBtn_cb, this);
   }  // Fl_Button* bntOK
   {
-    okBtn = new Fl_Button(kOkL, 675, 140, kBtnH, "OK");
+    okBtn = new Fl_Button(kOkX, kBtnY, kBtnW, kBtnH, "OK");
     setButtonStyle(okBtn);
     okBtn->callback(btnOK_cb, this);
   }  // Fl_Button* bntOK
