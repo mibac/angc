@@ -106,7 +106,7 @@ struct ShotStats {
 
 const int kMAX_SHOTS = 7;
 extern int gShotCount;
-extern array<ShotStats, kMAX_SHOTS> shotsRA;
+extern array<array<ShotStats, kMAX_SHOTS>, k18> roundShotsRA;
 extern void initShotStats();
 
 extern vector<CNGCHoles> vNGCHoles;
@@ -122,7 +122,7 @@ extern ofstream gFileShotStats;
 extern ofstream gFileGPS;
 
 extern void initGlobals();
-extern int getValidDistancesCount();
+extern int getValidDistancesCount(int hole);
 extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button * b);
 extern string getFileSuffix();

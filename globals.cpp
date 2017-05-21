@@ -30,7 +30,7 @@ vector<CNGCHoles> vNGCHoles;
 array<string, k18> clubNamesRA;
 
 int gShotCount;
-array<ShotStats, kMAX_SHOTS> shotsRA;
+array<array<ShotStats, kMAX_SHOTS>, k18> roundShotsRA;
 
 // clang-format off
 ostream& operator<<(ostream& strm, const CNGCHoles& h) {
@@ -60,7 +60,7 @@ void initNGCHolesVector() {
     CNGCHoles h;
     vNGCHoles.push_back(h);
   }
-      vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "0", "0", "0");
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "0", "0", "0");
   vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "0", "0", "0");
   vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "0", "0", "0");
   vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "0", "0", "0");
@@ -102,20 +102,22 @@ void initClubNames() {
 }
 
 void initShotStats() {
-    gShotCount = 0;
+  gShotCount = 0;
+  for (int hole = 0; hole < k18; ++hole) {
     for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
-        shotsRA[ix].club = "";
-        shotsRA[ix].yards = 0;
-        shotsRA[ix].utm.lat = 0.0;
-        shotsRA[ix].utm.lng = 0.0;
+      roundShotsRA[hole][ix].club = "";
+      roundShotsRA[hole][ix].yards = 0;
+      roundShotsRA[hole][ix].utm.lat = 0.0;
+      roundShotsRA[hole][ix].utm.lng = 0.0;
     }
+  }
 }
 
 void writeShotStatsFileHeader() {
-    string s = path + "aShots_" + getFileSuffix();
-    gFileShotStats.open(s.c_str());
-    gFileShotStats << asctime(std::localtime(&gToday));
-    gFileShotStats.flush();
+  string s = path + "aShots_" + getFileSuffix();
+  gFileShotStats.open(s.c_str());
+  gFileShotStats << asctime(std::localtime(&gToday));
+  gFileShotStats.flush();
 }
 
 void initGlobals() {
@@ -137,10 +139,10 @@ void initGlobals() {
   writeShotStatsFileHeader();
 }
 
-int getValidDistancesCount() {
+int getValidDistancesCount(int hole) {
   int num = 0;
   for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
-    if (shotsRA[ix].utm.lat != 0) num++;
+    if (roundShotsRA[hole][ix].utm.lat != 0) num++;
   }
   return --num;
 }
@@ -154,26 +156,24 @@ int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
   return (int)round(d);
 }
 
-void setButtonStyle(Fl_Button * b) {
-    b->resize(b->x(), b->y(), kBtnW, kBtnH);
-    b->color(FL_WHITE);
-    b->down_color(FL_YELLOW);
-    b->labelfont(1);
-    b->labelsize(36);
+void setButtonStyle(Fl_Button* b) {
+  b->resize(b->x(), b->y(), kBtnW, kBtnH);
+  b->color(FL_WHITE);
+  b->down_color(FL_YELLOW);
+  b->labelfont(1);
+  b->labelsize(36);
 }
 
 string getFileSuffix() {
   string suffix;
   ostringstream oss;
-  struct tm * t;
+  struct tm* t;
   t = localtime(&gToday);
   string y = to_string(t->tm_year - 100);
   string m = to_string(t->tm_mon);
-  if (m.length() == 1)
-    m = "0" + m;
+  if (m.length() == 1) m = "0" + m;
   string d = to_string(t->tm_mday);
-  if (d.length() == 1)
-    d = "0" + d;
-  suffix =  y + m + d + ".txt";
+  if (d.length() == 1) d = "0" + d;
+  suffix = y + m + d + ".txt";
   return suffix;
 }

@@ -60,7 +60,6 @@ class CClubcard : public Fl_Table {
 
   void drawClubData(int ROW, int COL, int X, int Y, int W, int H);
   void drawDistanceData(int ROW, int COL, int X, int Y, int W, int H);
-  void drawShotData(int ROW, int COL, int X, int Y, int W, int H);
 
  public:
   // Constructor

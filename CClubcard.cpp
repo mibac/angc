@@ -52,38 +52,38 @@ int validDist = 0;
 
 void setupTestClubVector() {
   UtmLatLng utm(4922170, 488471);
-  shotsRA[0].club = "";
-  shotsRA[0].utm = utm;
+  roundShotsRA[0][0].club = "";
+  roundShotsRA[0][0].utm = utm;
 
   utm.lat = 4922290;
   utm.lng = 488590;
-  shotsRA[1].club = "";
-  shotsRA[1].utm = utm;
+  roundShotsRA[0][1].club = "";
+  roundShotsRA[0][1].utm = utm;
 
   utm.lat = 4922490;
   utm.lng =  488520;
-  shotsRA[2].club = "";
-  shotsRA[2].utm = utm;
+  roundShotsRA[0][2].club = "";
+  roundShotsRA[0][2].utm = utm;
 
   utm.lat = 4922510;
   utm.lng =  488547;
-  shotsRA[3].club = "";
-  shotsRA[3].utm = utm;
+  roundShotsRA[0][3].club = "";
+  roundShotsRA[0][3].utm = utm;
 
   utm.lat = 4922550;
   utm.lng =  488680;
-  shotsRA[4].club = "";
-  shotsRA[4].utm = utm;
+  roundShotsRA[0][4].club = "";
+  roundShotsRA[0][4].utm = utm;
 
   // utm.lat = 4922570;
   // utm.lng =  488731;
-  // shotsRA[5].club = "";
-  // shotsRA[5].utm = utm;
+  // roundShotsRA[0][5].club = "";
+  // roundShotsRA[0][5].utm = utm;
   //
   // utm.lat = 4922600;
   // utm.lng =  488888;
-  // shotsRA[6].club = "";
-  // shotsRA[6].utm = utm;
+  // roundShotsRA[0][6].club = "";
+  // roundShotsRA[0][6].utm = utm;
 }
 
 // Draw the row/col headings
@@ -117,23 +117,23 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
 }
 
 void CClubcard::drawClubData(int ROW, int COL, int X, int Y, int W, int H) {
-  getValidDistancesCount();
+  int h = gCurrentHole - 1;
+  getValidDistancesCount(h);
   if ((COL == 0) && (ROW < validDist)) {
-    DrawData(shotsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
+    DrawData(roundShotsRA[h][ROW].club.c_str(), X, Y, W, H, ROW, COL);
   }
 }
 
 void CClubcard::drawDistanceData(int ROW, int COL, int X, int Y, int W, int H) {
   int d = 0;
-  getValidDistancesCount();
+  int h = gCurrentHole - 1;
+  getValidDistancesCount(h);
   if ((COL == 1) && (ROW < validDist)) {
-    d = calcUTMdistance(shotsRA[ROW + 1].utm, shotsRA[ROW].utm);
-    shotsRA[ROW].yards = d;
+    d = calcUTMdistance(roundShotsRA[h][ROW + 1].utm, roundShotsRA[h][ROW].utm);
+    roundShotsRA[h][ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
   }
 }
-
-void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {}
 
 // Handle drawing table's cells
 //     Fl_Table calls this function to draw each visible cell in the
@@ -205,7 +205,8 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   end();  // end the Fl_Table group
 
   setupTestClubVector();
-  validDist = getValidDistancesCount();
+  int h = gCurrentHole -1;
+  validDist = getValidDistancesCount(h);
   set_selection(0, 0, 0, 0);
 }
 

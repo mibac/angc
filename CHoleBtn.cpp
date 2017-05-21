@@ -38,6 +38,7 @@ void CHoleBtn::SetNumPadValue_CB2() {
   myHolePopup->hide();  // hide myHolePopup
   cll.setRefMark();
   gShotCount = 0;
+  initShotStats();
 }
 
 void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
