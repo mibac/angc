@@ -75,15 +75,15 @@ void setupTestClubVector() {
   roundShotsRA[0][4].club = "";
   roundShotsRA[0][4].utm = utm;
 
-  // utm.lat = 4922570;
-  // utm.lng =  488731;
-  // roundShotsRA[0][5].club = "";
-  // roundShotsRA[0][5].utm = utm;
-  //
-  // utm.lat = 4922600;
-  // utm.lng =  488888;
-  // roundShotsRA[0][6].club = "";
-  // roundShotsRA[0][6].utm = utm;
+  utm.lat = 4922570;
+  utm.lng =  488731;
+  roundShotsRA[0][5].club = "";
+  roundShotsRA[0][5].utm = utm;
+
+  utm.lat = 4922600;
+  utm.lng =  488888;
+  roundShotsRA[0][6].club = "";
+  roundShotsRA[0][6].utm = utm;
 }
 
 // Draw the row/col headings
@@ -156,19 +156,6 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         DrawHeader("Distance", X, Y, W, H);
       return;
     case CONTEXT_ROW_HEADER:  // Draw row headers
-                              //   if (ROW == 0)
-                              //     DrawHeader("1", X, Y, W, H);
-                              //   else if (ROW == 1)
-                              //     DrawHeader("2", X, Y, W, H);
-                              //   else if (ROW == 2)
-                              //     DrawHeader("3", X, Y, W, H);
-                              //   else if (ROW == 3)
-                              //     DrawHeader("4", X, Y, W, H);
-                              //   else if (ROW == 4)
-                              //     DrawHeader("5", X, Y, W, H);
-                              //   else if (ROW == 5)
-                              //     DrawHeader("6", X, Y, W, H);
-                              //   return;
       if (ROW < validDist) DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
@@ -199,7 +186,7 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
   cols(MAX_C);         // how many columns
   col_header(1);       // enable column headers (along top)
   col_width_all(200);  // default width of columns
-  col_resize(1);       // enable column resizing
+  col_resize(0);       // enable column resizing
 
   color((Fl_Color)159);
   end();  // end the Fl_Table group
