@@ -24,14 +24,14 @@ CScorecardDlg *scorecardDlg = nullptr;
 Fl_Button *okB = nullptr;
 CFrontBackBtn *fbBtn = nullptr;
 CScorecard *card = nullptr;
-CClubDlg *clubDlg = nullptr;
-Fl_Button *clubB = nullptr;
+// CClubDlg *clubDlg = nullptr;
+// Fl_Button *clubB = nullptr;
 
 void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
 
-void clubB_cb(Fl_Widget *w, void *data) {
-  clubDlg = new CClubDlg(0, 0, 480, 800);
-}
+// void clubB_cb(Fl_Widget *w, void *data) {
+//   clubDlg = new CClubDlg(0, 0, 480, 800);
+// }
 
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
@@ -46,11 +46,11 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     fbBtn = new CFrontBackBtn(190, 300, 0, 0);
     setButtonStyle(fbBtn);
   }
-  {
-    clubB = new Fl_Button(190, 358, kBtnW, kBtnH, "Shots");
-    setButtonStyle(clubB);
-    clubB->callback(clubB_cb, this);
-  }
+  // {
+  //   clubB = new Fl_Button(190, 358, kBtnW, kBtnH, "Shots");
+  //   setButtonStyle(clubB);
+  //   clubB->callback(clubB_cb, this);
+  // }
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);

@@ -48,6 +48,9 @@ Fl_Button *cardBtn = nullptr;
 
 Fl_Box *sel = scoreValue;
 
+CClubDlg *clubDlg = nullptr;
+Fl_Button *clubB = nullptr;
+
 int hole;
 
 void btnOK_cb(Fl_Widget *w, void *data) {
@@ -60,6 +63,13 @@ void cardBtn_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
   parent->stuffData(hole);
   createScorecardDlg();
+  parent->hide();
+}
+
+void clubB_cb(Fl_Widget *w, void *data) {
+  CScoreDlg2 *parent = (CScoreDlg2 *)data;
+  // parent->stuffData(hole);
+  createCClubDlg();
   parent->hide();
 }
 
@@ -513,9 +523,17 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     nextBtn->labelfont(1);
     nextBtn->labelsize(28);
   }  // Fl_Box* o
-  const int kWid =  140;
-  const int kCardL = 240 - kWid -10;
-  const int kOkL = 240 + 10;
+
+  const int kClubX = 20;
+  const int kBtnY = 675;
+  const int kdx =  20;
+  const int kCardL = kClubX + kBtnW + kdx;
+  const int kOkL = kCardL + kBtnW;
+  {
+    clubB = new Fl_Button(kClubX, kBY, kBtnW, kBtnH, "Shots");
+    setButtonStyle(clubB);
+    clubB->callback(clubB_cb, this);
+  }
   {
     cardBtn = new Fl_Button(kCardL, 675, 140, kBtnH, "Card");
     setButtonStyle(cardBtn);

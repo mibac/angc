@@ -403,3 +403,5 @@ size_range(480, 800, 480, 800);
 end();
 show();
 }
+
+void createCClubDlg() { clubcardDlg = new CClubDlg(0, 0, 480, 800); }

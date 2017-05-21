@@ -24,6 +24,6 @@ private:
     // int handle(int e);
 };
 
-extern void createClubcardDlg();
+extern void createCClubDlg();
 
 #endif
