@@ -123,18 +123,17 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
 }
 
 void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
-  int h = gCurrentHole - 1;
   if (COL == 0) {
-    DrawData(gShotRA[h].holeStatsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
+    DrawData(gShotRA[hole].holeStatsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
   } else if (COL == 1) {
-    int d = calcUTMdistance(gShotRA[h].holeStatsRA[ROW + 1].utm,
-                            gShotRA[h].holeStatsRA[ROW].utm);
-    gShotRA[h].holeStatsRA[ROW].yards = d;
+    int d = calcUTMdistance(gShotRA[hole].holeStatsRA[ROW + 1].utm,
+                            gShotRA[hole].holeStatsRA[ROW].utm);
+    gShotRA[hole].holeStatsRA[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
-    // cout << "Hole " << h << endl;
-    // cout << "ROW+1 " << gShotRA[h].holeStatsRA[ROW + 1].utm << endl;
-    // cout << "ROW " << gShotRA[h].holeStatsRA[ROW].utm << endl;
-    // cout << "dist " << d << endl;
+    cout << "Hole " << hole << " ";
+    // cout << "ROW+1 " << gShotRA[hole].holeStatsRA[ROW + 1].utm << endl;
+    // cout << "ROW " << gShotRA[hole].holeStatsRA[ROW].utm << endl;
+    cout << "dist " << d << endl;
   }
 }
 
@@ -160,7 +159,7 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         DrawHeader("Distance", X, Y, W, H);
       return;
     case CONTEXT_ROW_HEADER:  // Draw row headers
-      v = countValidDistances(gCurrentHole - 1);
+      v = countValidDistances(hole);
       if (ROW < v) DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
@@ -178,10 +177,10 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
 //
 CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
     : Fl_Table(X, Y, W, H, L) {
+  hole = 0;
   setupTestClubVector();
-  int h = gCurrentHole - 1;
-  int v = countValidDistances(h);
   // Rows
+  int v = countValidDistances(hole);
   rows(v);             // how many rows
   row_header(1);       // enable row headers (along left)
   row_height_all(40);  // default height of rows

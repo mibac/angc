@@ -41,6 +41,7 @@ const int MAX_C = 2;  // A-Z
 
 // Derive a class from Fl_Table
 class CClubcard : public Fl_Table {
+  int hole;
   int data[MAX_R][MAX_C];  // data array for cells
   // Draw the row/col headings
   //    Make this a dark thin upbox with the text inside.
@@ -68,6 +69,7 @@ class CClubcard : public Fl_Table {
   //
   CClubcard(int X, int Y, int W, int H, const char *L = 0);
   ~CClubcard() {}
+  void setHole(int h) { hole = h; }
 };
 
 #endif
