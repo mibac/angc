@@ -530,22 +530,21 @@ const int kLeftX = 12;
   }  // Fl_Box* o
 
   const int kCardX = kLeftX;
-  const int kBtnY = 665;
   const int kdx =  17;
   const int kClubX = kCardX + kBtnW + kdx;
   const int kOkX = kClubX + kBtnW + kdx;
   {
-    clubB = new Fl_Button(kClubX, kBtnY, kBtnW, kBtnH, "Shots");
+    clubB = new Fl_Button(kClubX, kBtnWinBottomY, kBtnW, kBtnH, "Shots");
     setButtonStyle(clubB);
     clubB->callback(clubB_cb, this);
   }
   {
-    cardBtn = new Fl_Button(kCardX, kBtnY, kBtnW, kBtnH, "Card");
+    cardBtn = new Fl_Button(kCardX, kBtnWinBottomY, kBtnW, kBtnH, "Card");
     setButtonStyle(cardBtn);
     cardBtn->callback(cardBtn_cb, this);
   }  // Fl_Button* bntOK
   {
-    okBtn = new Fl_Button(kOkX, kBtnY, kBtnW, kBtnH, "OK");
+    okBtn = new Fl_Button(kOkX, kBtnWinBottomY, kBtnW, kBtnH, "OK");
     setButtonStyle(okBtn);
     okBtn->callback(btnOK_cb, this);
   }  // Fl_Button* bntOK

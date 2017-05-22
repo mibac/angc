@@ -58,8 +58,9 @@ class CClubcard : public Fl_Table {
   void draw_cell(TableContext context, int ROW = 0, int COL = 0, int X = 0,
                  int Y = 0, int W = 0, int H = 0);
 
-  void drawClubData(int ROW, int COL, int X, int Y, int W, int H);
-  void drawDistanceData(int ROW, int COL, int X, int Y, int W, int H);
+  void drawShotData(int ROW, int COL, int X, int Y, int W, int H);
+  // void drawClubData(int ROW, int COL, int X, int Y, int W, int H);
+  // void drawDistanceData(int ROW, int COL, int X, int Y, int W, int H);
 
  public:
   // Constructor

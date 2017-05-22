@@ -21,12 +21,6 @@ const int ONE_SECOND = 1000000;
 GPS myGPS;
 CLatLng cll;
 
-ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
-
-  strm << setprecision(10) << ull.lng << "\t" << ull.lat;
-  return strm;
-}
-
 #if USEGPS
 CLatLng::CLatLng() {}
 

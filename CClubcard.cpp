@@ -35,7 +35,8 @@
 #endif
 
 #include <FL/fl_draw.H>
-
+#include <chrono>
+#include <random>
 #include <string>
 
 using namespace std;
@@ -47,43 +48,48 @@ const int kRow4 = 3;
 const int kRow5 = 4;
 const int kRow6 = 5;
 
-int validDist = 0;
-
+int getRandomYards(unsigned seed) {
+  std::default_random_engine generator (seed*1000000);
+  std::uniform_int_distribution<int> distribution(30, 200);
+  int dice_roll =
+      distribution(generator);  // generates number in the range 1..200
+  return dice_roll;
+}
 
 void setupTestClubVector() {
-  UtmLatLng utm(4922170, 488471);
-  roundShotsRA[0][0].club = "";
-  roundShotsRA[0][0].utm = utm;
+  UtmLatLng utm(4922170.0, 488471.0);
+  int h = 0;
+  int marks = 0;
+  gShotRA[h].nmarks = marks = 3;
+  for (int ix = 0; ix < marks; ++ix) {
+    gShotRA[h].holeStatsRA[ix].club = "";
+    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+  }
 
-  utm.lat = 4922290;
-  utm.lng = 488590;
-  roundShotsRA[0][1].club = "";
-  roundShotsRA[0][1].utm = utm;
+  h = 1;
+  gShotRA[h].nmarks = marks = 7;
+  for (int ix = 0; ix < marks; ++ix) {
+    gShotRA[h].holeStatsRA[ix].club = "";
+    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+  }
 
-  utm.lat = 4922490;
-  utm.lng =  488520;
-  roundShotsRA[0][2].club = "";
-  roundShotsRA[0][2].utm = utm;
+  h = 2;
+  gShotRA[h].nmarks = marks = 5;
+  for (int ix = 0; ix < marks; ++ix) {
+    gShotRA[h].holeStatsRA[ix].club = "";
+    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+  }
 
-  utm.lat = 4922510;
-  utm.lng =  488547;
-  roundShotsRA[0][3].club = "";
-  roundShotsRA[0][3].utm = utm;
-
-  utm.lat = 4922550;
-  utm.lng =  488680;
-  roundShotsRA[0][4].club = "";
-  roundShotsRA[0][4].utm = utm;
-
-  utm.lat = 4922570;
-  utm.lng =  488731;
-  roundShotsRA[0][5].club = "";
-  roundShotsRA[0][5].utm = utm;
-
-  utm.lat = 4922600;
-  utm.lng =  488888;
-  roundShotsRA[0][6].club = "";
-  roundShotsRA[0][6].utm = utm;
+  h = 3;
+  gShotRA[h].nmarks = marks = 2;
+  for (int ix = 0; ix < marks; ++ix) {
+    gShotRA[h].holeStatsRA[ix].club = "";
+    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+  }
 }
 
 // Draw the row/col headings
@@ -116,22 +122,19 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
   fl_pop_clip();
 }
 
-void CClubcard::drawClubData(int ROW, int COL, int X, int Y, int W, int H) {
+void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
   int h = gCurrentHole - 1;
-  getValidDistancesCount(h);
-  if ((COL == 0) && (ROW < validDist)) {
-    DrawData(roundShotsRA[h][ROW].club.c_str(), X, Y, W, H, ROW, COL);
-  }
-}
-
-void CClubcard::drawDistanceData(int ROW, int COL, int X, int Y, int W, int H) {
-  int d = 0;
-  int h = gCurrentHole - 1;
-  getValidDistancesCount(h);
-  if ((COL == 1) && (ROW < validDist)) {
-    d = calcUTMdistance(roundShotsRA[h][ROW + 1].utm, roundShotsRA[h][ROW].utm);
-    roundShotsRA[h][ROW].yards = d;
+  if (COL == 0) {
+    DrawData(gShotRA[h].holeStatsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
+  } else if (COL == 1) {
+    int d = calcUTMdistance(gShotRA[h].holeStatsRA[ROW + 1].utm,
+                            gShotRA[h].holeStatsRA[ROW].utm);
+    gShotRA[h].holeStatsRA[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
+    // cout << "Hole " << h << endl;
+    // cout << "ROW+1 " << gShotRA[h].holeStatsRA[ROW + 1].utm << endl;
+    // cout << "ROW " << gShotRA[h].holeStatsRA[ROW].utm << endl;
+    // cout << "dist " << d << endl;
   }
 }
 
@@ -144,6 +147,7 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
                           int W, int H) {
   // static char s[40];
   string str;
+  int v = 0;
   switch (context) {
     case CONTEXT_STARTPAGE:  // before page is drawn..
       fl_font(FL_HELVETICA_BOLD,
@@ -156,28 +160,29 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
         DrawHeader("Distance", X, Y, W, H);
       return;
     case CONTEXT_ROW_HEADER:  // Draw row headers
-      if (ROW < validDist) DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
+      v = countValidDistances(gCurrentHole - 1);
+      if (ROW < v) DrawHeader(to_string(ROW + 1).c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
                         // set the font for our drawing operations
       fl_font(FL_HELVETICA_BOLD, 24);
-
-      drawClubData(ROW, COL, X, Y, W, H);
-      drawDistanceData(ROW, COL, X, Y, W, H);
+      drawShotData(ROW, COL, X, Y, W, H);
       return;  // CONTEXT_CELL
 
     default:
       return;
   }
 }
-
 // Constructor
 //     Make our data array, and initialize the table options.
 //
 CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
     : Fl_Table(X, Y, W, H, L) {
+  setupTestClubVector();
+  int h = gCurrentHole - 1;
+  int v = countValidDistances(h);
   // Rows
-  rows(MAX_R);         // how many rows
+  rows(v);             // how many rows
   row_header(1);       // enable row headers (along left)
   row_height_all(40);  // default height of rows
   row_header_width(48);
@@ -190,10 +195,6 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
 
   color((Fl_Color)159);
   end();  // end the Fl_Table group
-
-  setupTestClubVector();
-  int h = gCurrentHole -1;
-  validDist = getValidDistancesCount(h);
   set_selection(0, 0, 0, 0);
 }
 

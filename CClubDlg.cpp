@@ -58,32 +58,23 @@ Fl_Button *btnX = nullptr;
 
 int btnIndex = 0;
 int btnPresses = 0;
-int validDistances = 0;
 int saveCurrentHole = 0;
 int clubDlgHole = 0;
 
-static void oKBtn_cb(Fl_Widget *w, void *data) {
+void updateFileStats() {
   gFileShotStats << "Hole " << clubDlgHole << endl;
   gFileGPS << setprecision(kPrecision);
   int h = clubDlgHole - 1;
-  for (int ix = 0; ix < validDistances; ++ix)
-    gFileShotStats << roundShotsRA[h][ix] << endl;
+  gFileShotStats << gShotRA[h] << endl;
   gFileShotStats.flush();
+}
 
+static void oKBtn_cb(Fl_Widget *w, void *data) {
+  updateFileStats();
   CClubDlg *ccd = (CClubDlg *)data;
   ccd->hide();
   gCurrentHole = saveCurrentHole;
 }
-
-// void populateClubcard(int hole) {
-//     int h = hole - 1;
-//     int n = getValidDistancesCount(h);
-//     for (int ix = 0; ix < n; ++ix)
-//     {
-//         roundShotsRA[h][ix].club = clubNamesRA[btnIndex]
-//     }
-//
-// }
 
 static void btnPrev_cb(Fl_Widget *w, void *data) {
   clubDlgHole--;
@@ -92,7 +83,9 @@ static void btnPrev_cb(Fl_Widget *w, void *data) {
   buff->text(s.c_str());
   boxHole->redraw();
   gCurrentHole = clubDlgHole;
-  clubcard->redraw();
+  int v = countValidDistances(clubDlgHole - 1);
+  clubcard->rows(v);
+  // clubcard->redraw();
 }
 
 static void btnNext_cb(Fl_Widget *w, void *data) {
@@ -102,14 +95,17 @@ static void btnNext_cb(Fl_Widget *w, void *data) {
   buff->text(s.c_str());
   boxHole->redraw();
   gCurrentHole = clubDlgHole;
-  clubcard->redraw();
+  int v = countValidDistances(clubDlgHole - 1);
+  clubcard->rows(v);
+  // clubcard->redraw();
 }
 
 void updateClubCard(int btnIndex) {
   int h = clubDlgHole - 1;
-  roundShotsRA[h][btnPresses].club = clubNamesRA[btnIndex];
+  gShotRA[h].holeStatsRA[btnPresses].club = clubNamesRA[btnIndex];
   btnPresses++;
-  if (btnPresses >= validDistances) btnPresses = 0;
+  int v = countValidDistances(clubDlgHole - 1);
+  if (btnPresses >= v) btnPresses = 0;
   clubcard->set_selection(btnPresses, 0, btnPresses, 0);
   clubcard->redraw();
 }
@@ -122,7 +118,8 @@ static void upBtn_cb(Fl_Widget *w, void *data) {
   clubcard->get_selection(row_top, col_left, row_bot, col_right);
   btnPresses = row_top;
   btnPresses--;
-  if (btnPresses < 0) btnPresses = validDistances - 1;
+  int v = countValidDistances(clubDlgHole - 1);
+  if (btnPresses < 0) btnPresses = v - 1;
   clubcard->set_selection(btnPresses, 0, btnPresses, 0);
   clubcard->redraw();
 }
@@ -135,7 +132,8 @@ static void downBtn_cb(Fl_Widget *w, void *data) {
   clubcard->get_selection(row_top, col_left, row_bot, col_right);
   btnPresses = row_top;
   btnPresses++;
-  if (btnPresses >= validDistances) btnPresses = 0;
+  int v = countValidDistances(clubDlgHole - 1);
+  if (btnPresses >= v) btnPresses = 0;
   clubcard->set_selection(btnPresses, 0, btnPresses, 0);
   clubcard->redraw();
 }
@@ -226,7 +224,6 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
   int col = kLMargin;
   int row = kClubBtnsY;
   ////
-  const int kOkY = 665;
   const int kOkX = 174;
   const int kOkW = kBtnW;
 
@@ -415,20 +412,20 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
     downBtn->callback(downBtn_cb, this);
   }
   {
-    oKBtn = new Fl_Button(kOkX, kOkY, kOkW, kBtnH, "OK");
+    oKBtn = new Fl_Button(kOkX, kBtnWinBottomY, kOkW, kBtnH, "OK");
     setButtonStyle(oKBtn);
     oKBtn->callback(oKBtn_cb, this);
   }
 
   saveCurrentHole = gCurrentHole;
   clubDlgHole = gCurrentHole;
-  validDistances = getValidDistancesCount(clubDlgHole-1);
-  cout << "gShotCount " << gShotCount << " validDistances " << validDistances
-       << endl;
+  int v = countValidDistances(clubDlgHole - 1);
+  cout << "gShotCount " << gShotCount << " validDistances " << v << endl;
   color((Fl_Color)159);
   set_modal();
   size_range(480, 800, 480, 800);
   end();
+  clear_border();
   show();
 }
 

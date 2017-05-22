@@ -3,6 +3,7 @@
 #endif
 
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -30,7 +31,12 @@ vector<CNGCHoles> vNGCHoles;
 array<string, k18> clubNamesRA;
 
 int gShotCount;
-array<array<ShotStats, kMAX_SHOTS>, k18> roundShotsRA;
+array<ShotStats, k18> gShotRA;
+
+ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
+  strm << setprecision(10) << ull.lng << "\t" << ull.lat;
+  return strm;
+}
 
 // clang-format off
 ostream& operator<<(ostream& strm, const CNGCHoles& h) {
@@ -47,10 +53,13 @@ ostream& operator<<(ostream& strm, const CNGCHoles& h) {
 
 // clang-format off
 ostream& operator<<(ostream& strm, const ShotStats& sra) {
-  strm << sra.club << "\t"
-       << sra.yards << "\t"
-        << sra.utm.lat << "\t"
-        << sra.utm.lng;
+  strm << sra.nmarks << endl;
+  for (int ix = 0; ix < sra.nmarks; ++ix) {
+  strm  << sra.holeStatsRA[ix].club << "\t"
+       << sra.holeStatsRA[ix].yards << "\t"
+        << setprecision(10) << sra.holeStatsRA[ix].utm.lat << "\t"
+        << sra.holeStatsRA[ix].utm.lng << endl;
+}
   return strm;
 }
 // clang-format on
@@ -104,11 +113,12 @@ void initClubNames() {
 void initShotStats() {
   gShotCount = 0;
   for (int hole = 0; hole < k18; ++hole) {
+    gShotRA[hole].nmarks = 0;
     for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
-      roundShotsRA[hole][ix].club = "";
-      roundShotsRA[hole][ix].yards = 0;
-      roundShotsRA[hole][ix].utm.lat = 0.0;
-      roundShotsRA[hole][ix].utm.lng = 0.0;
+      gShotRA[hole].holeStatsRA[ix].yards = 0;
+      gShotRA[hole].holeStatsRA[ix].club = "";
+      gShotRA[hole].holeStatsRA[ix].utm.lat = 0.0;
+      gShotRA[hole].holeStatsRA[ix].utm.lng = 0.0;
     }
   }
 }
@@ -139,12 +149,10 @@ void initGlobals() {
   writeShotStatsFileHeader();
 }
 
-int getValidDistancesCount(int hole) {
-  int num = 0;
-  for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
-    if (roundShotsRA[hole][ix].utm.lat != 0) num++;
-  }
-  return --num;
+int countValidDistances(int hole) {
+    int n = gShotRA[hole].nmarks - 1;
+    if (n < 0) n = 0;
+  return n;
 }
 
 int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
@@ -152,7 +160,9 @@ int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
   double y = now.lat - prev.lat;
   double d = sqrt(x * x + y * y);
   d *= 1.0936139;  // meters to yards
-  // cout << "Yards: " << d << endl;
+  // cout << "now " << now << endl;
+  // cout << "prev " << prev << endl;
+  // cout << "dist " << d << endl;
   return (int)round(d);
 }
 

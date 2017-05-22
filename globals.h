@@ -14,6 +14,7 @@ using namespace std;
 
 const int k18 = 18;
 const int kPrecision = 9;
+const int kBtnWinBottomY = 680;
 const int kBtnH = 48;
 const int kBtnW = 140;
 
@@ -40,6 +41,7 @@ struct UtmLatLng {
     lat = latitude;
     lng = longitude;
   }
+  friend ostream& operator<<(ostream& strm, const UtmLatLng& ull);
 };
 
 class CNGCHoles {
@@ -97,16 +99,21 @@ extern array<string, k18> clubNamesRA;
 
 const string path = "/home/pi/golf/angc/stats/";
 
-struct ShotStats {
-  string club;
+struct holeStats {
   int yards;
   UtmLatLng utm;
-  friend ostream& operator<<(ostream& strm, const ShotStats& sra);
+  string club;
 };
 
 const int kMAX_SHOTS = 7;
+struct   ShotStats {
+  int nmarks; // umber of times Mark btn hit
+  array<holeStats, kMAX_SHOTS> holeStatsRA;
+  friend ostream& operator<<(ostream& strm, const ShotStats& sra);
+};
+
 extern int gShotCount;
-extern array<array<ShotStats, kMAX_SHOTS>, k18> roundShotsRA;
+extern array<ShotStats, k18> gShotRA;
 extern void initShotStats();
 
 extern vector<CNGCHoles> vNGCHoles;
@@ -122,9 +129,9 @@ extern ofstream gFileShotStats;
 extern ofstream gFileGPS;
 
 extern void initGlobals();
-extern int getValidDistancesCount(int hole);
+extern int countValidDistances(int hole);
 extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
-extern void setButtonStyle(Fl_Button * b);
+extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
 
 #endif  // CGLOBALS_H

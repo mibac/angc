@@ -37,7 +37,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
   { card = new CScorecard(2, 20, 472, 244); }
   {
-    okB = new Fl_Button(174, 665, kBtnW, kBtnH, "OK");
+    okB = new Fl_Button(174, kBtnWinBottomY, kBtnW, kBtnH, "OK");
     setButtonStyle(okB);
     okB->callback(okB_cb, this);
   }
@@ -54,6 +54,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   set_modal();
   size_range(480, 800, 480, 800);
   end();
+  clear_border();
   show();
 }
 
