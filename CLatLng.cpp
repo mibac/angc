@@ -85,8 +85,6 @@ UtmLatLng CLatLng::getMark(size_t avg) {
   return ull;
 }
 
-void CLatLng::setRefMark() { lastMark = getMark(gGpsAvgNum); }
-
 UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
 
 #else
@@ -114,8 +112,6 @@ UtmLatLng CLatLng::getMark(size_t avg) {
   UtmLatLng ull;
   return ull;
 }
-
-void CLatLng::setRefMark() {}
 
 UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
 

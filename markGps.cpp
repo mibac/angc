@@ -100,11 +100,12 @@ void setMainBtnStyle(Fl_Button *b) {
 static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
 
 static void markBtn_cb(Fl_Widget *widget, void *) {
-  UtmLatLng u = cll.getNowMark();
-  gShotRA[gCurrentHole-1].holeStatsRA[gShotCount].utm = u;
   gShotCount++;
   if (gShotCount > kMAX_SHOTS) gShotCount = kMAX_SHOTS;
+
   gShotRA[gCurrentHole-1].nmarks++;
+  UtmLatLng u = cll.getNowMark();
+  gShotRA[gCurrentHole-1].holeStatsRA[gShotCount].utm = u;
 }
 
 void HandleFD(FL_SOCKET fd, void *data) {

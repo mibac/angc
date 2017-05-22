@@ -130,6 +130,7 @@ void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
     int d = calcUTMdistance(gShotRA[hole].holeStatsRA[ROW + 1].utm,
                             gShotRA[hole].holeStatsRA[ROW].utm);
     gShotRA[hole].holeStatsRA[ROW].yards = d;
+    cout << "drawShotData HOLE " << hole << endl;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
     // cout << "Hole " << hole << " ";
     // cout << "ROW+1 " << gShotRA[hole].holeStatsRA[ROW + 1].utm << endl;
@@ -178,8 +179,8 @@ void CClubcard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
 //
 CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
     : Fl_Table(X, Y, W, H, L) {
-  hole = 0;
-  setupTestClubVector();
+  hole = gCurrentHole -1;
+  // setupTestClubVector();
   // Rows
   int v = countValidDistances(hole);
   rows(v);             // how many rows

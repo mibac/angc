@@ -57,7 +57,6 @@ class CLatLng {
   CLatLng(const LatLng);
 
   //  bool isgpsup();
-  void setRefMark();
   UtmLatLng getNowMark();
 
   // Utility functions
