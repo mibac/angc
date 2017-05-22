@@ -97,7 +97,7 @@ const int kx = 17;
 
 extern array<string, k18> clubNamesRA;
 
-const string path = "/home/pi/golf/angc/stats/";
+const string path = "/home/pi/golf/stats/";
 
 struct holeStats {
   int yards;
