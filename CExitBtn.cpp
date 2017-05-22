@@ -34,7 +34,7 @@ void CExitBtn::writeGPS() {
 }
 
 void CExitBtn::writeScoreStats() {
-  string s = path + "aStats_" + getFileSuffix();
+  string s = path + "aScore_" + getFileSuffix();
   gFileScoreStats.open(s.c_str());
   gFileScoreStats << asctime(std::localtime(&gToday));
   for (auto itr : vNGCHoles) gFileScoreStats << itr;

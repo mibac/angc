@@ -53,8 +53,8 @@ ostream& operator<<(ostream& strm, const CNGCHoles& h) {
 
 // clang-format off
 ostream& operator<<(ostream& strm, const ShotStats& sra) {
-  strm << sra.nmarks << endl;
-  for (int ix = 0; ix < sra.nmarks; ++ix) {
+  // strm << sra.nmarks << endl;
+  for (int ix = 0; ix < sra.nmarks-1; ++ix) {
   strm  << sra.holeStatsRA[ix].club << "\t"
        << sra.holeStatsRA[ix].yards << "\t"
         << setprecision(10) << sra.holeStatsRA[ix].utm.lat << "\t"
@@ -127,6 +127,7 @@ void writeShotStatsFileHeader() {
   string s = path + "aShots_" + getFileSuffix();
   gFileShotStats.open(s.c_str());
   gFileShotStats << asctime(std::localtime(&gToday));
+  gFileShotStats << "Club\tDist\tLng\tLat" << endl;
   gFileShotStats.flush();
 }
 

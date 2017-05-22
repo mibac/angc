@@ -48,9 +48,10 @@ const int kRow4 = 3;
 const int kRow5 = 4;
 const int kRow6 = 5;
 
-int getRandomYards(unsigned seed) {
-  std::default_random_engine generator (seed*1000000);
-  std::uniform_int_distribution<int> distribution(30, 200);
+int getRandomYards(unsigned myseed) {
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine generator (myseed*1000000 + seed);
+  std::uniform_int_distribution<int> distribution(40, 250);
   int dice_roll =
       distribution(generator);  // generates number in the range 1..200
   return dice_roll;
@@ -130,10 +131,10 @@ void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
                             gShotRA[hole].holeStatsRA[ROW].utm);
     gShotRA[hole].holeStatsRA[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
-    cout << "Hole " << hole << " ";
+    // cout << "Hole " << hole << " ";
     // cout << "ROW+1 " << gShotRA[hole].holeStatsRA[ROW + 1].utm << endl;
     // cout << "ROW " << gShotRA[hole].holeStatsRA[ROW].utm << endl;
-    cout << "dist " << d << endl;
+    // cout << "dist " << d << endl;
   }
 }
 

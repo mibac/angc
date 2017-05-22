@@ -62,11 +62,13 @@ int saveCurrentHole = 0;
 int clubDlgHole = 0;
 
 void updateFileStats() {
-  gFileShotStats << "Hole " << clubDlgHole << endl;
-  gFileGPS << setprecision(kPrecision);
-  int h = clubDlgHole - 1;
-  clubcard->setHole(h);
-  gFileShotStats << gShotRA[h] << endl;
+  gFileShotStats << setprecision(kPrecision);
+  for (int ix = 0; ix < k18; ++ix) {
+    if (gShotRA[ix].nmarks > 1) {
+      gFileShotStats << "Hole\t" << ix + 1 << endl;
+      gFileShotStats << gShotRA[ix] << endl;
+    }
+  }
   gFileShotStats.flush();
 }
 
@@ -78,7 +80,6 @@ static void oKBtn_cb(Fl_Widget *w, void *data) {
 }
 
 static void btnPrev_cb(Fl_Widget *w, void *data) {
-  updateFileStats();
   clubDlgHole--;
   if (clubDlgHole < 1) clubDlgHole = 1;
   gCurrentHole = clubDlgHole;
@@ -88,11 +89,11 @@ static void btnPrev_cb(Fl_Widget *w, void *data) {
   int v = countValidDistances(clubDlgHole - 1);
   clubcard->rows(v);
   clubcard->setHole(clubDlgHole - 1);
+  clubcard->set_selection(0, 0, 0, 0);
   clubcard->redraw();
 }
 
 static void btnNext_cb(Fl_Widget *w, void *data) {
-  updateFileStats();
   clubDlgHole++;
   if (clubDlgHole > 18) clubDlgHole = 18;
   gCurrentHole = clubDlgHole;
@@ -102,6 +103,7 @@ static void btnNext_cb(Fl_Widget *w, void *data) {
   int v = countValidDistances(clubDlgHole - 1);
   clubcard->rows(v);
   clubcard->setHole(clubDlgHole - 1);
+  clubcard->set_selection(0, 0, 0, 0);
   clubcard->redraw();
 }
 
@@ -109,15 +111,15 @@ void updateClubCard(int btnIndex) {
   int h = clubDlgHole - 1;
   clubcard->setHole(h);
   int v = countValidDistances(h);
-  int row_top;
+  int sel_row;
   int col_left;
   int row_bot;
   int col_right;
-  clubcard->get_selection(row_top, col_left, row_bot, col_right);
-  gShotRA[h].holeStatsRA[row_top].club = clubNamesRA[btnIndex];
-  row_top++;
-  if (row_top >= v) row_top = 0;
-  clubcard->set_selection(row_top, 0, row_top, 0);
+  clubcard->get_selection(sel_row, col_left, row_bot, col_right);
+  gShotRA[h].holeStatsRA[sel_row].club = clubNamesRA[btnIndex];
+  sel_row++;
+  if (sel_row >= v) sel_row = 0;
+  clubcard->set_selection(sel_row, 0, sel_row, 0);
   clubcard->redraw();
 }
 
@@ -130,7 +132,7 @@ static void upBtn_cb(Fl_Widget *w, void *data) {
   btnPresses = row_top;
   btnPresses--;
   int v = countValidDistances(clubDlgHole - 1);
-  if (btnPresses < 0) btnPresses = v;
+  if (btnPresses < 0) btnPresses = v - 1;
   clubcard->set_selection(btnPresses, 0, btnPresses, 0);
   clubcard->redraw();
 }
