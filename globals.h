@@ -30,6 +30,9 @@ extern string gStartRoundTimeStr;
 extern bool bRoundStarted;
 extern bool gFront9;
 
+extern Fl_Button *markBtn;
+extern string markBtnLabel;
+
 struct UtmLatLng {
   double lat;
   double lng;

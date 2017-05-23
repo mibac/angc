@@ -38,7 +38,9 @@ void CHoleBtn::SetNumPadValue_CB2() {
   myHolePopup->hide();  // hide myHolePopup
   gShotRA[gCurrentHole-1].holeStatsRA[0].utm = cll.getNowMark();
   gShotRA[gCurrentHole-1].nmarks = 1;
-  gShotCount = 0;
+  gShotCount = 1;
+  markBtnLabel = "Mark\n1";
+  markBtn->label(markBtnLabel.c_str());
 }
 
 void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {

@@ -66,7 +66,7 @@ using namespace std;
 
 Fl_Window *win;
 Fl_Output *my_input;
-Fl_Button *markBtn;
+// Fl_Button *markBtn; // moved to globals.h
 CYellowBtn *yellowBtn;
 CHoleBtn *holeBtn;
 // CClubBtn *clubBtn;
@@ -93,7 +93,8 @@ void setMainBtnStyle(Fl_Button *b) {
   b->labelfont(1);
   b->labelsize(24);
   b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
+  // b->down_color(FL_DARK_BLUE);
+  b->down_color(FL_DARK_BLUE);
 }
 
 // This window callback allows the user to save & exit, don't save, or cancel.
@@ -102,6 +103,8 @@ static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
 static void markBtn_cb(Fl_Widget *widget, void *) {
   gShotCount++;
   if (gShotCount > kMAX_SHOTS) gShotCount = kMAX_SHOTS;
+  markBtnLabel = "Mark\n" + to_string(gShotCount);
+  markBtn->label(markBtnLabel.c_str());
 
   gShotRA[gCurrentHole-1].nmarks++;
   UtmLatLng u = cll.getNowMark();
@@ -185,9 +188,9 @@ int main(int argc, char **argv) {
   int y = 674;
   win = new Fl_Window(0, 0, 480, 800, "NGC Golf");
   win->size_range(480, 800, 480, 800);
-
   win->color(fl_rgb_color(162, 255, 146));
   win->callback(window_cb);
+
   win->begin();
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
@@ -203,7 +206,7 @@ int main(int argc, char **argv) {
   // holeBtn->color(FL_GRAY);
   holeBtn->cursor_color(FL_GRAY);
 
-  markBtn = new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark");
+  markBtn = new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark\n1");
   setMainBtnStyle(markBtn);
   markBtn->callback(markBtn_cb);
 
@@ -218,6 +221,8 @@ int main(int argc, char **argv) {
 
   win->resizable(win);
   win->show();
+
+  gShotCount = 1;
   hv->make_current();
   hv->initHoleWindow(x, y, ngc);
   hv->makeList();
@@ -225,6 +230,5 @@ int main(int argc, char **argv) {
   hv->draw();
   // setup a callback for the popen() ed descriptor
   Fl::add_fd(fileno(gpsin), HandleFD, 0);
-
   return (Fl::run());
 }

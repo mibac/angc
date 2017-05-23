@@ -18,6 +18,9 @@ string gStartRoundTimeStr;
 bool bRoundStarted;
 bool gFront9;
 
+Fl_Button *markBtn = nullptr;
+string markBtnLabel = "Mark\n1";
+
 ofstream gFileScoreStats;
 ofstream gFileShotStats;
 ofstream gFileGPS;
@@ -170,7 +173,7 @@ int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev) {
 void setButtonStyle(Fl_Button* b) {
   b->resize(b->x(), b->y(), kBtnW, kBtnH);
   b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
+  b->down_color(FL_DARK_BLUE);
   b->labelfont(1);
   b->labelsize(36);
 }
