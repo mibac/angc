@@ -67,7 +67,7 @@ using namespace std;
 Fl_Window *win;
 Fl_Output *my_input;
 // Fl_Button *markBtn; // moved to globals.h
-// Fl_Text_Display *yellowBtn;
+// Fl_Text_Display *gTmDisplay;
 CHoleBtn *holeBtn;
 // CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
@@ -106,9 +106,9 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
   markBtnLabel = "Mark\n" + to_string(gShotCount);
   markBtn->label(markBtnLabel.c_str());
 
-  gShotRA[gCurrentHole-1].nmarks++;
+  gShotRA[gCurrentHole - 1].nmarks++;
   UtmLatLng u = cll.getNowMark();
-  gShotRA[gCurrentHole-1].holeStatsRA[gShotCount].utm = u;
+  gShotRA[gCurrentHole - 1].holeStatsRA[gShotCount].utm = u;
 }
 
 void HandleFD(FL_SOCKET fd, void *data) {
@@ -139,7 +139,7 @@ void HandleFD(FL_SOCKET fd, void *data) {
     size_t found = gpsStr.find("GPGGA");
     // size_t found = s.find("GPGLL");
     if (found != string::npos) {
-      yellowBtn->updateGPStime();
+      gTmDisplay->updateGPStime();
       cll.updateLatLng(gpsStr.c_str());
       UtmLatLng u = cll.getNowMark();
       if ((fabs(u.lng - hv->ngc->hole[gCurrentHole].startOrient[0].v[0]) >
@@ -188,14 +188,15 @@ int main(int argc, char **argv) {
   int y = 674;
   win = new Fl_Window(0, 0, 480, 800, "NGC Golf");
   win->size_range(480, 800, 480, 800);
-  win->color(fl_rgb_color(162, 255, 146));
+//  win->color(fl_rgb_color(162, 255, 146));
+  win->color(getBkgRGBcolor());
   win->callback(window_cb);
 
   win->begin();
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  yellowBtn = new CTimeDisplay(3, kBtnRow1Top, kYardageWid + 1, kBoxSize, 0);
+  gTmDisplay = new CTimeDisplay(3, kBtnRow1Top, kYardageWid + 1, kBoxSize, 0);
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);
@@ -206,13 +207,14 @@ int main(int argc, char **argv) {
   // holeBtn->color(FL_GRAY);
   holeBtn->cursor_color(FL_GRAY);
 
-  markBtn = new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark\n1");
+  markBtn =
+      new Fl_Button(kMarkLeft, kBtnRow1Top, kMarkWid, kBoxSize, "Mark\n1");
   setMainBtnStyle(markBtn);
   markBtn->callback(markBtn_cb);
 
   scoreBtn =
       new CScoreBtn(kScoreLeft, kBtnRow1Top, kScoreWid, kBoxSize, "Score");
-      setMainBtnStyle(scoreBtn);
+  setMainBtnStyle(scoreBtn);
 
   exitBtn = new CExitBtn(kExitLeft, kBtnRow1Top, kExitWid, kBoxSize, "Exit");
   setMainBtnStyle(exitBtn);

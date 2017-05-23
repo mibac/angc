@@ -17,10 +17,14 @@
 #include "CHoleBtn.h"
 #endif
 
+#ifndef CLATLNG_H
+#include "CLatLng.h"
+#endif
+
 using namespace std;
 
-// CTimeDisplay *yellowBtn;
-// Fl_Text_Buffer *tmbuff;
+// CTimeDisplay *gTmDisplay;
+// Fl_Text_Buffer *gTmbuff;
 
 void CTimeDisplay::setAttributes() {
   labeltype(FL_NORMAL_LABEL);
@@ -29,17 +33,17 @@ void CTimeDisplay::setAttributes() {
   textfont(1);
   textsize(36);
   textcolor(FL_BLACK);
-  color(fl_rgb_color(162, 255, 146));
-  selection_color(fl_rgb_color(162, 255, 146));
-  cursor_color(fl_rgb_color(162, 255, 146));
+  color(getBkgRGBcolor());
+  selection_color(getBkgRGBcolor());
+  cursor_color(getBkgRGBcolor());
   box(FL_NO_BOX);
   scrollbar_width(0);
 }
 
 // Called when user finishes entering data with numeric keypad
-void CTimeDisplay::yellowBtn_CB2() {}
+void CTimeDisplay::gTmDisplay_CB2() {}
 
-void CTimeDisplay::yellowBtn_CB(Fl_Widget *, void *data) {}
+void CTimeDisplay::gTmDisplay_CB(Fl_Widget *, void *data) {}
 
 void CTimeDisplay::calcGPStime(const string &lbl) {
   if (gNowTimeStr == "") return;
@@ -63,7 +67,7 @@ void CTimeDisplay::calcGPStime(const string &lbl) {
   if (hr == 0) hr = 12;
   hs = to_string(hr);
   timeStr = lbl + hs + ":" + ms;
-  tmbuff->text(timeStr.c_str());
+  gTmbuff->text(timeStr.c_str());
 }
 
 void CTimeDisplay::calcRoundGPStime(const string &lbl) {
@@ -72,7 +76,7 @@ void CTimeDisplay::calcRoundGPStime(const string &lbl) {
   int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
   CGPStime val(sec);
   timeStr = val.sec2str(sec, lbl).c_str();
-  tmbuff->text(timeStr.c_str());
+  gTmbuff->text(timeStr.c_str());
 }
 
 int countHolesPlayed() {
@@ -90,21 +94,28 @@ void CTimeDisplay::calcAvgHoleGPStime(const string &lbl) {
   if (num > 0) sec /= num;
   CGPStime val(sec);
   timeStr = val.sec2str(sec, lbl).c_str();
-  tmbuff->text(timeStr.c_str());
+  gTmbuff->text(timeStr.c_str());
 }
 
 void CTimeDisplay::updateGPStime() {
-  switch (count) {
-    case 0:
-      calcRoundGPStime("Round\n");
-      break;
-    case 1:
-      calcAvgHoleGPStime("Avg\n");
-      break;
-    case 2:
-      calcGPStime("Time\n");
-      break;
-    default:;
+  if (!bRoundStarted) {
+      textcolor(FL_BLUE);
+      timeStr = "Start";
+    gTmbuff->text(timeStr.c_str());
+  } else {
+    textcolor(FL_BLACK);
+    switch (count) {
+      case 0:
+        calcRoundGPStime("Round\n");
+        break;
+      case 1:
+        calcAvgHoleGPStime("Avg\n");
+        break;
+      case 2:
+        calcGPStime("Time\n");
+        break;
+      default:;
+    }
   }
 }
 
@@ -120,8 +131,17 @@ int CTimeDisplay::handle(int e) {
       break;
     case FL_RELEASE:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
-        count++;
-        if (count > 2) count = 0;
+        if (!bRoundStarted) {
+          bRoundStarted = true;
+          gCurrentHole = 1;
+          gShotRA[gCurrentHole-1].holeStatsRA[0].utm = cll.getNowMark();
+          gShotRA[gCurrentHole-1].nmarks = 1;
+          gShotCount = 1;
+          gStartRoundTimeStr = gNowTimeStr;
+        } else {
+          count++;
+          if (count > 2) count = 0;
+        }
         ret = 1;
       }
       break;
@@ -131,8 +151,8 @@ int CTimeDisplay::handle(int e) {
 
 CTimeDisplay::CTimeDisplay(int X, int Y, int W, int H, const char *L)
     : Fl_Text_Display(X, Y, W, H, L) {
-  tmbuff = new Fl_Text_Buffer();
-  buffer(tmbuff);
+  gTmbuff = new Fl_Text_Buffer();
+  buffer(gTmbuff);
   setAttributes();
   count = 2;
 }

@@ -2,8 +2,8 @@
 #include "globals.h"
 #endif
 
-#include <ctime>
 #include <cmath>
+#include <ctime>
 #include <iomanip>
 
 using namespace std;
@@ -19,12 +19,12 @@ string gStartRoundTimeStr;
 bool bRoundStarted;
 bool gFront9;
 
-Fl_Button *markBtn = nullptr;
+Fl_Button* markBtn = nullptr;
 string markBtnLabel = "Mark\n1";
 
-CTimeDisplay *yellowBtn = nullptr;
-Fl_Text_Buffer *tmbuff = nullptr;
-string timeStr = "";
+CTimeDisplay* gTmDisplay = nullptr;
+Fl_Text_Buffer* gTmbuff = nullptr;
+string timeStr = "Start";
 
 ofstream gFileScoreStats;
 ofstream gFileShotStats;
@@ -159,8 +159,8 @@ void initGlobals() {
 }
 
 int countValidDistances(int hole) {
-    int n = gShotRA[hole].nmarks - 1;
-    if (n < 0) n = 0;
+  int n = gShotRA[hole].nmarks - 1;
+  if (n < 0) n = 0;
   return n;
 }
 
@@ -198,4 +198,16 @@ string getFileSuffix() {
   if (d.length() == 1) d = "0" + d;
   suffix = suffix + "_" + y + m + d + ".txt";
   return suffix;
+}
+
+Fl_Color getBkgRGBcolor() {
+  // 1st attempt
+  // return fl_rgb_color(162, 255, 146);
+
+  // pixie conversion from http://davengrace.com/cgi-bin/cspace.pl
+  // return fl_rgb_color(161, 255, 140);
+
+  // experiments
+  return fl_rgb_color(150, 255, 160);
+
 }

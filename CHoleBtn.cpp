@@ -24,10 +24,6 @@ void CHoleBtn::SetNumPadValue_CB2() {
   gCurrentHole = atoi(str.c_str());
   bPlayedHole[gCurrentHole] = true;
   gStartHoleTimeStr = gNowTimeStr;
-  if (bRoundStarted == false) {
-    gStartRoundTimeStr = gNowTimeStr;
-    bRoundStarted = true;
-  }
 
   CHoleBtn::holeName = str;
   if (str.size() == 1)

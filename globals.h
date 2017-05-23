@@ -35,8 +35,8 @@ extern Fl_Button *markBtn;
 extern string markBtnLabel;
 
 class CTimeDisplay;
-extern CTimeDisplay *yellowBtn;
-extern Fl_Text_Buffer *tmbuff;
+extern CTimeDisplay *gTmDisplay;
+extern Fl_Text_Buffer *gTmbuff;
 extern string timeStr;
 
 struct UtmLatLng {
@@ -142,5 +142,5 @@ extern int countValidDistances(int hole);
 extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
-
+extern Fl_Color getBkgRGBcolor();
 #endif  // CGLOBALS_H
