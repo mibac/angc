@@ -32,6 +32,7 @@ extern bool gFront9;
 
 extern Fl_Button *markBtn;
 extern string markBtnLabel;
+extern string timeStr;
 
 struct UtmLatLng {
   double lat;

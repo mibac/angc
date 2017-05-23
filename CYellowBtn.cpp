@@ -22,11 +22,13 @@ using namespace std;
 void CYellowBtn::setAttributes() {
   labeltype(FL_NORMAL_LABEL);
   align(FL_ALIGN_CENTER);
-
+  box(FL_UP_BOX);
   textfont(1);
-  textsize(32);
+  textsize(36);
   textcolor(FL_BLACK);
-  color(FL_YELLOW);
+  color(fl_rgb_color(162, 255, 146));
+  selection_color(fl_rgb_color(162, 255, 146));
+  cursor_color(fl_rgb_color(162, 255, 146));
   readonly(1);
 }
 
@@ -56,9 +58,9 @@ void CYellowBtn::calcGPStime(const string &lbl) {
   hr -= 5;
   if (hr == 0) hr = 12;
   hs = to_string(hr);
-  s = lbl + hs + ":" + ms;
+  timeStr = lbl + hs + ":" + ms;
 
-  value(s.c_str());
+  value(timeStr.c_str());
   redraw();
 }
 
@@ -67,7 +69,8 @@ void CYellowBtn::calcRoundGPStime(const string &lbl) {
   CGPStime tm;
   int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
   CGPStime val(sec);
-  value(val.sec2str(sec, lbl).c_str());
+  timeStr = val.sec2str(sec, lbl).c_str();
+  value(timeStr.c_str());
   redraw();
 }
 
@@ -85,7 +88,8 @@ void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
   int num = countHolesPlayed();
   if (num > 0) sec /= num;
   CGPStime val(sec);
-  value(val.sec2str(sec, lbl).c_str());
+  timeStr = val.sec2str(sec, lbl).c_str();
+  value(timeStr.c_str());
   redraw();
 }
 

@@ -4,6 +4,8 @@
 
 #include <iomanip>
 
+#include <FL/Fl.H>
+#include <FL/Enumerations.H>
 #include <FL/fl_ask.H>
 
 #ifndef CGLOBALS_H
@@ -47,6 +49,13 @@ void CExitBtn::Button_CB() {
                          "Save",        // 1
                          "Cancel"       // 2
                          );
+  // {
+  //   uchar r = 0;
+  //   uchar g = 0;
+  //   uchar b = 0;
+  //   Fl::get_color(FL_DARK_BLUE, r, g, b);
+  //   cout << "FL_DARK_BLUE " << (int)r << " " << (int)g << " " << (int)b << endl;
+  // }
   if (result == 0) {  // Close without saving
     gFileShotStats.close();
     gFileScoreStats.close();

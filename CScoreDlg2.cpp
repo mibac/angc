@@ -88,24 +88,46 @@ void toggleNumbers(Fl_Box *box) {
   box7->color(FL_WHITE);
   box8->color(FL_WHITE);
   box9->color(FL_WHITE);
-  box->color(FL_YELLOW);
+
+  box0->labelcolor(FL_BLACK);
+  box1->labelcolor(FL_BLACK);
+  box2->labelcolor(FL_BLACK);
+  box3->labelcolor(FL_BLACK);
+  box4->labelcolor(FL_BLACK);
+  box5->labelcolor(FL_BLACK);
+  box6->labelcolor(FL_BLACK);
+  box7->labelcolor(FL_BLACK);
+  box8->labelcolor(FL_BLACK);
+  box9->labelcolor(FL_BLACK);
+
+  box->color(FL_DARK_BLUE);
+  box->labelcolor(FL_WHITE);
 }
 
 void toggleSelection(Fl_Box *box) {
   if (box == scoreBox || box == scoreValue) {
-    scoreBox->color(FL_YELLOW);
+    scoreBox->color(FL_DARK_BLUE);
+    scoreBox->labelcolor(FL_WHITE);
     puttBox->color(FL_WHITE);
+    puttBox->labelcolor(FL_BLACK);
     udBox->color(FL_WHITE);
+    udBox->labelcolor(FL_BLACK);
     sel = scoreValue;
   } else if (box == puttBox || box == puttValue) {
+    puttBox->color(FL_DARK_BLUE);
+    puttBox->labelcolor(FL_WHITE);
     scoreBox->color(FL_WHITE);
-    puttBox->color(FL_YELLOW);
+    scoreBox->labelcolor(FL_BLACK);
     udBox->color(FL_WHITE);
+    udBox->labelcolor(FL_BLACK);
     sel = puttValue;
   } else if (box == udBox || box == udValue) {
+    udBox->color(FL_DARK_BLUE);
+    udBox->labelcolor(FL_WHITE);
     scoreBox->color(FL_WHITE);
+    scoreBox->labelcolor(FL_BLACK);
     puttBox->color(FL_WHITE);
-    udBox->color(FL_YELLOW);
+    puttBox->labelcolor(FL_BLACK);
     sel = udValue;
   }
 }
@@ -126,7 +148,11 @@ void incrementSelection() {
   scoreBox->color(FL_WHITE);
   puttBox->color(FL_WHITE);
   udBox->color(FL_WHITE);
-  hdr->color(FL_YELLOW);
+  scoreBox->labelcolor(FL_BLACK);
+  puttBox->labelcolor(FL_BLACK);
+  udBox->labelcolor(FL_BLACK);
+  hdr->color(FL_DARK_BLUE);
+  hdr->labelcolor(FL_WHITE);
 }
 
 void CScoreDlg2::stuffData(int n) {
@@ -229,14 +255,14 @@ int CScoreDlg2::handle(int e) {
 
 CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
-const int kLeftX = 12;
+  const int kLeftX = 12;
   {
     holeBox = new Fl_Box(60, 101, 90, 56, "Hole");
     holeBox->box(FL_BORDER_BOX);
     holeBox->color(FL_BACKGROUND2_COLOR);
     holeBox->selection_color(FL_BACKGROUND_COLOR);
     holeBox->labeltype(FL_NORMAL_LABEL);
-    holeBox->labelfont(0);
+    holeBox->labelfont(1);
     holeBox->labelsize(28);
     holeBox->labelcolor(FL_FOREGROUND_COLOR);
     holeBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -248,7 +274,7 @@ const int kLeftX = 12;
     yardsBox->color(FL_BACKGROUND2_COLOR);
     yardsBox->selection_color(FL_BACKGROUND_COLOR);
     yardsBox->labeltype(FL_NORMAL_LABEL);
-    yardsBox->labelfont(0);
+    yardsBox->labelfont(1);
     yardsBox->labelsize(28);
     yardsBox->labelcolor(FL_FOREGROUND_COLOR);
     yardsBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -260,7 +286,7 @@ const int kLeftX = 12;
     hdcpBox->color(FL_BACKGROUND2_COLOR);
     hdcpBox->selection_color(FL_BACKGROUND_COLOR);
     hdcpBox->labeltype(FL_NORMAL_LABEL);
-    hdcpBox->labelfont(0);
+    hdcpBox->labelfont(1);
     hdcpBox->labelsize(28);
     hdcpBox->labelcolor(FL_FOREGROUND_COLOR);
     hdcpBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -272,7 +298,7 @@ const int kLeftX = 12;
     parBox->color(FL_BACKGROUND2_COLOR);
     parBox->selection_color(FL_BACKGROUND_COLOR);
     parBox->labeltype(FL_NORMAL_LABEL);
-    parBox->labelfont(0);
+    parBox->labelfont(1);
     parBox->labelsize(28);
     parBox->labelcolor(FL_FOREGROUND_COLOR);
     parBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -284,7 +310,7 @@ const int kLeftX = 12;
     scoreBox->color(FL_BACKGROUND2_COLOR);
     scoreBox->selection_color(FL_BACKGROUND_COLOR);
     scoreBox->labeltype(FL_NORMAL_LABEL);
-    scoreBox->labelfont(0);
+    scoreBox->labelfont(1);
     scoreBox->labelsize(28);
     scoreBox->labelcolor(FL_FOREGROUND_COLOR);
     scoreBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -296,7 +322,7 @@ const int kLeftX = 12;
     puttBox->color(FL_BACKGROUND2_COLOR);
     puttBox->selection_color(FL_BACKGROUND_COLOR);
     puttBox->labeltype(FL_NORMAL_LABEL);
-    puttBox->labelfont(0);
+    puttBox->labelfont(1);
     puttBox->labelsize(28);
     puttBox->labelcolor(FL_FOREGROUND_COLOR);
     puttBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -308,7 +334,7 @@ const int kLeftX = 12;
     udBox->color(FL_BACKGROUND2_COLOR);
     udBox->selection_color(FL_BACKGROUND_COLOR);
     udBox->labeltype(FL_NORMAL_LABEL);
-    udBox->labelfont(0);
+    udBox->labelfont(1);
     udBox->labelsize(28);
     udBox->labelcolor(FL_FOREGROUND_COLOR);
     udBox->align(Fl_Align(FL_ALIGN_CENTER));
@@ -320,7 +346,7 @@ const int kLeftX = 12;
     box0->color(FL_BACKGROUND2_COLOR);
     box0->selection_color(FL_BACKGROUND_COLOR);
     box0->labeltype(FL_NORMAL_LABEL);
-    box0->labelfont(0);
+    box0->labelfont(1);
     box0->labelsize(60);
     box0->labelcolor(FL_FOREGROUND_COLOR);
     box0->align(Fl_Align(FL_ALIGN_CENTER));
@@ -332,7 +358,7 @@ const int kLeftX = 12;
     box1->color(FL_BACKGROUND2_COLOR);
     box1->selection_color(FL_BACKGROUND_COLOR);
     box1->labeltype(FL_NORMAL_LABEL);
-    box1->labelfont(0);
+    box1->labelfont(1);
     box1->labelsize(60);
     box1->labelcolor(FL_FOREGROUND_COLOR);
     box1->align(Fl_Align(FL_ALIGN_CENTER));
@@ -344,7 +370,7 @@ const int kLeftX = 12;
     box2->color(FL_BACKGROUND2_COLOR);
     box2->selection_color(FL_BACKGROUND_COLOR);
     box2->labeltype(FL_NORMAL_LABEL);
-    box2->labelfont(0);
+    box2->labelfont(1);
     box2->labelsize(60);
     box2->labelcolor(FL_FOREGROUND_COLOR);
     box2->align(Fl_Align(FL_ALIGN_CENTER));
@@ -356,7 +382,7 @@ const int kLeftX = 12;
     box3->color(FL_BACKGROUND2_COLOR);
     box3->selection_color(FL_BACKGROUND_COLOR);
     box3->labeltype(FL_NORMAL_LABEL);
-    box3->labelfont(0);
+    box3->labelfont(1);
     box3->labelsize(60);
     box3->labelcolor(FL_FOREGROUND_COLOR);
     box3->align(Fl_Align(FL_ALIGN_CENTER));
@@ -368,7 +394,7 @@ const int kLeftX = 12;
     box4->color(FL_BACKGROUND2_COLOR);
     box4->selection_color(FL_BACKGROUND_COLOR);
     box4->labeltype(FL_NORMAL_LABEL);
-    box4->labelfont(0);
+    box4->labelfont(1);
     box4->labelsize(60);
     box4->labelcolor(FL_FOREGROUND_COLOR);
     box4->align(Fl_Align(FL_ALIGN_CENTER));
@@ -380,7 +406,7 @@ const int kLeftX = 12;
     box5->color(FL_BACKGROUND2_COLOR);
     box5->selection_color(FL_BACKGROUND_COLOR);
     box5->labeltype(FL_NORMAL_LABEL);
-    box5->labelfont(0);
+    box5->labelfont(1);
     box5->labelsize(60);
     box5->labelcolor(FL_FOREGROUND_COLOR);
     box5->align(Fl_Align(FL_ALIGN_CENTER));
@@ -392,7 +418,7 @@ const int kLeftX = 12;
     box6->color(FL_BACKGROUND2_COLOR);
     box6->selection_color(FL_BACKGROUND_COLOR);
     box6->labeltype(FL_NORMAL_LABEL);
-    box6->labelfont(0);
+    box6->labelfont(1);
     box6->labelsize(60);
     box6->labelcolor(FL_FOREGROUND_COLOR);
     box6->align(Fl_Align(FL_ALIGN_CENTER));
@@ -404,7 +430,7 @@ const int kLeftX = 12;
     box7->color(FL_BACKGROUND2_COLOR);
     box7->selection_color(FL_BACKGROUND_COLOR);
     box7->labeltype(FL_NORMAL_LABEL);
-    box7->labelfont(0);
+    box7->labelfont(1);
     box7->labelsize(60);
     box7->labelcolor(FL_FOREGROUND_COLOR);
     box7->align(Fl_Align(FL_ALIGN_CENTER));
@@ -416,7 +442,7 @@ const int kLeftX = 12;
     box8->color(FL_BACKGROUND2_COLOR);
     box8->selection_color(FL_BACKGROUND_COLOR);
     box8->labeltype(FL_NORMAL_LABEL);
-    box8->labelfont(0);
+    box8->labelfont(1);
     box8->labelsize(60);
     box8->labelcolor(FL_FOREGROUND_COLOR);
     box8->align(Fl_Align(FL_ALIGN_CENTER));
@@ -428,7 +454,7 @@ const int kLeftX = 12;
     box9->color(FL_BACKGROUND2_COLOR);
     box9->selection_color(FL_BACKGROUND_COLOR);
     box9->labeltype(FL_NORMAL_LABEL);
-    box9->labelfont(0);
+    box9->labelfont(1);
     box9->labelsize(60);
     box9->labelcolor(FL_FOREGROUND_COLOR);
     box9->align(Fl_Align(FL_ALIGN_CENTER));
@@ -530,7 +556,7 @@ const int kLeftX = 12;
   }  // Fl_Box* o
 
   const int kCardX = kLeftX;
-  const int kdx =  17;
+  const int kdx = 17;
   const int kClubX = kCardX + kBtnW + kdx;
   const int kOkX = kClubX + kBtnW + kdx;
   {

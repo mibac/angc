@@ -195,9 +195,9 @@ void clubBtn_cb(Fl_Widget *w, void *data) {
 
 void CClubDlg::setClubBtnStyle(Fl_Button *b) {
   b->labelfont(1);
-  b->labelsize(32);
+  b->labelsize(36);
   b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
+  b->down_color(FL_DARK_BLUE);
 }
 
 void setImageBtnSytle(Fl_Image_Button *b, Fl_JPEG_Image *up,
@@ -206,7 +206,7 @@ void setImageBtnSytle(Fl_Image_Button *b, Fl_JPEG_Image *up,
   b->down_image(down);
   b->image(NULL);
   b->color(FL_WHITE);
-  b->down_color(FL_YELLOW);
+  b->down_color(FL_DARK_BLUE);
 }
 
 CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
@@ -405,7 +405,7 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
     upBtn->down_image(iup_down);  // the identifyable name as described above
     upBtn->image(NULL);
     upBtn->color(FL_WHITE);
-    upBtn->down_color(FL_YELLOW);
+    upBtn->down_color(FL_DARK_BLUE);
     upBtn->callback(upBtn_cb, this);
   }
   {
@@ -421,7 +421,7 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
         idown_down);  // the identifyable name as described above
     downBtn->image(NULL);
     downBtn->color(FL_WHITE);
-    downBtn->down_color(FL_YELLOW);
+    downBtn->down_color(FL_DARK_BLUE);
     downBtn->callback(downBtn_cb, this);
   }
   {
