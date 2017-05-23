@@ -12,7 +12,6 @@ using namespace std;
 
 class CTimeDisplay : public Fl_Text_Display {
   int count;
-  // Called when user finishes entering data with numeric keypad
   void gTmDisplay_CB2();
   static void gTmDisplay_CB(Fl_Widget *, void *data);
 
@@ -29,5 +28,4 @@ class CTimeDisplay : public Fl_Text_Display {
   void updateGPStime();
 };
 
-// extern CTimeDisplay *gTmDisplay;  // local instance of numeric keypad widget
 #endif  // CYELLOWBTN_H

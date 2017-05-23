@@ -14,9 +14,6 @@ void CHolesPopup::setBtnAttributes(Fl_Button *b) {
 // Handle numeric keypad buttons pressed
 void CHolesPopup::Button_CB2(Fl_Widget *w) {
   Fl_Button *b = (Fl_Button *)w;
-  // Appends label of button
-  // in->replace(in->position(), in->mark(), b->label(), 1);
-  // je
   s = b->label();
   in->replace(in->position(), in->mark(), b->label(), s.size());  // je
   (*enter_cb)(in, enter_data);

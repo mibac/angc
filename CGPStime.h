@@ -17,7 +17,6 @@ class CGPStime {
   CGPStime& operator=(const CGPStime& other) = default;
   CGPStime& operator=(CGPStime&& other) = default;
 
-  // int utc;
   int h;
   int m;
   int s;

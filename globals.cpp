@@ -26,7 +26,7 @@ CTimeDisplay* gTmDisplay = nullptr;
 Fl_Text_Buffer* gTmbuff = nullptr;
 string timeStr = "Start";
 
-ofstream gFileScoreStats;
+ofstream gFileScore;
 ofstream gFileShotStats;
 ofstream gFileGPS;
 
@@ -46,28 +46,78 @@ ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
   return strm;
 }
 
-// clang-format off
-ostream& operator<<(ostream& strm, const CNGCHoles& h) {
-  strm << h.hole << "\t"
-        << h.yards << "\t"
-        << h.hdcp << "\t"
-        << h.par << "\t"
-        << h.score << "\t"
-        << h.putts << "\t"
-        << h.uds << endl;
-  return strm;
+int calcScore(bool front9) {
+  int sum = 0;
+  if (front9) {
+    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].score);
+  } else {
+      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].score);
+  }
+  return sum;
 }
-// clang-format on
+
+int calcPutts(bool front9) {
+  int sum = 0;
+  if (front9) {
+    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].putts);
+  } else {
+      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].putts);
+  }
+  return sum;
+}
+
+int calcUDs(bool front9) {
+  int sum = 0;
+  if (front9) {
+    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].uds);
+  } else {
+      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].uds);
+  }
+  return sum;
+}
+
+void printScores() {
+  int fscore = calcScore(true);
+  int bscore = calcScore(false);
+  int fputts = calcPutts(true);
+  int bputts = calcPutts(false);
+  int fuds = calcUDs(true);
+  int buds = calcUDs(false);
+
+  string s = path + "aScore_" + getFileSuffix();
+  gFileScore.open(s.c_str());
+  gFileScore << asctime(std::localtime(&gToday));
+  // clang-format off
+  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\t\tPutts\tUD\n";
+  for (int ix = 0; ix < k18; ++ix) {
+    gFileScore << vNGCHoles[ix].hole << "\t"
+              << vNGCHoles[ix].yards << "\t"
+              << vNGCHoles[ix].hdcp << "\t"
+              << vNGCHoles[ix].par << "\t"
+              << vNGCHoles[ix].score << "\t\t"
+              << vNGCHoles[ix].putts << "\t"
+              << vNGCHoles[ix].uds << endl;
+  }
+  gFileScore << "----------------------------------------------------------\n";
+  gFileScore << "    \t     \t    \t   \t";
+  gFileScore << fscore <<"-"
+    << bscore << " "
+    << (fscore + bscore) << "\t"
+    << (fputts + bputts) << "\t"
+    << (fuds + buds) << endl;
+  // clang-format on
+  gFileScore.close();
+}
 
 // clang-format off
 ostream& operator<<(ostream& strm, const ShotStats& sra) {
-  // strm << sra.nmarks << endl;
-  for (int ix = 0; ix < sra.nmarks-1; ++ix) {
-  strm  << sra.holeStatsRA[ix].club << "\t"
-       << sra.holeStatsRA[ix].yards << "\t"
-        << setprecision(10) << sra.holeStatsRA[ix].utm.lat << "\t"
-        << sra.holeStatsRA[ix].utm.lng << endl;
-}
+  for (int ix = 0; ix < sra.nmarks - 1; ++ix) {
+    strm << sra.holeStatsRA[ix].club << "\t"
+         << sra.holeStatsRA[ix].yards
+         << "\t" << setprecision(10)
+         << sra.holeStatsRA[ix].utm.lat << "\t"
+         << sra.holeStatsRA[ix].utm.lng << endl;
+  }
   return strm;
 }
 // clang-format on
@@ -153,6 +203,7 @@ void initGlobals() {
   for (int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;
 
   initNGCHolesVector();
+  // initScoreResults();
   initClubNames();
   initShotStats();
   writeShotStatsFileHeader();
@@ -201,13 +252,9 @@ string getFileSuffix() {
 }
 
 Fl_Color getBkgRGBcolor() {
-  // 1st attempt
+  // Jack's decimal * 255
   // return fl_rgb_color(162, 255, 146);
-
-  // pixie conversion from http://davengrace.com/cgi-bin/cspace.pl
-  // return fl_rgb_color(161, 255, 140);
 
   // experiments
   return fl_rgb_color(150, 255, 160);
-
 }

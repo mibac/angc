@@ -131,11 +131,6 @@ void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
                             gShotRA[hole].holeStatsRA[ROW].utm);
     gShotRA[hole].holeStatsRA[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
-    // cout << "drawShotData HOLE " << hole << endl;
-    // cout << "Hole " << hole << " ";
-    // cout << "ROW+1 " << gShotRA[hole].holeStatsRA[ROW + 1].utm << endl;
-    // cout << "ROW " << gShotRA[hole].holeStatsRA[ROW].utm << endl;
-    // cout << "dist " << d << endl;
   }
 }
 

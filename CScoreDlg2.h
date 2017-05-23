@@ -28,5 +28,4 @@ class CScoreDlg2 : public Fl_Window {
 extern void createScoreDlg2();
 extern CScoreDlg2 *scoreDlg2;
 
-// Fl_Double_Window* make_window();
 #endif

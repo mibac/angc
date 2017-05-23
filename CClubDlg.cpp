@@ -12,7 +12,6 @@
 #include "globals.h"
 #endif
 
-// #include <FL/Fl_Output.H>
 #include <FL/Fl_JPEG_Image.H>
 #include <FL/Fl_Text_Display.H>
 
@@ -23,7 +22,6 @@
 #include <iomanip>
 #include <iostream>
 #include <string>
-// #include <cstdio>
 
 using namespace std;
 
@@ -190,7 +188,6 @@ void clubBtn_cb(Fl_Widget *w, void *data) {
     btnIndex = 17;
   }
   updateClubCard(btnIndex);
-  // cout << "btnIndex " << btnIndex << " " << clubNamesRA[btnIndex] << endl;
 }
 
 void CClubDlg::setClubBtnStyle(Fl_Button *b) {
@@ -440,9 +437,6 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
   clubDlgHole = gCurrentHole;
   int h = clubDlgHole - 1;
   clubcard->setHole(h);
-  // int v = countValidDistances(h);
-  // cout << "Hole " << h << " gShotCount " << gShotCount << " validDistances "
-  //      << v << endl;
   show();
 }
 

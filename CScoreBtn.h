@@ -9,11 +9,6 @@
 #endif
 
 class CScoreBtn : public Fl_Button {
-
-  // Handle numeric keypad buttons pressed
-  void Button_CB();
-  static void staticButton_CB(Fl_Widget *w, void *data);
-
   int handle(int e);
 
  public:

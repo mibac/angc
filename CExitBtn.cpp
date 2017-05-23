@@ -20,10 +20,6 @@
 #include "CHoleBtn.h"
 #endif
 
-// #ifndef CCLUBBTN_H
-// #include "CClubBtn.h"
-// #endif
-
 using namespace std;
 
 void CExitBtn::writeGPS() {
@@ -35,12 +31,30 @@ void CExitBtn::writeGPS() {
   gFileGPS.close();
 }
 
+void initTestScore() {
+    vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
+    vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
+    vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "6", "2", "3");
+    vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "2", "2");
+    vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "2", "3");
+    vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "4", "2", "2");
+    vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
+    vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "3", "3");
+    vNGCHoles[8].setHoleDesc("9", "312", "5", "4", "3", "1", "1");
+    vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "5", "2", "3");
+    vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "3", "2", "2");
+    vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
+    vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "5", "2", "3");
+    vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "5", "2", "3");
+    vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "3", "1", "1");
+    vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "7", "2", "3");
+    vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "4", "2", "3");
+    vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "4", "2", "2");
+}
+
 void CExitBtn::writeScoreStats() {
-  string s = path + "aScore_" + getFileSuffix();
-  gFileScoreStats.open(s.c_str());
-  gFileScoreStats << asctime(std::localtime(&gToday));
-  for (auto itr : vNGCHoles) gFileScoreStats << itr;
-  gFileScoreStats.close();
+    initTestScore();
+    printScores();
 }
 
 void CExitBtn::Button_CB() {
@@ -49,7 +63,7 @@ void CExitBtn::Button_CB() {
                          "Save",        // 1
                          "Cancel"       // 2
                          );
-  // {
+  // { // used to get RGB value of Fl_Color
   //   uchar r = 0;
   //   uchar g = 0;
   //   uchar b = 0;
@@ -58,7 +72,7 @@ void CExitBtn::Button_CB() {
   // }
   if (result == 0) {  // Close without saving
     gFileShotStats.close();
-    gFileScoreStats.close();
+    gFileScore.close();
     gFileGPS.close();
     // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
@@ -67,8 +81,7 @@ void CExitBtn::Button_CB() {
   } else if (result == 1) {  // Save and close
     writeGPS();
     writeScoreStats();
-    gFileScoreStats.close();
-    // if (myClubPopup != nullptr) myClubPopup->hide();
+    gFileScore.close();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();

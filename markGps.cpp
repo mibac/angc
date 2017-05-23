@@ -46,10 +46,6 @@
 #include "CHoleBtn.h"  //CHoleBtn *holeBtn
 #endif
 
-// #ifndef CCLUBBTN_H
-// #include "CClubBtn.h"
-// #endif
-
 #ifndef CScoreBtn_H
 #include "CScoreBtn.h"
 #endif
@@ -66,17 +62,12 @@ using namespace std;
 
 Fl_Window *win;
 Fl_Output *my_input;
-// Fl_Button *markBtn; // moved to globals.h
-// Fl_Text_Display *gTmDisplay;
 CHoleBtn *holeBtn;
-// CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
 CExitBtn *exitBtn;
 FILE *gpsin = nullptr;
 HoleView *hv;
 Course *ngc;
-
-// Fl_Button *avgBtn;
 
 const int kBUFSIZE = 1024;
 char gpsBuf[kBUFSIZE];
@@ -188,7 +179,6 @@ int main(int argc, char **argv) {
   int y = 674;
   win = new Fl_Window(0, 0, 480, 800, "NGC Golf");
   win->size_range(480, 800, 480, 800);
-//  win->color(fl_rgb_color(162, 255, 146));
   win->color(getBkgRGBcolor());
   win->callback(window_cb);
 
@@ -204,7 +194,6 @@ int main(int argc, char **argv) {
   holeBtn->value("  1");
   holeBtn->textfont(1);
   holeBtn->textsize(48);
-  // holeBtn->color(FL_GRAY);
   holeBtn->cursor_color(FL_GRAY);
 
   markBtn =

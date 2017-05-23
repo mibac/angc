@@ -6,17 +6,6 @@ using namespace std;
 
 CScoreDlg2 *scoreDlg2 = nullptr;
 
-void CScoreBtn::Button_CB() {
-  // cll.writeAll();
-  //DEBUG_LOG << "Score button hit" << endl;
-}
-
-// Handle numeric keypad buttons pressed
-void CScoreBtn::staticButton_CB(Fl_Widget *, void *data) {
-  CScoreBtn *cmb = (CScoreBtn *)data;
-  cmb->Button_CB();
-}
-
 // Handle when user right clicks on our input widget
 int CScoreBtn::handle(int e) {
   int ret = 0;
@@ -39,5 +28,4 @@ int CScoreBtn::handle(int e) {
 
 CScoreBtn::CScoreBtn(int X, int Y, int W, int H, const char *L)
     : Fl_Button(X, Y, W, H, L) {
-  callback(staticButton_CB, (void *)this);
 }

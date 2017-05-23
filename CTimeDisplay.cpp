@@ -23,9 +23,6 @@
 
 using namespace std;
 
-// CTimeDisplay *gTmDisplay;
-// Fl_Text_Buffer *gTmbuff;
-
 void CTimeDisplay::setAttributes() {
   labeltype(FL_NORMAL_LABEL);
   align(FL_ALIGN_CENTER);
@@ -123,7 +120,6 @@ void CTimeDisplay::updateGPStime() {
 int CTimeDisplay::handle(int e) {
   int ret = 0;
   switch (e) {
-    // Mouse click on input field? Open myHolePopup dialog..
     case FL_PUSH:
       if (Fl::event_button() == FL_LEFT_MOUSE) {
         ret = 1;

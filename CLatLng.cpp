@@ -33,7 +33,6 @@ double CLatLng::NMEA2DecimalDegrees(const double nmea) {
   double min = nmea - (deg * 100);
   double minOver60 = min / 60.0;
   double dec_deg = deg + minOver60;
-  // cout << fixed << setprecision(9);
   return dec_deg;
 }
 
@@ -59,14 +58,12 @@ UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
 }
 
 void CLatLng::updateLatLng(const string& s) {
-  // if (myGPS.isValidGGA(s)) {
   vGPS.push_back(s);
   myGPS.setValuesGGA(s);
   LatLng ll(myGPS.latitude, myGPS.longitude);
   UtmLatLng ull = NMEA2UTM(ll);
   vUTM.push_back(ull);
   gNowTimeStr = to_string(myGPS.UTC);
-  // }
 }
 
 UtmLatLng CLatLng::getMark(size_t avg) {

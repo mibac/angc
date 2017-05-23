@@ -54,7 +54,6 @@ struct frontBackResults {
 };
 
 frontBackResults results;
-// CScorecard *scorecard = nullptr;
 
 // Draw the row/col headings
 //    Make this a dark thin upbox with the text inside.

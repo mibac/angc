@@ -82,7 +82,6 @@ class CNGCHoles {
     putts = p;
     uds = u;
   }
-  friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
 };
 
 const int kDr = 0;
@@ -129,11 +128,10 @@ extern vector<CNGCHoles> vNGCHoles;
 
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
-// extern vector<string> vClubsUsed;
 
 extern array<bool, k18> bPlayedHole;
 
-extern ofstream gFileScoreStats;
+extern ofstream gFileScore;
 extern ofstream gFileShotStats;
 extern ofstream gFileGPS;
 
@@ -143,4 +141,5 @@ extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
 extern Fl_Color getBkgRGBcolor();
+extern void printScores();
 #endif  // CGLOBALS_H

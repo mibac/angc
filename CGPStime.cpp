@@ -2,7 +2,7 @@
 #include "CGPStime.h"
 #endif
 
-CGPStime::CGPStime() : /*utc(0),*/ h(0), m(0), s(0), hs(""), ms(""), ss("") {}
+CGPStime::CGPStime() : h(0), m(0), s(0), hs(""), ms(""), ss("") {}
 
 CGPStime::CGPStime(string utc) {
   int len = utc.length();
@@ -40,12 +40,6 @@ string prefixTm(const string &str) {
 }
 
 string CGPStime::sec2str(const int sec, const string &lbl) {
-  // string utc = to_string(sec);
-  // int len = utc.length();
-  // if (len < 6) {
-  //   for (int ix = 0; ix < 6 - len; ++ix) utc = "0" + utc;
-  // }
-
   CGPStime tm(sec);
   string hs = to_string(tm.h);
   string ms = to_string(tm.m);

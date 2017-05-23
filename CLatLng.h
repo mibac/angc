@@ -71,8 +71,6 @@ class CLatLng {
   UtmLatLng NMEA2UTM(const LatLng &LL);
 };
 
-// extern ostream &operator<<(ostream &strm, const LatLng &ll);
-// extern ostream &operator<<(ostream &strm, const DDLatLng &dll);
 extern ostream &operator<<(ostream &strm, const UtmLatLng &ull);
 extern GPS myGPS;
 
