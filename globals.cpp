@@ -2,6 +2,7 @@
 #include "globals.h"
 #endif
 
+#include <ctime>
 #include <cmath>
 #include <iomanip>
 
@@ -180,7 +181,10 @@ void setButtonStyle(Fl_Button* b) {
 
 string getFileSuffix() {
   string suffix;
-  ostringstream oss;
+  time_t result = time(nullptr);
+  asctime(localtime(&result));
+  suffix = to_string(result);
+
   struct tm* t;
   t = localtime(&gToday);
   string y = to_string(t->tm_year - 100);
@@ -188,6 +192,6 @@ string getFileSuffix() {
   if (m.length() == 1) m = "0" + m;
   string d = to_string(t->tm_mday);
   if (d.length() == 1) d = "0" + d;
-  suffix = y + m + d + ".txt";
+  suffix = suffix + "_" + y + m + d + ".txt";
   return suffix;
 }
