@@ -2,6 +2,7 @@
 #define CGLOBALS_H
 
 #include <FL/Fl_Button.H>
+#include <FL/Fl_Text_Buffer.H>
 
 #include <array>
 #include <ctime>
@@ -32,6 +33,10 @@ extern bool gFront9;
 
 extern Fl_Button *markBtn;
 extern string markBtnLabel;
+
+class CTimeDisplay;
+extern CTimeDisplay *yellowBtn;
+extern Fl_Text_Buffer *tmbuff;
 extern string timeStr;
 
 struct UtmLatLng {

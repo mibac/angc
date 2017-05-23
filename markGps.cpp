@@ -58,8 +58,8 @@
 #include "CExitBtn.h"
 #endif
 
-#ifndef CYELLOWBTN_H
-#include "CYellowBtn.h"
+#ifndef CTIMEDISPLAY_H
+#include "CTimeDisplay.h"
 #endif
 
 using namespace std;
@@ -67,7 +67,7 @@ using namespace std;
 Fl_Window *win;
 Fl_Output *my_input;
 // Fl_Button *markBtn; // moved to globals.h
-CYellowBtn *yellowBtn;
+// Fl_Text_Display *yellowBtn;
 CHoleBtn *holeBtn;
 // CClubBtn *clubBtn;
 CScoreBtn *scoreBtn;
@@ -195,7 +195,7 @@ int main(int argc, char **argv) {
   hv = new HoleView(0, kHoleViewTop, x, y, 0);
   hv->mode(FL_DOUBLE);
 
-  yellowBtn = new CYellowBtn(3, kBtnRow1Top, kYardageWid + 1, kBoxSize, 0);
+  yellowBtn = new CTimeDisplay(3, kBtnRow1Top, kYardageWid + 1, kBoxSize, 0);
 
   holeBtn = new CHoleBtn(kHoleLeft, kBtnRow1Top, kHoleWid, kBoxSize);
   holeBtn->align(FL_ALIGN_CENTER);

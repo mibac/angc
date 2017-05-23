@@ -21,6 +21,9 @@ bool gFront9;
 
 Fl_Button *markBtn = nullptr;
 string markBtnLabel = "Mark\n1";
+
+CTimeDisplay *yellowBtn = nullptr;
+Fl_Text_Buffer *tmbuff = nullptr;
 string timeStr = "";
 
 ofstream gFileScoreStats;

@@ -1,5 +1,5 @@
 #ifndef CYELLOWBTN_H
-#include "CYellowBtn.h"
+#include "CTimeDisplay.h"
 #endif
 
 #include <iostream>
@@ -19,7 +19,10 @@
 
 using namespace std;
 
-void CYellowBtn::setAttributes() {
+// CTimeDisplay *yellowBtn;
+// Fl_Text_Buffer *tmbuff;
+
+void CTimeDisplay::setAttributes() {
   labeltype(FL_NORMAL_LABEL);
   align(FL_ALIGN_CENTER);
   box(FL_UP_BOX);
@@ -29,15 +32,16 @@ void CYellowBtn::setAttributes() {
   color(fl_rgb_color(162, 255, 146));
   selection_color(fl_rgb_color(162, 255, 146));
   cursor_color(fl_rgb_color(162, 255, 146));
-  readonly(1);
+  box(FL_NO_BOX);
+  scrollbar_width(0);
 }
 
 // Called when user finishes entering data with numeric keypad
-void CYellowBtn::yellowBtn_CB2() {}
+void CTimeDisplay::yellowBtn_CB2() {}
 
-void CYellowBtn::yellowBtn_CB(Fl_Widget *, void *data) {}
+void CTimeDisplay::yellowBtn_CB(Fl_Widget *, void *data) {}
 
-void CYellowBtn::calcGPStime(const string &lbl) {
+void CTimeDisplay::calcGPStime(const string &lbl) {
   if (gNowTimeStr == "") return;
   string stm = gNowTimeStr;
   int len = stm.length();
@@ -59,19 +63,16 @@ void CYellowBtn::calcGPStime(const string &lbl) {
   if (hr == 0) hr = 12;
   hs = to_string(hr);
   timeStr = lbl + hs + ":" + ms;
-
-  value(timeStr.c_str());
-  redraw();
+  tmbuff->text(timeStr.c_str());
 }
 
-void CYellowBtn::calcRoundGPStime(const string &lbl) {
+void CTimeDisplay::calcRoundGPStime(const string &lbl) {
   if ((count != 2) && (gStartRoundTimeStr == "")) return;
   CGPStime tm;
   int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
   CGPStime val(sec);
   timeStr = val.sec2str(sec, lbl).c_str();
-  value(timeStr.c_str());
-  redraw();
+  tmbuff->text(timeStr.c_str());
 }
 
 int countHolesPlayed() {
@@ -81,7 +82,7 @@ int countHolesPlayed() {
   return num;
 }
 
-void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
+void CTimeDisplay::calcAvgHoleGPStime(const string &lbl) {
   if ((count != 2) && (gStartRoundTimeStr == "")) return;
   CGPStime tm;
   int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
@@ -89,11 +90,10 @@ void CYellowBtn::calcAvgHoleGPStime(const string &lbl) {
   if (num > 0) sec /= num;
   CGPStime val(sec);
   timeStr = val.sec2str(sec, lbl).c_str();
-  value(timeStr.c_str());
-  redraw();
+  tmbuff->text(timeStr.c_str());
 }
 
-void CYellowBtn::updateGPStime() {
+void CTimeDisplay::updateGPStime() {
   switch (count) {
     case 0:
       calcRoundGPStime("Round\n");
@@ -109,7 +109,7 @@ void CYellowBtn::updateGPStime() {
 }
 
 // Handle when user right clicks on our input widget
-int CYellowBtn::handle(int e) {
+int CTimeDisplay::handle(int e) {
   int ret = 0;
   switch (e) {
     // Mouse click on input field? Open myHolePopup dialog..
@@ -126,11 +126,13 @@ int CYellowBtn::handle(int e) {
       }
       break;
   }
-  return (Fl_Output::handle(e) ? 1 : ret);
+  return (Fl_Text_Display::handle(e) ? 1 : ret);
 }
 
-CYellowBtn::CYellowBtn(int X, int Y, int W, int H, const char *L)
-    : Fl_Multiline_Output(X, Y, W, H, L) {
+CTimeDisplay::CTimeDisplay(int X, int Y, int W, int H, const char *L)
+    : Fl_Text_Display(X, Y, W, H, L) {
+  tmbuff = new Fl_Text_Buffer();
+  buffer(tmbuff);
   setAttributes();
   count = 2;
 }

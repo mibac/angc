@@ -3,14 +3,14 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Multiline_Output.H>
+#include <FL/Fl_Text_Display.H>
 #include <FL/Fl_Window.H>
 
 #include <string>
 
 using namespace std;
 
-class CYellowBtn : public Fl_Multiline_Output {
+class CTimeDisplay : public Fl_Text_Display {
   int count;
   // Called when user finishes entering data with numeric keypad
   void yellowBtn_CB2();
@@ -25,10 +25,9 @@ class CYellowBtn : public Fl_Multiline_Output {
   void calcGPStime(const string &lbl);
 
  public:
-  CYellowBtn(int X, int Y, int W, int H, const char *L = 0);
+  CTimeDisplay(int X, int Y, int W, int H, const char *L = 0);
   void updateGPStime();
 };
 
-extern CYellowBtn *yellowBtn;  // local instance of numeric keypad widget
-
+// extern CTimeDisplay *yellowBtn;  // local instance of numeric keypad widget
 #endif  // CYELLOWBTN_H

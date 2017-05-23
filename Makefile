@@ -46,7 +46,7 @@ HoleView.o \
 CScoreBtn.o \
 CScoreDlg2.o \
 globals.o \
-CYellowBtn.o \
+CTimeDisplay.o \
 CGPStime.o \
 CScorecard.o \
 CScorecardDlg.o \
@@ -67,7 +67,7 @@ Fl_Image_Button.o
 		CScoreBtn.o \
 		CScoreDlg2.o \
 		globals.o \
-		CYellowBtn.o \
+		CTimeDisplay.o \
 		CGPStime.o \
 		CScorecard.o \
 		CScorecardDlg.o \
@@ -89,7 +89,7 @@ HoleView.h \
 CScoreBtn.h \
 CScoreDlg2.h \
 globals.h \
-CYellowBtn.h \
+CTimeDisplay.h \
 CGPStime.h \
 CScorecard.h \
 CScorecardDlg.h \
@@ -128,7 +128,7 @@ CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h  CClubcard.h
 CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
 			g++ -c $<  $(CXXFLAGS)
 
-CYellowBtn.o: CYellowBtn.cpp 	CYellowBtn.h globals.h CGPStime.h CHoleBtn.h
+CTimeDisplay.o: CTimeDisplay.cpp 	CTimeDisplay.h globals.h CGPStime.h CHoleBtn.h
 	g++ -c $<  $(CXXFLAGS)
 
 globals.o: globals.cpp globals.h
