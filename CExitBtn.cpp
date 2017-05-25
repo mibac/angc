@@ -23,7 +23,7 @@
 using namespace std;
 
 void CExitBtn::writeGPS() {
-  string s = path + "aGPS_" + getFileSuffix();
+  string s = pathGPS + "aGPS_" + getFileSuffix();
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
   gFileGPS << asctime(std::localtime(&gToday));
@@ -54,7 +54,7 @@ void initTestScore() {
 
 void CExitBtn::writeScoreStats() {
     initTestScore();
-    printScores();
+    writeScores();
 }
 
 void CExitBtn::Button_CB() {

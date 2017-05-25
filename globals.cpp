@@ -51,7 +51,7 @@ int calcScore(bool front9) {
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].score);
   } else {
-      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].score);
+    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].score);
   }
   return sum;
 }
@@ -61,7 +61,7 @@ int calcPutts(bool front9) {
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].putts);
   } else {
-      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].putts);
+    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].putts);
   }
   return sum;
 }
@@ -71,12 +71,60 @@ int calcUDs(bool front9) {
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].uds);
   } else {
-      for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].uds);
+    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].uds);
   }
   return sum;
 }
 
-void printScores() {
+int birdies = 0;
+int pars = 0;
+int bogies = 0;
+int doubles = 0;
+int triples = 0;
+
+string getScoreType(int par, int score) {
+    int n = score - par; // order important
+    string s;
+    switch (ScoreType(n)) {
+    case ScoreType::albatross:
+        s = "albatross";
+        break;
+    case ScoreType::eagle:
+        s = "eagle";
+        break;
+    case ScoreType::birdie:
+        s = "birdie";
+        birdies++;
+        break;
+    case ScoreType::par:
+        s = "par";
+        pars++;
+        break;
+    case ScoreType::bogey:
+        s = "bogey";
+        bogies++;
+        break;
+    case ScoreType::dbogey:
+        s = "double";
+        doubles++;
+        break;
+    case ScoreType::tbogey:
+        s = "triple";
+        triples++;
+        break;
+    case ScoreType::x:
+        s = "X";
+        break;
+    default:
+        s = "unknown";
+        break;
+    }
+    if (score == 1)
+        s = "ACE";
+    return s;
+}
+
+void writeScores() {
   int fscore = calcScore(true);
   int bscore = calcScore(false);
   int fputts = calcPutts(true);
@@ -84,29 +132,32 @@ void printScores() {
   int fuds = calcUDs(true);
   int buds = calcUDs(false);
 
-  string s = path + "aScore_" + getFileSuffix();
+  string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
   gFileScore << asctime(std::localtime(&gToday));
-  // clang-format off
-  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\t\tPutts\tUD\n";
+  /// clang-format off
+  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << vNGCHoles[ix].hole << "\t"
-              << vNGCHoles[ix].yards << "\t"
-              << vNGCHoles[ix].hdcp << "\t"
-              << vNGCHoles[ix].par << "\t"
-              << vNGCHoles[ix].score << "\t\t"
-              << vNGCHoles[ix].putts << "\t"
-              << vNGCHoles[ix].uds << endl;
+      int par = stoi(vNGCHoles[ix].par);
+      int score = stoi(vNGCHoles[ix].score);
+    gFileScore << vNGCHoles[ix].hole << "\t";
+    gFileScore << vNGCHoles[ix].yards << "\t";
+    gFileScore << vNGCHoles[ix].hdcp << "\t";
+    gFileScore << par << "\t";
+    gFileScore << score << "\t";
+    gFileScore << vNGCHoles[ix].putts << "\t";
+    gFileScore << vNGCHoles[ix].uds << "\t";
+    gFileScore << getScoreType(par, score) << endl;
   }
-  gFileScore << "----------------------------------------------------------\n";
-  gFileScore << "    \t     \t    \t   \t";
-  gFileScore << fscore <<"-"
-    << bscore << " "
-    << (fscore + bscore) << "\t"
-    << (fputts + bputts) << "\t"
-    << (fuds + buds) << endl;
-  // clang-format on
-  gFileScore.close();
+  gFileScore << "Score \t" << fscore << "\t" << bscore << "\t" << fscore + bscore
+             << endl;
+  gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t" << fputts + bputts
+             << endl;
+  gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds << endl;
+  gFileScore << "Birdies\t" << birdies << endl;
+  gFileScore << "Pars\t" << pars << endl;
+  gFileScore << "Doubles\t" << doubles << endl;
+  gFileScore << "Triples\t" << triples << endl;
 }
 
 // clang-format off
@@ -182,7 +233,7 @@ void initShotStats() {
 }
 
 void writeShotStatsFileHeader() {
-  string s = path + "aShots_" + getFileSuffix();
+  string s = pathShots + "aShots_" + getFileSuffix();
   gFileShotStats.open(s.c_str());
   gFileShotStats << asctime(std::localtime(&gToday));
   gFileShotStats << "Club\tDist\tLng\tLat" << endl;

@@ -31,12 +31,12 @@ extern string gStartRoundTimeStr;
 extern bool bRoundStarted;
 extern bool gFront9;
 
-extern Fl_Button *markBtn;
+extern Fl_Button* markBtn;
 extern string markBtnLabel;
 
 class CTimeDisplay;
-extern CTimeDisplay *gTmDisplay;
-extern Fl_Text_Buffer *gTmbuff;
+extern CTimeDisplay* gTmDisplay;
+extern Fl_Text_Buffer* gTmbuff;
 extern string timeStr;
 
 struct UtmLatLng {
@@ -52,6 +52,20 @@ struct UtmLatLng {
   }
   friend ostream& operator<<(ostream& strm, const UtmLatLng& ull);
 };
+
+enum class ScoreType {
+ ace  = -4,
+ albatross = -3,
+ eagle = -2,
+ birdie = -1,
+ par = 0,
+ bogey = 1,
+ dbogey = 2,
+ tbogey = 3,
+ x = 4
+};
+
+extern string getScoreType(int par, int score);
 
 class CNGCHoles {
  public:
@@ -105,7 +119,9 @@ const int kx = 17;
 
 extern array<string, k18> clubNamesRA;
 
-const string path = "/home/pi/golf/stats/";
+const string pathGPS = "/home/pi/golf/stats/gps/";
+const string pathShots = "/home/pi/golf/stats/shots/";
+const string pathScores = "/home/pi/golf/stats/scores/";
 
 struct holeStats {
   int yards;
@@ -114,8 +130,8 @@ struct holeStats {
 };
 
 const int kMAX_SHOTS = 7;
-struct   ShotStats {
-  int nmarks; // umber of times Mark btn hit
+struct ShotStats {
+  int nmarks;  // umber of times Mark btn hit
   array<holeStats, kMAX_SHOTS> holeStatsRA;
   friend ostream& operator<<(ostream& strm, const ShotStats& sra);
 };
@@ -141,5 +157,5 @@ extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
 extern Fl_Color getBkgRGBcolor();
-extern void printScores();
+extern void writeScores();
 #endif  // CGLOBALS_H
