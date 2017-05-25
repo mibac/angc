@@ -156,6 +156,7 @@ void writeScores() {
   gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds << endl;
   gFileScore << "Birdies\t" << birdies << endl;
   gFileScore << "Pars\t" << pars << endl;
+  gFileScore << "Bogies\t" << pars << endl;
   gFileScore << "Doubles\t" << doubles << endl;
   gFileScore << "Triples\t" << triples << endl;
 }

@@ -53,7 +53,7 @@ void initTestScore() {
 }
 
 void CExitBtn::writeScoreStats() {
-    initTestScore();
+    // initTestScore();
     writeScores();
 }
 
