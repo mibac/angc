@@ -63,33 +63,33 @@ void setupTestClubVector() {
   int marks = 0;
   gShotRA[h].nmarks = marks = 3;
   for (int ix = 0; ix < marks; ++ix) {
-    gShotRA[h].holeStatsRA[ix].club = "";
-    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
-    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].club = "";
+    gShotRA[h].shot[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
   }
 
   h = 1;
   gShotRA[h].nmarks = marks = 7;
   for (int ix = 0; ix < marks; ++ix) {
-    gShotRA[h].holeStatsRA[ix].club = "";
-    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
-    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].club = "";
+    gShotRA[h].shot[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
   }
 
   h = 2;
   gShotRA[h].nmarks = marks = 5;
   for (int ix = 0; ix < marks; ++ix) {
-    gShotRA[h].holeStatsRA[ix].club = "";
-    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
-    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].club = "";
+    gShotRA[h].shot[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
   }
 
   h = 3;
   gShotRA[h].nmarks = marks = 2;
   for (int ix = 0; ix < marks; ++ix) {
-    gShotRA[h].holeStatsRA[ix].club = "";
-    gShotRA[h].holeStatsRA[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
-    gShotRA[h].holeStatsRA[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].club = "";
+    gShotRA[h].shot[ix].utm.lat = utm.lat + getRandomYards(ix*(h+ix));
+    gShotRA[h].shot[ix].utm.lng = utm.lng + getRandomYards(ix*(h+ix));
   }
 }
 
@@ -125,11 +125,11 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
 
 void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
   if (COL == 0) {
-    DrawData(gShotRA[hole].holeStatsRA[ROW].club.c_str(), X, Y, W, H, ROW, COL);
+    DrawData(gShotRA[hole].shot[ROW].club.c_str(), X, Y, W, H, ROW, COL);
   } else if (COL == 1) {
-    int d = calcUTMdistance(gShotRA[hole].holeStatsRA[ROW + 1].utm,
-                            gShotRA[hole].holeStatsRA[ROW].utm);
-    gShotRA[hole].holeStatsRA[ROW].yards = d;
+    int d = calcUTMdistance(gShotRA[hole].shot[ROW + 1].utm,
+                            gShotRA[hole].shot[ROW].utm);
+    gShotRA[hole].shot[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
   }
 }

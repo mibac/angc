@@ -54,7 +54,7 @@ CFrontBackBtn.o \
 CClubDlg.o \
 CClubcard.o \
 Fl_Image_Button.o
-	g++ -o aNGCApp \
+	g++ -o aNGCApp_test \
 		markGps.o \
 		C2UTM.o \
 		CExitBtn.o \

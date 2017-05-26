@@ -164,11 +164,11 @@ void writeScores() {
 // clang-format off
 ostream& operator<<(ostream& strm, const ShotStats& sra) {
   for (int ix = 0; ix < sra.nmarks - 1; ++ix) {
-    strm << sra.holeStatsRA[ix].club << "\t"
-         << sra.holeStatsRA[ix].yards
+    strm << sra.shot[ix].club << "\t"
+         << sra.shot[ix].yards
          << "\t" << setprecision(10)
-         << sra.holeStatsRA[ix].utm.lat << "\t"
-         << sra.holeStatsRA[ix].utm.lng << endl;
+         << sra.shot[ix].utm.lat << "\t"
+         << sra.shot[ix].utm.lng << endl;
   }
   return strm;
 }
@@ -225,10 +225,10 @@ void initShotStats() {
   for (int hole = 0; hole < k18; ++hole) {
     gShotRA[hole].nmarks = 0;
     for (int ix = 0; ix < kMAX_SHOTS; ++ix) {
-      gShotRA[hole].holeStatsRA[ix].yards = 0;
-      gShotRA[hole].holeStatsRA[ix].club = "";
-      gShotRA[hole].holeStatsRA[ix].utm.lat = 0.0;
-      gShotRA[hole].holeStatsRA[ix].utm.lng = 0.0;
+      gShotRA[hole].shot[ix].yards = 0;
+      gShotRA[hole].shot[ix].club = "";
+      gShotRA[hole].shot[ix].utm.lat = 0.0;
+      gShotRA[hole].shot[ix].utm.lng = 0.0;
     }
   }
 }

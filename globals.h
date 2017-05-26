@@ -132,7 +132,7 @@ struct holeStats {
 const int kMAX_SHOTS = 7;
 struct ShotStats {
   int nmarks;  // umber of times Mark btn hit
-  array<holeStats, kMAX_SHOTS> holeStatsRA;
+  array<holeStats, kMAX_SHOTS> shot;
   friend ostream& operator<<(ostream& strm, const ShotStats& sra);
 };
 

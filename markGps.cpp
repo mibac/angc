@@ -97,9 +97,9 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
   markBtnLabel = "Mark\n" + to_string(gShotCount);
   markBtn->label(markBtnLabel.c_str());
 
-  gShotRA[gCurrentHole - 1].nmarks++;
   UtmLatLng u = cll.getNowMark();
-  gShotRA[gCurrentHole - 1].holeStatsRA[gShotCount].utm = u;
+  gShotRA[gCurrentHole - 1].shot[gShotCount-1].utm = u;
+  gShotRA[gCurrentHole - 1].nmarks++;
 }
 
 void HandleFD(FL_SOCKET fd, void *data) {

@@ -130,7 +130,7 @@ int CTimeDisplay::handle(int e) {
         if (!bRoundStarted) {
           bRoundStarted = true;
           gCurrentHole = 1;
-          gShotRA[gCurrentHole-1].holeStatsRA[0].utm = cll.getNowMark();
+          gShotRA[gCurrentHole-1].shot[0].utm = cll.getNowMark();
           gShotRA[gCurrentHole-1].nmarks = 1;
           gShotCount = 1;
           gStartRoundTimeStr = gNowTimeStr;

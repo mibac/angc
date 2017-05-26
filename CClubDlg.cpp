@@ -114,7 +114,7 @@ void updateClubCard(int btnIndex) {
   int row_bot;
   int col_right;
   clubcard->get_selection(sel_row, col_left, row_bot, col_right);
-  gShotRA[h].holeStatsRA[sel_row].club = clubNamesRA[btnIndex];
+  gShotRA[h].shot[sel_row].club = clubNamesRA[btnIndex];
   sel_row++;
   if (sel_row >= v) sel_row = 0;
   clubcard->set_selection(sel_row, 0, sel_row, 0);

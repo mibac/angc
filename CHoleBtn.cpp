@@ -32,7 +32,7 @@ void CHoleBtn::SetNumPadValue_CB2() {
     str = " " + str;
   value(str.c_str());   // pass value from myHolePopup to our input
   myHolePopup->hide();  // hide myHolePopup
-  gShotRA[gCurrentHole-1].holeStatsRA[0].utm = cll.getNowMark();
+  gShotRA[gCurrentHole-1].shot[0].utm = cll.getNowMark();
   gShotRA[gCurrentHole-1].nmarks = 1;
   gShotCount = 1;
   markBtnLabel = "Mark\n1";
