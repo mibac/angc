@@ -429,9 +429,10 @@ CClubDlg::CClubDlg(int X, int Y, int W, int H, const char *L)
   end();
 
   color((Fl_Color)159);
-  set_modal();
+  // set_modal();
+  // clear_border();
   size_range(480, 800, 480, 800);
-  clear_border();
+  label("Club Used to Get Here");
 
   saveCurrentHole = gCurrentHole;
   clubDlgHole = gCurrentHole;

@@ -191,7 +191,7 @@ CClubcard::CClubcard(int X, int Y, int W, int H, const char *L)
 
   color((Fl_Color)159);
   end();  // end the Fl_Table group
-  set_selection(0, 0, 0, 0);
+  set_selection(v-1, 0, v-1, 0);
 }
 
 //

@@ -58,6 +58,10 @@
 #include "CTimeDisplay.h"
 #endif
 
+#ifndef CCLUBDLG_H
+#include "CClubDlg.h"
+#endif
+
 using namespace std;
 
 Fl_Window *win;
@@ -100,6 +104,8 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
   UtmLatLng u = cll.getNowMark();
   gShotRA[gCurrentHole - 1].shot[gShotCount-1].utm = u;
   gShotRA[gCurrentHole - 1].nmarks++;
+
+  createCClubDlg();
 }
 
 void HandleFD(FL_SOCKET fd, void *data) {

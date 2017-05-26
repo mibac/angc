@@ -576,7 +576,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   }  // Fl_Button* bntOK
 
   color((Fl_Color)159);
-  set_modal();
+  // set_modal();
   size_range(480, 800, 480, 800);
   end();
 
