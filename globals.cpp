@@ -233,13 +233,6 @@ void initShotStats() {
   }
 }
 
-void writeShotStatsFileHeader() {
-  string s = pathShots + "aShots_" + getFileSuffix();
-  gFileShotStats.open(s.c_str());
-  gFileShotStats << asctime(std::localtime(&gToday));
-  gFileShotStats << "Club\tDist\tLng\tLat" << endl;
-  gFileShotStats.flush();
-}
 
 void initGlobals() {
   gCurrentHole = 1;
@@ -258,7 +251,6 @@ void initGlobals() {
   // initScoreResults();
   initClubNames();
   initShotStats();
-  writeShotStatsFileHeader();
 }
 
 int countValidDistances(int hole) {

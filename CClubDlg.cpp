@@ -59,19 +59,8 @@ int btnPresses = 0;
 int saveCurrentHole = 0;
 int clubDlgHole = 0;
 
-void updateFileStats() {
-  gFileShotStats << setprecision(kPrecision);
-  for (int ix = 0; ix < k18; ++ix) {
-    if (gShotRA[ix].nmarks > 1) {
-      gFileShotStats << "Hole\t" << ix + 1 << endl;
-      gFileShotStats << gShotRA[ix] << endl;
-    }
-  }
-  gFileShotStats.flush();
-}
 
 static void oKBtn_cb(Fl_Widget *w, void *data) {
-  updateFileStats();
   CClubDlg *ccd = (CClubDlg *)data;
   ccd->hide();
   gCurrentHole = saveCurrentHole;

@@ -57,6 +57,28 @@ void CExitBtn::writeScoreStats() {
     writeScores();
 }
 
+void writeShotStats() {
+  string s = pathShots + "aShots_" + getFileSuffix();
+  gFileShotStats.open(s.c_str());
+  gFileShotStats << asctime(std::localtime(&gToday));
+  gFileShotStats << "Hole\tClub\tDist\tLng      \tLat" << endl;
+  int hole = gCurrentHole -1;
+  int valid = countValidDistances(hole);
+  gFileShotStats << setprecision(kPrecision);
+
+    if (gShotRA[hole].nmarks > 1) {
+      for (int jx = 0; jx < valid; ++jx) {
+          gFileShotStats << gCurrentHole << "\t";
+        gFileShotStats << gShotRA[hole].shot[jx].club << "\t";
+        gFileShotStats << gShotRA[hole].shot[jx].yards << "\t";
+        gFileShotStats << gShotRA[hole].shot[jx].utm.lng << "\t";
+        gFileShotStats << gShotRA[hole].shot[jx].utm.lat << endl;
+      }
+  }
+  gFileShotStats << endl;
+  gFileShotStats.flush();
+}
+
 void CExitBtn::Button_CB() {
   int result = fl_choice("Do you want to save before quitting?",
                          "Don't Save",  // 0
@@ -81,6 +103,7 @@ void CExitBtn::Button_CB() {
   } else if (result == 1) {  // Save and close
     writeGPS();
     writeScoreStats();
+    writeShotStats();
     gFileScore.close();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);

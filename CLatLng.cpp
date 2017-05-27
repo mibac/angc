@@ -21,7 +21,6 @@ const int ONE_SECOND = 1000000;
 GPS myGPS;
 CLatLng cll;
 
-#if USEGPS
 CLatLng::CLatLng() {}
 
 CLatLng::CLatLng(const string s) {}
@@ -83,33 +82,3 @@ UtmLatLng CLatLng::getMark(size_t avg) {
 }
 
 UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
-
-#else
-CLatLng::CLatLng() {}
-
-CLatLng::CLatLng(const string s) {}
-CLatLng::CLatLng(const char* cstr) {}
-CLatLng::CLatLng(const LatLng) {}
-
-double CLatLng::NMEA2DecimalDegrees(const double nmea) { return 0; }
-
-DDLatLng CLatLng::NMEA2DecimalDegrees(const LatLng& LL) {
-  DDLatLng dll;
-  return dll;
-}
-
-UtmLatLng CLatLng::NMEA2UTM(const LatLng& LL) {
-  UtmLatLng ull;  //	JACK C2UTM
-  return ull;
-}
-
-void CLatLng::updateLatLng(const string& s) {}
-
-UtmLatLng CLatLng::getMark(size_t avg) {
-  UtmLatLng ull;
-  return ull;
-}
-
-UtmLatLng CLatLng::getNowMark() { return getMark(gGpsAvgNum); }
-
-#endif

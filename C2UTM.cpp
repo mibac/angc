@@ -13,6 +13,7 @@
 #include <iomanip>
 using namespace std;
 
+// clang-format OFF
 LL2UTM::LL2UTM()
 {
     equatorialRadius = 6378137.0;
@@ -53,10 +54,8 @@ void LL2UTM::setLatLon(double lat, double lon)
 void LL2UTM::setVariables()
 {
     latitude = latitudeDegree*M_PI/180.0;
-    rho = equatorialRadius * (1 - e * e)
-    / pow(1 - pow(e * sin(latitude), 2), 3 / 2.0);
-
-    nu = equatorialRadius / pow(1 - pow(e * sin(latitude), 2), (1 / 2.0));
+    rho = equatorialRadius*(1-e*e)/pow(1-pow(e*sin(latitude),2),3/2.0);
+    nu = equatorialRadius/pow(1-pow(e*sin(latitude),2),(1/2.0));
 
     double var1;
     if (longitude < 0.0)
@@ -71,28 +70,23 @@ void LL2UTM::setVariables()
     double var3 = longitude - var2;
     p = var3 * 3600 / 10000;
 
-    S = A0 * latitude - B0 * sin(2 * latitude) + C0 * sin(4 * latitude) - D0
-    * sin(6 * latitude) + E0 * sin(8 * latitude);
+    S = A0*latitude-B0*sin(2*latitude)+C0*sin(4*latitude)-D0*sin(6*latitude)+E0*sin(8*latitude);
 
     K1 = S * k0;
-    K2 = nu * sin(latitude) * cos(latitude) * pow(sin1, 2) * k0 * (100000000)
-    / 2;
-    K3 = ((pow(sin1, 4) * nu * sin(latitude) * pow(cos(latitude), 3)) / 24)
-    * (5 - pow(tan(latitude), 2) + 9 * e1sq * pow(cos(latitude), 2) + 4
-       * pow(e1sq, 2) * pow(cos(latitude), 4))
-    * k0
-    * (10000000000000000L);
+    K2 = nu * sin(latitude) * cos(latitude) * pow(sin1, 2) * k0 * (100000000) / 2;
+    K3 = ((pow(sin1,4)*nu*sin(latitude)*pow(cos(latitude),3))/24)*(5-pow(tan(latitude),2)+9*e1sq*pow(cos(latitude),2)+4*pow(e1sq,2)*pow(cos(latitude),4))*k0*(10000000000000000L);
 
-    K4 = nu * cos(latitude) * sin1 * k0 * 10000;
+    // JE to prevent bad initialization of CLatLng if here is no valid GPS reading
+    if ((latitude == 0) || (longitude == 0)) {
+        K4 = 0;
+        K5 = 0;
+    } else {
+        K4 = nu * cos(latitude) * sin1 * k0 * 10000;
+        K5 = pow(sin1*cos(latitude),3)*(nu/6)*(1-pow(tan(latitude),2)+e1sq*pow(cos(latitude),2))*k0*1000000000000L;
+    }
+    // end JE
 
-    K5 = pow(sin1 * cos(latitude), 3) * (nu / 6)
-    * (1 - pow(tan(latitude), 2) + e1sq * pow(cos(latitude), 2)) * k0
-    * 1000000000000L;
-
-    A6 = (pow(p * sin1, 6) * nu * sin(latitude) * pow(cos(latitude), 5) / 720)
-    * (61 - 58 * pow(tan(latitude), 2) + pow(tan(latitude), 4) + 270
-       * e1sq * pow(cos(latitude), 2) - 330 * e1sq
-       * pow(sin(latitude), 2)) * k0 * (1E+24);
+   A6 = (pow(p*sin1,6)*nu*sin(latitude)*pow(cos(latitude),5)/720)*(61-58*pow(tan(latitude),2)+pow(tan(latitude),4)+270*e1sq*pow(cos(latitude),2)-330*e1sq*pow(sin(latitude),2))*k0*(1E+24);
 
 }
 
@@ -116,7 +110,10 @@ string LL2UTM::getLongZone() {
 }
 
 double LL2UTM::getEast() {
-    return 500000 + (K4 * p + K5 * pow(p, 3));
+    if ((latitude == 0) || (longitude == 0))
+        return 0;
+    else
+        return 500000 + (K4 * p + K5 * pow(p, 3));
 }
 
 double LL2UTM::getNorth() {
@@ -141,3 +138,4 @@ void LL2UTM::print() {
     cout << setprecision(10) << latitudeDegree << " " << longitude << endl;
     cout << setprecision(10) << UTMEast << " " << UTMNorth << endl;
 }
+// clang-format ON
