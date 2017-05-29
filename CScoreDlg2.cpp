@@ -54,6 +54,7 @@ Fl_Box *sel = scoreValue;
 
 CClubDlg *clubDlg = nullptr;
 Fl_Button *clubB = nullptr;
+CScoreDlg2 *scoreDlg2 = nullptr;
 
 int hole;
 
@@ -577,15 +578,18 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
 
   color((Fl_Color)159);
   // set_modal();
+  label("Scores");
   size_range(480, 800, 480, 800);
+  // clear_border();
   end();
 
+  initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
-  clear_border();
 
   show();
 }
+
 
 void createScoreDlg2() { scoreDlg2 = new CScoreDlg2(0, 0, 480, 800); }

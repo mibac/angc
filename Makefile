@@ -43,7 +43,6 @@ CLatLng.o \
 Course.o \
 gps.o \
 HoleView.o \
-CScoreBtn.o \
 CScoreDlg2.o \
 globals.o \
 CTimeDisplay.o \
@@ -64,7 +63,6 @@ Fl_Image_Button.o
 		Course.o \
 		gps.o \
 		HoleView.o \
-		CScoreBtn.o \
 		CScoreDlg2.o \
 		globals.o \
 		CTimeDisplay.o \
@@ -86,7 +84,6 @@ CLatLng.h \
 Course.h \
 gps.h \
 HoleView.h \
-CScoreBtn.h \
 CScoreDlg2.h \
 globals.h \
 CTimeDisplay.h \
@@ -123,9 +120,6 @@ HoleView.o: HoleView.cpp HoleView.h Course.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CScoreDlg2.o: CScoreDlg2.cpp CScoreDlg2.h globals.h  CScorecard.h  CClubcard.h
-			g++ -c $<  $(CXXFLAGS)
-
-CScoreBtn.o: CScoreBtn.cpp CScoreBtn.h CScoreDlg2.h
 			g++ -c $<  $(CXXFLAGS)
 
 CTimeDisplay.o: CTimeDisplay.cpp 	CTimeDisplay.h globals.h CGPStime.h CHoleBtn.h

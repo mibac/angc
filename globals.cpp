@@ -76,52 +76,50 @@ int calcUDs(bool front9) {
   return sum;
 }
 
-int birdies = 0;
-int pars = 0;
-int bogies = 0;
-int doubles = 0;
-int triples = 0;
+Scores scor;
 
 string getScoreType(int par, int score) {
-    int n = score - par; // order important
-    string s;
-    switch (ScoreType(n)) {
+  int n = score - par;  // order important
+  string s;
+  switch (ScoreType(n)) {
     case ScoreType::albatross:
-        s = "albatross";
-        break;
+      s = "albatross";
+      scor.albatross++;
+      break;
     case ScoreType::eagle:
-        s = "eagle";
-        break;
+      s = "eagle";
+      scor.eagles++;
+      break;
     case ScoreType::birdie:
-        s = "birdie";
-        birdies++;
-        break;
+      s = "birdie";
+      scor.birdies++;
+      break;
     case ScoreType::par:
-        s = "par";
-        pars++;
-        break;
+      s = "par";
+      scor.pars++;
+      break;
     case ScoreType::bogey:
-        s = "bogey";
-        bogies++;
-        break;
+      s = "bogey";
+      scor.bogies++;
+      break;
     case ScoreType::dbogey:
-        s = "double";
-        doubles++;
-        break;
+      s = "double";
+      scor.doubles++;
+      break;
     case ScoreType::tbogey:
-        s = "triple";
-        triples++;
-        break;
+      s = "triple";
+      scor.triples++;
+      break;
     case ScoreType::x:
-        s = "X";
-        break;
+      s = "X";
+      scor.x++;
+      break;
     default:
-        s = "unknown";
-        break;
-    }
-    if (score == 1)
-        s = "ACE";
-    return s;
+      s = "unknown";
+      break;
+  }
+  if (score == 1) s = "ACE";
+  return s;
 }
 
 void writeScores() {
@@ -138,8 +136,8 @@ void writeScores() {
   /// clang-format off
   gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-      int par = stoi(vNGCHoles[ix].par);
-      int score = stoi(vNGCHoles[ix].score);
+    int par = stoi(vNGCHoles[ix].par);
+    int score = stoi(vNGCHoles[ix].score);
     gFileScore << vNGCHoles[ix].hole << "\t";
     gFileScore << vNGCHoles[ix].yards << "\t";
     gFileScore << vNGCHoles[ix].hdcp << "\t";
@@ -149,16 +147,17 @@ void writeScores() {
     gFileScore << vNGCHoles[ix].uds << "\t";
     gFileScore << getScoreType(par, score) << endl;
   }
-  gFileScore << "Score \t" << fscore << "\t" << bscore << "\t" << fscore + bscore
+  gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
+             << fscore + bscore << endl;
+  gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t"
+             << fputts + bputts << endl;
+  gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
              << endl;
-  gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t" << fputts + bputts
-             << endl;
-  gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds << endl;
-  gFileScore << "Birdies\t" << birdies << endl;
-  gFileScore << "Pars\t" << pars << endl;
-  gFileScore << "Bogies\t" << pars << endl;
-  gFileScore << "Doubles\t" << doubles << endl;
-  gFileScore << "Triples\t" << triples << endl;
+  gFileScore << "Birdies\t" << scor.birdies << endl;
+  gFileScore << "Pars\t" << scor.pars << endl;
+  gFileScore << "Bogies\t" << scor.bogies << endl;
+  gFileScore << "Doubles\t" << scor.doubles << endl;
+  gFileScore << "Triples\t" << scor.triples << endl;
 }
 
 // clang-format off
@@ -187,7 +186,7 @@ void initNGCHolesVector() {
   vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "0", "0", "0");
   vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "0", "0", "0");
   vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "0", "0", "0");
-  vNGCHoles[8].setHoleDesc("9", "312", "5", "4", "0", "0", "0");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "0", "0", "0");
   vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "0", "0", "0");
   vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "0", "0", "0");
   vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "0", "0", "0");
@@ -197,6 +196,27 @@ void initNGCHolesVector() {
   vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "0", "0", "0");
   vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "0", "0", "0");
   vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "0", "0", "0");
+}
+
+void initTestScores() {
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
+  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "6", "2", "3");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "2", "2");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "2", "3");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "4", "2", "2");
+  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "3", "3");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "3", "1", "1");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "5", "2", "3");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "3", "2", "2");
+  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "5", "2", "3");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "5", "2", "3");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "3", "1", "1");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "7", "2", "3");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "4", "2", "3");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "4", "2", "2");
 }
 
 void initClubNames() {
@@ -232,7 +252,6 @@ void initShotStats() {
     }
   }
 }
-
 
 void initGlobals() {
   gCurrentHole = 1;

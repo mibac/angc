@@ -43,7 +43,6 @@ const int kScoreRow = 3;
 const int kPuttRow = 4;
 const int kUDRow = 5;
 
-
 struct frontBackResults {
   int fscore;
   int bscore;
@@ -76,8 +75,7 @@ void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
   // Draw cell data
   fl_color(FL_GRAY0);
   string str(s);
-  if (str == "0")
-    str = " ";
+  if (str == "0") str = " ";
   fl_draw(str.c_str(), X, Y, W, H, FL_ALIGN_CENTER);
   // Draw box border
   fl_color(color());
@@ -88,8 +86,8 @@ void CScorecard::DrawData(const char *s, int X, int Y, int W, int H) {
 void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData("T", X, Y, W, H);
-  } else if (COL == 10) {
-    DrawData("TT", X, Y, W, H);
+  // } else if (COL == 10) {
+  //   DrawData("TT", X, Y, W, H);
   } else if (gFront9) {
     DrawData(vNGCHoles[COL].hole.c_str(), X, Y, W, H);
   } else {
@@ -173,10 +171,10 @@ string CScorecard::sumRow(const int row) {
 void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kScoreRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!gFront9)) {
-    int n = results.fscore + results.bscore;
-    string s = to_string(n);
-    DrawData(s.c_str(), X, Y, W, H);
+  // } else if ((COL == 10) && (!gFront9)) {
+  //   int n = results.fscore + results.bscore;
+  //   string s = to_string(n);
+  //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
     DrawData(vNGCHoles[COL].score.c_str(), X, Y, W, H);
   } else {
@@ -187,10 +185,10 @@ void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
 void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kPuttRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!gFront9)) {
-    int n = results.fputts + results.bputts;
-    string s = to_string(n);
-    DrawData(s.c_str(), X, Y, W, H);
+  // } else if ((COL == 10) && (!gFront9)) {
+  //   int n = results.fputts + results.bputts;
+  //   string s = to_string(n);
+  //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
     DrawData(vNGCHoles[COL].putts.c_str(), X, Y, W, H);
   } else {
@@ -201,10 +199,10 @@ void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
 void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
   if (COL == 9) {
     DrawData(sumRow(kUDRow).c_str(), X, Y, W, H);
-  } else if ((COL == 10) && (!gFront9)) {
-    int n = results.fuds + results.buds;
-    string s = to_string(n);
-    DrawData(s.c_str(), X, Y, W, H);
+  // } else if ((COL == 10) && (!gFront9)) {
+  //   int n = results.fuds + results.buds;
+  //   string s = to_string(n);
+  //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
     DrawData(vNGCHoles[COL].uds.c_str(), X, Y, W, H);
   } else {
@@ -246,7 +244,8 @@ void CScorecard::draw_cell(TableContext context, int ROW, int COL, int X, int Y,
       DrawHeader(str.c_str(), X, Y, W, H);
       return;
     case CONTEXT_CELL:  // Draw data in cells
-      fl_font(FL_HELVETICA_BOLD,24);  // set the font for our drawing operations
+      fl_font(FL_HELVETICA_BOLD,
+              24);  // set the font for our drawing operations
       if (COL == 10) DrawData(" ", X, Y, W, H);
       if (ROW == kHoleRow)
         drawHoleData(COL, X, Y, W, H);

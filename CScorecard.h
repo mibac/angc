@@ -33,7 +33,8 @@
 using namespace std;
 
 #define MAX_ROWS 6
-#define MAX_COLS 11  // A-Z
+//#define MAX_COLS 11
+#define MAX_COLS 10
 
 // Derive a class from Fl_Table
 class CScorecard : public Fl_Table {

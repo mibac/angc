@@ -9,7 +9,6 @@
 class CScorecardDlg : public Fl_Window {
 public:
     CScorecardDlg(int X, int Y, int W, int H, const char *L = 0);
-    void updateCard();
 };
 
 extern void createScorecardDlg();

@@ -53,16 +53,38 @@ struct UtmLatLng {
   friend ostream& operator<<(ostream& strm, const UtmLatLng& ull);
 };
 
+struct Scores {
+  int albatross;
+  int eagles;
+  int birdies;
+  int pars;
+  int bogies;
+  int doubles;
+  int triples;
+  int x;
+  Scores()
+      : albatross(0),
+        eagles(0),
+        birdies(0),
+        pars(0),
+        bogies(0),
+        doubles(0),
+        triples(0),
+        x(0) {}
+};
+
+extern Scores scor;
+
 enum class ScoreType {
- ace  = -4,
- albatross = -3,
- eagle = -2,
- birdie = -1,
- par = 0,
- bogey = 1,
- dbogey = 2,
- tbogey = 3,
- x = 4
+  ace = -4,
+  albatross = -3,
+  eagle = -2,
+  birdie = -1,
+  par = 0,
+  bogey = 1,
+  dbogey = 2,
+  tbogey = 3,
+  x = 4
 };
 
 extern string getScoreType(int par, int score);
@@ -158,4 +180,10 @@ extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
 extern Fl_Color getBkgRGBcolor();
 extern void writeScores();
+extern int calcScore(bool front9);
+extern int calcPutts(bool front9);
+extern int calcUDs(bool front9);
+extern void initTestScores();
+extern string getScoreType(int par, int score);
+
 #endif  // CGLOBALS_H

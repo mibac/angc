@@ -46,16 +46,16 @@
 #include "CHoleBtn.h"  //CHoleBtn *holeBtn
 #endif
 
-#ifndef CScoreBtn_H
-#include "CScoreBtn.h"
-#endif
-
 #ifndef CEXITBTN_H
 #include "CExitBtn.h"
 #endif
 
 #ifndef CTIMEDISPLAY_H
 #include "CTimeDisplay.h"
+#endif
+
+#ifndef CSCOREDLG2_H
+#include "CScoreDlg2.h"
 #endif
 
 #ifndef CCLUBDLG_H
@@ -67,7 +67,7 @@ using namespace std;
 Fl_Window *win;
 Fl_Output *my_input;
 CHoleBtn *holeBtn;
-CScoreBtn *scoreBtn;
+Fl_Button *scoreBtn;
 CExitBtn *exitBtn;
 FILE *gpsin = nullptr;
 HoleView *hv;
@@ -102,11 +102,13 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
   markBtn->label(markBtnLabel.c_str());
 
   UtmLatLng u = cll.getNowMark();
-  gShotRA[gCurrentHole - 1].shot[gShotCount-1].utm = u;
+  gShotRA[gCurrentHole - 1].shot[gShotCount - 1].utm = u;
   gShotRA[gCurrentHole - 1].nmarks++;
 
   createCClubDlg();
 }
+
+static void scoreBtn_cb(Fl_Widget *widget, void *) { createScoreDlg2(); }
 
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
@@ -208,8 +210,9 @@ int main(int argc, char **argv) {
   markBtn->callback(markBtn_cb);
 
   scoreBtn =
-      new CScoreBtn(kScoreLeft, kBtnRow1Top, kScoreWid, kBoxSize, "Score");
+      new Fl_Button(kScoreLeft, kBtnRow1Top, kScoreWid, kBoxSize, "Score");
   setMainBtnStyle(scoreBtn);
+  scoreBtn->callback(scoreBtn_cb);
 
   exitBtn = new CExitBtn(kExitLeft, kBtnRow1Top, kExitWid, kBoxSize, "Exit");
   setMainBtnStyle(exitBtn);
