@@ -4,8 +4,8 @@
 
 #include <iomanip>
 
-#include <FL/Fl.H>
 #include <FL/Enumerations.H>
+#include <FL/Fl.H>
 #include <FL/fl_ask.H>
 
 #ifndef CGLOBALS_H
@@ -32,29 +32,29 @@ void CExitBtn::writeGPS() {
 }
 
 void initTestScore() {
-    vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
-    vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
-    vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "6", "2", "3");
-    vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "2", "2");
-    vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "2", "3");
-    vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "4", "2", "2");
-    vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
-    vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "3", "3");
-    vNGCHoles[8].setHoleDesc("9", "312", "5", "4", "3", "1", "1");
-    vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "5", "2", "3");
-    vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "3", "2", "2");
-    vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
-    vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "5", "2", "3");
-    vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "5", "2", "3");
-    vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "3", "1", "1");
-    vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "7", "2", "3");
-    vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "4", "2", "3");
-    vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "4", "2", "2");
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
+  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "6", "2", "3");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "2", "2");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "2", "3");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "4", "2", "2");
+  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "3", "3");
+  vNGCHoles[8].setHoleDesc("9", "312", "5", "4", "3", "1", "1");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "5", "2", "3");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "3", "2", "2");
+  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "5", "2", "3");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "5", "2", "3");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "3", "1", "1");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "7", "2", "3");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "4", "2", "3");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "4", "2", "2");
 }
 
 void CExitBtn::writeScoreStats() {
-    // initTestScore();
-    writeScores();
+  // initTestScore();
+  writeScores();
 }
 
 void writeShotStats() {
@@ -62,19 +62,19 @@ void writeShotStats() {
   gFileShotStats.open(s.c_str());
   gFileShotStats << asctime(std::localtime(&gToday));
   gFileShotStats << "Hole\tClub\tDist\tLng      \tLat" << endl;
-  int hole = gCurrentHole -1;
-  int valid = countValidDistances(hole);
+  int valid = 0;
   gFileShotStats << setprecision(kPrecision);
-
-    if (gShotRA[hole].nmarks > 1) {
+  for (int ix = 0; ix < k18; ++ix)
+    if (gShotRA[ix].nmarks > 1) {
+      valid = countValidDistances(ix);
       for (int jx = 0; jx < valid; ++jx) {
-          gFileShotStats << gCurrentHole << "\t";
-        gFileShotStats << gShotRA[hole].shot[jx].club << "\t";
-        gFileShotStats << gShotRA[hole].shot[jx].yards << "\t";
-        gFileShotStats << gShotRA[hole].shot[jx].utm.lng << "\t";
-        gFileShotStats << gShotRA[hole].shot[jx].utm.lat << endl;
+        gFileShotStats << ix + 1 << "\t";
+        gFileShotStats << gShotRA[ix].shot[jx].club << "\t";
+        gFileShotStats << gShotRA[ix].shot[jx].yards << "\t";
+        gFileShotStats << gShotRA[ix].shot[jx].utm.lng << "\t";
+        gFileShotStats << gShotRA[ix].shot[jx].utm.lat << endl;
       }
-  }
+    }
   gFileShotStats << endl;
   gFileShotStats.flush();
 }
@@ -90,7 +90,8 @@ void CExitBtn::Button_CB() {
   //   uchar g = 0;
   //   uchar b = 0;
   //   Fl::get_color(FL_DARK_BLUE, r, g, b);
-  //   cout << "FL_DARK_BLUE " << (int)r << " " << (int)g << " " << (int)b << endl;
+  //   cout << "FL_DARK_BLUE " << (int)r << " " << (int)g << " " << (int)b <<
+  //   endl;
   // }
   if (result == 0) {  // Close without saving
     gFileShotStats.close();
