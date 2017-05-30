@@ -583,7 +583,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   // clear_border();
   end();
 
-  initTestScores();
+  // initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);

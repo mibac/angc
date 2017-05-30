@@ -33,6 +33,42 @@ Fl_Text_Buffer *txtbuf = nullptr;
 
 void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
 
+Scores sc;
+
+void incrScoreTypes(int par, int score) {
+  int n = score - par;  // order important
+  if (score == 0) n =99; // bad case
+  string s;
+  switch (ScoreType(n)) {
+    case ScoreType::albatross:
+      sc.albatross++;
+      break;
+    case ScoreType::eagle:
+      sc.eagles++;
+      break;
+    case ScoreType::birdie:
+      sc.birdies++;
+      break;
+    case ScoreType::par:
+      sc.pars++;
+      break;
+    case ScoreType::bogey:
+      sc.bogies++;
+      break;
+    case ScoreType::dbogey:
+      sc.doubles++;
+      break;
+    case ScoreType::tbogey:
+      sc.triples++;
+      break;
+    case ScoreType::x:
+      sc.x++;
+      break;
+    default:
+      break;
+  }
+}
+
 string statsStr;
 string writeScoreStats() {
   int fscore = calcScore(true);
@@ -42,10 +78,11 @@ string writeScoreStats() {
   int fuds = calcUDs(true);
   int buds = calcUDs(false);
 
+
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(vNGCHoles[ix].par);
     int score = stoi(vNGCHoles[ix].score);
-    getScoreType(par, score);
+    incrScoreTypes(par, score);
   }
 
   ostringstream oss;
@@ -54,13 +91,13 @@ string writeScoreStats() {
   oss << "Putts \t" << fputts << "\t" << bputts << "\t" << fputts + bputts
       << endl;
   oss << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds << endl;
-  if (scor.eagles > 0) oss << "Eagles\t" << scor.eagles << endl;
-  if (scor.birdies > 0) oss << "Birdies\t" << scor.birdies << endl;
-  if (scor.pars > 0) oss << "Pars\t" << scor.pars << endl;
-  if (scor.bogies > 0) oss << "Bogies\t" << scor.bogies << endl;
-  if (scor.doubles > 0) oss << "Doubles\t" << scor.doubles << endl;
-  if (scor.triples > 0) oss << "Triples\t" << scor.triples << endl;
-  if (scor.x > 0) oss << "Xs\t" << scor.x << endl;
+  if (sc.eagles > 0) oss << "Eagles\t" << sc.eagles << endl;
+  if (sc.birdies > 0) oss << "Birdies\t" << sc.birdies << endl;
+  if (sc.pars > 0) oss << "Pars\t" << sc.pars << endl;
+  if (sc.bogies > 0) oss << "Bogies\t" << sc.bogies << endl;
+  if (sc.doubles > 0) oss << "Doubles\t" << sc.doubles << endl;
+  if (sc.triples > 0) oss << "Triples\t" << sc.triples << endl;
+  if (sc.x > 0) oss << "Xs\t" << sc.x << endl;
   return oss.str();
 }
 

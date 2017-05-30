@@ -31,10 +31,6 @@ void CExitBtn::writeGPS() {
   gFileGPS.close();
 }
 
-void CExitBtn::writeScoreStats() {
-  // initTestScore();
-  writeScores();
-}
 
 void writeShotStats() {
   string s = pathShots + "aShots_" + getFileSuffix();
@@ -82,7 +78,7 @@ void CExitBtn::Button_CB() {
     mainwin->hide();
   } else if (result == 1) {  // Save and close
     writeGPS();
-    writeScoreStats();
+    writeScores();
     writeShotStats();
     gFileScore.close();
     if (myHolePopup != nullptr) myHolePopup->hide();

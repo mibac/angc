@@ -184,6 +184,5 @@ extern int calcScore(bool front9);
 extern int calcPutts(bool front9);
 extern int calcUDs(bool front9);
 extern void initTestScores();
-extern string getScoreType(int par, int score);
 
 #endif  // CGLOBALS_H

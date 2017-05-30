@@ -11,7 +11,6 @@ using namespace std;
 
 class CExitBtn : public Fl_Button {
   void writeGPS();
-  void writeScoreStats();
 
   // Handle numeric keypad buttons pressed
   static void staticButton_CB(Fl_Widget *w, void *data);

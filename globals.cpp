@@ -80,6 +80,7 @@ Scores scor;
 
 string getScoreType(int par, int score) {
   int n = score - par;  // order important
+  if (score == 0) n =99; // bad case
   string s;
   switch (ScoreType(n)) {
     case ScoreType::albatross:
@@ -115,7 +116,7 @@ string getScoreType(int par, int score) {
       scor.x++;
       break;
     default:
-      s = "unknown";
+      s = "";
       break;
   }
   if (score == 1) s = "ACE";
