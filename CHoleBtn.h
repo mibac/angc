@@ -27,6 +27,7 @@ class CHoleBtn : public Fl_Output {
  public:
   static string holeName;
 
+  void setNewHole();
   CHoleBtn(int X, int Y, int W, int H, const char *L = 0);
 };
 

@@ -63,6 +63,8 @@ void CLatLng::updateLatLng(const string& s) {
   UtmLatLng ull = NMEA2UTM(ll);
   vUTM.push_back(ull);
   gNowTimeStr = to_string(myGPS.UTC);
+  gTmpGPS << s;
+  gTmpGPS.flush();
 }
 
 UtmLatLng CLatLng::getMark(size_t avg) {

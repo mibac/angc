@@ -36,8 +36,8 @@ void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
 Scores sc;
 
 void incrScoreTypes(int par, int score) {
-  int n = score - par;  // order important
-  if (score == 0) n =99; // bad case
+  int n = score - par;     // order important
+  if (score == 0) n = 99;  // bad case
   string s;
   switch (ScoreType(n)) {
     case ScoreType::albatross:
@@ -77,7 +77,8 @@ string writeScoreStats() {
   int bputts = calcPutts(false);
   int fuds = calcUDs(true);
   int buds = calcUDs(false);
-
+  int fGIR = calcGIRs(true);
+  int bGIR = calcGIRs(false);
 
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(vNGCHoles[ix].par);
@@ -91,6 +92,8 @@ string writeScoreStats() {
   oss << "Putts \t" << fputts << "\t" << bputts << "\t" << fputts + bputts
       << endl;
   oss << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds << endl;
+  oss << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR << endl;
+
   if (sc.eagles > 0) oss << "Eagles\t" << sc.eagles << endl;
   if (sc.birdies > 0) oss << "Birdies\t" << sc.birdies << endl;
   if (sc.pars > 0) oss << "Pars\t" << sc.pars << endl;
@@ -114,7 +117,7 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     setButtonStyle(fbBtn);
   }
   {
-    stats = new Fl_Text_Display(2, 380, 472, 240);
+    stats = new Fl_Text_Display(2, 380, 472, 270);
     stats->textfont(1);
     stats->textsize(30);
     stats->textcolor(FL_BLACK);

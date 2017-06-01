@@ -132,6 +132,8 @@ void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
     gShotRA[hole].shot[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
   }
+  gTmpShots << hole << "\t" << ROW << "\t";
+  gTmpShots << gShotRA[hole].shot[ROW];
 }
 
 // Handle drawing table's cells

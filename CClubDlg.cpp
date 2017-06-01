@@ -59,7 +59,6 @@ int btnPresses = 0;
 int saveCurrentHole = 0;
 int clubDlgHole = 0;
 
-
 static void oKBtn_cb(Fl_Widget *w, void *data) {
   CClubDlg *ccd = (CClubDlg *)data;
   ccd->hide();

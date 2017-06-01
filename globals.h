@@ -118,6 +118,7 @@ class CNGCHoles {
     putts = p;
     uds = u;
   }
+  friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
 };
 
 const int kDr = 0;
@@ -149,6 +150,7 @@ struct holeStats {
   int yards;
   UtmLatLng utm;
   string club;
+  friend ostream& operator<<(ostream& strm, const holeStats& hs);
 };
 
 const int kMAX_SHOTS = 7;
@@ -170,8 +172,11 @@ extern vector<UtmLatLng> vUTM;
 extern array<bool, k18> bPlayedHole;
 
 extern ofstream gFileScore;
-extern ofstream gFileShotStats;
+extern ofstream gFileShots;
 extern ofstream gFileGPS;
+extern ofstream gTmpGPS;
+extern ofstream gTmpShots;
+extern ofstream gTmpScore;
 
 extern void initGlobals();
 extern int countValidDistances(int hole);
@@ -183,6 +188,10 @@ extern void writeScores();
 extern int calcScore(bool front9);
 extern int calcPutts(bool front9);
 extern int calcUDs(bool front9);
+extern int calcGIRs(bool front9);
 extern void initTestScores();
+
+extern UtmLatLng gThisGreen;
+extern UtmLatLng gNextTee;
 
 #endif  // CGLOBALS_H

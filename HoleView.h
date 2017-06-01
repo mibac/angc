@@ -34,4 +34,5 @@ class HoleView: public Fl_Gl_Window {
    Course *ngc;
 };
 
+extern HoleView *hv;
 #endif

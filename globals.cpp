@@ -26,9 +26,12 @@ CTimeDisplay* gTmDisplay = nullptr;
 Fl_Text_Buffer* gTmbuff = nullptr;
 string timeStr = "Start";
 
-ofstream gFileScore;
-ofstream gFileShotStats;
 ofstream gFileGPS;
+ofstream gFileScore;
+ofstream gFileShots;
+ofstream gTmpGPS;
+ofstream gTmpScore;
+ofstream gTmpShots;
 
 vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 vector<UtmLatLng> vUTM;
@@ -40,6 +43,9 @@ array<string, k18> clubNamesRA;
 
 int gShotCount;
 array<ShotStats, k18> gShotRA;
+
+UtmLatLng gThisGreen;
+UtmLatLng gNextTee;
 
 ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
   strm << setprecision(10) << ull.lng << "\t" << ull.lat;
@@ -76,11 +82,39 @@ int calcUDs(bool front9) {
   return sum;
 }
 
+bool isGIR(string spar, string sscore, string sputts) {
+  int par = stoi(spar);
+  int score = stoi(sscore);
+  int putts = stoi(sputts);
+  if ((score == par) && (putts == 2))
+    return true;
+  else if ((score + 1 == par) && (putts == 1))
+    return true;
+  else
+    return false;
+}
+
+int calcGIRs(bool front9) {
+  int sum = 0;
+  if (front9) {
+    for (int ix = 0; ix < 9; ++ix) {
+      if (isGIR(vNGCHoles[ix].par, vNGCHoles[ix].score, vNGCHoles[ix].putts))
+        sum++;
+    };
+  } else {
+    for (int ix = 9; ix < k18; ++ix) {
+      if (isGIR(vNGCHoles[ix].par, vNGCHoles[ix].score, vNGCHoles[ix].putts))
+        sum++;
+    };
+  }
+  return sum;
+}
+
 Scores scor;
 
 string getScoreType(int par, int score) {
-  int n = score - par;  // order important
-  if (score == 0) n =99; // bad case
+  int n = score - par;     // order important
+  if (score == 0) n = 99;  // bad case
   string s;
   switch (ScoreType(n)) {
     case ScoreType::albatross:
@@ -123,6 +157,24 @@ string getScoreType(int par, int score) {
   return s;
 }
 
+// clang-format off
+ostream& operator<<(ostream& strm, const CNGCHoles& h) {
+      strm << h.hole << "\t";
+      strm << h.yards << "\t";
+      strm << h.hdcp << "\t";
+      strm << h.par << "\t";
+      strm << h.score << "\t";
+      strm << h.putts << "\t";
+      strm << h.uds << "\t";
+      strm << getScoreType(stoi(h.par), stoi(h.score)) << "\t";
+      if (isGIR (h.par, h.score, h.putts))
+        strm << "GIR" << endl;
+      else
+        strm << "\t" << endl;
+  return strm;
+}
+// clang-format on
+
 void writeScores() {
   int fscore = calcScore(true);
   int bscore = calcScore(false);
@@ -130,6 +182,8 @@ void writeScores() {
   int bputts = calcPutts(false);
   int fuds = calcUDs(true);
   int buds = calcUDs(false);
+  int fGIR = calcGIRs(true);
+  int bGIR = calcGIRs(false);
 
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
@@ -137,16 +191,7 @@ void writeScores() {
   /// clang-format off
   gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    int par = stoi(vNGCHoles[ix].par);
-    int score = stoi(vNGCHoles[ix].score);
-    gFileScore << vNGCHoles[ix].hole << "\t";
-    gFileScore << vNGCHoles[ix].yards << "\t";
-    gFileScore << vNGCHoles[ix].hdcp << "\t";
-    gFileScore << par << "\t";
-    gFileScore << score << "\t";
-    gFileScore << vNGCHoles[ix].putts << "\t";
-    gFileScore << vNGCHoles[ix].uds << "\t";
-    gFileScore << getScoreType(par, score) << endl;
+    gFileScore << vNGCHoles[ix];
   }
   gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
              << fscore + bscore << endl;
@@ -154,21 +199,31 @@ void writeScores() {
              << fputts + bputts << endl;
   gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
              << endl;
+  gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR
+             << endl;
   gFileScore << "Birdies\t" << scor.birdies << endl;
   gFileScore << "Pars\t" << scor.pars << endl;
   gFileScore << "Bogies\t" << scor.bogies << endl;
   gFileScore << "Doubles\t" << scor.doubles << endl;
   gFileScore << "Triples\t" << scor.triples << endl;
+  gFileScore.flush();
 }
+
+// clang-format off
+ostream& operator<<(ostream& strm, const holeStats& h) {
+    strm << h.club << "\t"
+         << h.yards
+         << "\t" << setprecision(10)
+         << h.utm.lat << "\t"
+         << h.utm.lng << endl;
+  return strm;
+}
+// clang-format on
 
 // clang-format off
 ostream& operator<<(ostream& strm, const ShotStats& sra) {
   for (int ix = 0; ix < sra.nmarks - 1; ++ix) {
-    strm << sra.shot[ix].club << "\t"
-         << sra.shot[ix].yards
-         << "\t" << setprecision(10)
-         << sra.shot[ix].utm.lat << "\t"
-         << sra.shot[ix].utm.lng << endl;
+    strm << sra.shot[ix];
   }
   return strm;
 }
@@ -254,6 +309,23 @@ void initShotStats() {
   }
 }
 
+void openTmpFiles() {
+  string s1 = "tmpGPS.txt";
+  gTmpGPS.open(s1.c_str(), ios::app);
+  gTmpGPS << setprecision(kPrecision);
+  gTmpGPS << asctime(std::localtime(&gToday));
+
+  string s2 = "tmpScore.txt";
+  gTmpScore.open(s2.c_str(), ios::app);
+  // gTmpScore << setprecision(kPrecision);
+  gTmpScore << asctime(std::localtime(&gToday));
+
+  string s3 = "tmpShots.txt";
+  gTmpShots.open(s3.c_str(), ios::app);
+  gTmpShots << setprecision(kPrecision);
+  gTmpShots << asctime(std::localtime(&gToday));
+}
+
 void initGlobals() {
   gCurrentHole = 1;
   gGpsAvgNum = 3;
@@ -271,6 +343,7 @@ void initGlobals() {
   // initScoreResults();
   initClubNames();
   initShotStats();
+  openTmpFiles();
 }
 
 int countValidDistances(int hole) {

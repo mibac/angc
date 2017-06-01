@@ -110,6 +110,15 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
 
 static void scoreBtn_cb(Fl_Widget *widget, void *) { createScoreDlg2(); }
 
+bool isCloserToNextTee(UtmLatLng now) {
+  // int y2g = calcUTMdistance(now, gThisGreen);
+  int y2t = calcUTMdistance(now, gNextTee);
+  if (y2t < 12)
+    return true;
+  else
+    return false;
+}
+
 void HandleFD(FL_SOCKET fd, void *data) {
   int n = atoi(holeBtn->value());
   if (n == 0) n = 1;
@@ -150,6 +159,8 @@ void HandleFD(FL_SOCKET fd, void *data) {
             hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);
       else
         hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
+      if (isCloserToNextTee(u))
+        holeBtn->setNewHole();
       hv->redraw();
     }
   }

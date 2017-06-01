@@ -12,6 +12,10 @@
 #include "CLatLng.h"
 #endif
 
+#ifndef HOLEVIEW_H_
+#include "HoleView.h"
+#endif
+
 using namespace std;
 
 CHolesPopup *myHolePopup = nullptr;  // local instance of numeric keypad widget
@@ -32,16 +36,51 @@ void CHoleBtn::SetNumPadValue_CB2() {
     str = " " + str;
   value(str.c_str());   // pass value from myHolePopup to our input
   myHolePopup->hide();  // hide myHolePopup
-  gShotRA[gCurrentHole-1].shot[0].utm = cll.getNowMark();
-  gShotRA[gCurrentHole-1].nmarks = 1;
+  gShotRA[gCurrentHole - 1].shot[0].utm = cll.getNowMark();
+  gShotRA[gCurrentHole - 1].nmarks = 1;
   gShotCount = 1;
   markBtnLabel = "Mark\n1";
   markBtn->label(markBtnLabel.c_str());
+
+  gThisGreen.lng = hv->ngc->hole[gCurrentHole].startOrient[1].v[0];
+  gThisGreen.lat = hv->ngc->hole[gCurrentHole].startOrient[1].v[1];
+  gNextTee.lng = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[0];
+  gNextTee.lat = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[1];
+
+  // cout << "SetNumPadValue_CB2 Hole " << gCurrentHole << endl;
+  // cout << "gThisGreen " << gThisGreen << endl;
+  // cout << "gNextTee " << gNextTee << endl;
 }
 
 void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
   CHoleBtn *in = (CHoleBtn *)data;
   in->SetNumPadValue_CB2();
+}
+
+void CHoleBtn::setNewHole() {
+  bPlayedHole[gCurrentHole - 1] = true;
+  string str = to_string(gCurrentHole);
+  gStartHoleTimeStr = gNowTimeStr;
+
+  CHoleBtn::holeName = str;
+  if (str.size() == 1)
+    str = "  " + str;
+  else
+    str = " " + str;
+  value(str.c_str());   // pass value from myHolePopup to our input
+  gShotRA[gCurrentHole - 1].nmarks = 1;
+  gShotCount = 1;
+  markBtnLabel = "Mark\n1";
+  markBtn->label(markBtnLabel.c_str());
+
+  gThisGreen.lng = hv->ngc->hole[gCurrentHole].startOrient[1].v[0];
+  gThisGreen.lat = hv->ngc->hole[gCurrentHole].startOrient[1].v[1];
+  gNextTee.lng = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[0];
+  gNextTee.lat = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[1];
+  gShotRA[gCurrentHole - 1].shot[0].utm = gNextTee;
+
+  // cout << "setNewHole Hole " << gCurrentHole << endl;
+  // cout << "gNextTee " << gNextTee << endl;
 }
 
 // Handle when user right clicks on our input widget

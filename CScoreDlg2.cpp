@@ -164,6 +164,7 @@ void CScoreDlg2::stuffData(int n) {
   vNGCHoles[n].score = scoreValue->label();
   vNGCHoles[n].putts = puttValue->label();
   vNGCHoles[n].uds = udValue->label();
+  gTmpScore << vNGCHoles[n];
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {

@@ -28,30 +28,29 @@ void CExitBtn::writeGPS() {
   gFileGPS << setprecision(kPrecision);
   gFileGPS << asctime(std::localtime(&gToday));
   for (auto itr : vGPS) gFileGPS << itr;
-  gFileGPS.close();
+  gFileGPS.flush();
 }
-
 
 void writeShotStats() {
   string s = pathShots + "aShots_" + getFileSuffix();
-  gFileShotStats.open(s.c_str());
-  gFileShotStats << asctime(std::localtime(&gToday));
-  gFileShotStats << "Hole\tClub\tDist\tLng      \tLat" << endl;
+  gFileShots.open(s.c_str());
+  gFileShots << asctime(std::localtime(&gToday));
+  gFileShots << "Hole\tClub\tDist\tLng      \tLat" << endl;
   int valid = 0;
-  gFileShotStats << setprecision(kPrecision);
+  gFileShots << setprecision(kPrecision);
   for (int ix = 0; ix < k18; ++ix)
     if (gShotRA[ix].nmarks > 1) {
       valid = countValidDistances(ix);
       for (int jx = 0; jx < valid; ++jx) {
-        gFileShotStats << ix + 1 << "\t";
-        gFileShotStats << gShotRA[ix].shot[jx].club << "\t";
-        gFileShotStats << gShotRA[ix].shot[jx].yards << "\t";
-        gFileShotStats << gShotRA[ix].shot[jx].utm.lng << "\t";
-        gFileShotStats << gShotRA[ix].shot[jx].utm.lat << endl;
+        gFileShots << ix + 1 << "\t";
+        gFileShots << gShotRA[ix].shot[jx].club << "\t";
+        gFileShots << gShotRA[ix].shot[jx].yards << "\t";
+        gFileShots << gShotRA[ix].shot[jx].utm.lng << "\t";
+        gFileShots << gShotRA[ix].shot[jx].utm.lat << endl;
       }
     }
-  gFileShotStats << endl;
-  gFileShotStats.flush();
+  gFileShots << endl;
+  gFileShots.flush();
 }
 
 void CExitBtn::Button_CB() {
@@ -69,14 +68,23 @@ void CExitBtn::Button_CB() {
   //   endl;
   // }
   if (result == 0) {  // Close without saving
-    gFileShotStats.close();
+    gTmpShots.close();
+    gTmpScore.close();
+    gTmpGPS.close();
+
+    gFileShots.close();
     gFileScore.close();
     gFileGPS.close();
+
     // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 1) {  // Save and close
+    gTmpShots.close();
+    gTmpScore.close();
+    gTmpGPS.close();
+
     writeGPS();
     writeScores();
     writeShotStats();
