@@ -185,6 +185,8 @@ void writeScores() {
   int fGIR = calcGIRs(true);
   int bGIR = calcGIRs(false);
 
+  scor.initScores();
+
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
   gFileScore << asctime(std::localtime(&gToday));
@@ -199,8 +201,7 @@ void writeScores() {
              << fputts + bputts << endl;
   gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
              << endl;
-  gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR
-             << endl;
+  gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR << endl;
   gFileScore << "Birdies\t" << scor.birdies << endl;
   gFileScore << "Pars\t" << scor.pars << endl;
   gFileScore << "Bogies\t" << scor.bogies << endl;
@@ -234,45 +235,45 @@ void initNGCHolesVector() {
     CNGCHoles h;
     vNGCHoles.push_back(h);
   }
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "0", "0", "0");
-  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "0", "0", "0");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "0", "0", "0");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "0", "0", "0");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "0", "0", "0");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "0", "0", "0");
-  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "0", "0", "0");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "0", "0", "0");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "0", "0", "0");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "0", "0", "0");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "0", "0", "0");
-  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "0", "0", "0");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "0", "0", "0");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "0", "0", "0");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "0", "0", "0");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "0", "0", "0");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "0", "0", "0");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "0", "0", "0");
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
+  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "5", "2", "2");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "1", "2");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "5", "3");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "5", "2", "2");
+  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "2", "3");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "7", "3", "4");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "4", "1", "2");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "5", "3", "3");
+  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "6", "2", "4");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "6", "2", "3");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "6", "3", "3");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "5", "2", "2");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "3", "2", "2");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "6", "2", "2");
 }
 
 void initTestScores() {
   vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
   vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "6", "2", "3");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "2", "2");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "2", "3");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "4", "2", "2");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "5", "2", "2");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "1", "2");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "5", "3");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "5", "2", "2");
   vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "3", "3");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "3", "1", "1");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "5", "2", "3");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "3", "2", "2");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "2", "3");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "7", "3", "4");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "4", "1", "2");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "5", "3", "3");
   vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "5", "2", "3");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "5", "2", "3");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "3", "1", "1");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "7", "2", "3");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "4", "2", "3");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "4", "2", "2");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "6", "2", "4");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "6", "2", "3");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "6", "3", "3");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "5", "2", "2");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "3", "2", "2");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "6", "2", "2");
 }
 
 void initClubNames() {
@@ -310,17 +311,18 @@ void initShotStats() {
 }
 
 void openTmpFiles() {
-  string s1 = "tmpGPS.txt";
+  string dir = "/home/pi/golf/stats/";
+  string s1 = dir + "tmpGPS.txt";
   gTmpGPS.open(s1.c_str(), ios::app);
   gTmpGPS << setprecision(kPrecision);
   gTmpGPS << asctime(std::localtime(&gToday));
 
-  string s2 = "tmpScore.txt";
+  string s2 = dir + "tmpScore.txt";
   gTmpScore.open(s2.c_str(), ios::app);
   // gTmpScore << setprecision(kPrecision);
   gTmpScore << asctime(std::localtime(&gToday));
 
-  string s3 = "tmpShots.txt";
+  string s3 = dir + "tmpShots.txt";
   gTmpShots.open(s3.c_str(), ios::app);
   gTmpShots << setprecision(kPrecision);
   gTmpShots << asctime(std::localtime(&gToday));

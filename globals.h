@@ -71,6 +71,17 @@ struct Scores {
         doubles(0),
         triples(0),
         x(0) {}
+
+  void initScores() {
+    albatross = 0;
+    eagles = 0;
+    birdies = 0;
+    pars = 0;
+    bogies = 0;
+    doubles = 0;
+    triples = 0;
+    x = 0;
+  }
 };
 
 extern Scores scor;

@@ -59,6 +59,7 @@ void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
 
 void CHoleBtn::setNewHole() {
   bPlayedHole[gCurrentHole - 1] = true;
+  gCurrentHole++;
   string str = to_string(gCurrentHole);
   gStartHoleTimeStr = gNowTimeStr;
 

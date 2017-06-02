@@ -80,6 +80,7 @@ string writeScoreStats() {
   int fGIR = calcGIRs(true);
   int bGIR = calcGIRs(false);
 
+  sc.initScores();
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(vNGCHoles[ix].par);
     int score = stoi(vNGCHoles[ix].score);
