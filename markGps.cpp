@@ -239,6 +239,10 @@ int main(int argc, char **argv) {
   hv->makeList();
   hv->show();
   hv->draw();
+
+  gNextTee.lng = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[0];
+  gNextTee.lat = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[1];
+
   // setup a callback for the popen() ed descriptor
   Fl::add_fd(fileno(gpsin), HandleFD, 0);
   return (Fl::run());

@@ -16,6 +16,14 @@
 #include "CClubDlg.h"
 #endif
 
+#ifndef CTIMEDISPLAY_H
+#include "CTimeDisplay.h"
+#endif
+
+#ifndef HOLEVIEW_H_
+#include "HoleView.h"
+#endif
+
 #include <iostream>
 #include <string>
 
@@ -61,6 +69,9 @@ int hole;
 void btnOK_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
   parent->stuffData(hole);
+  string s = holeValue->label();
+  int n = stoi(s);
+  gTmDisplay->showAvgHoleGPStime(n);
   parent->hide();
 }
 

@@ -132,6 +132,8 @@ class CNGCHoles {
   friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
 };
 
+extern vector<CNGCHoles> vNGCHoles;
+
 const int kDr = 0;
 const int k3w = 1;
 const int k5w = 2;
@@ -175,7 +177,6 @@ extern int gShotCount;
 extern array<ShotStats, k18> gShotRA;
 extern void initShotStats();
 
-extern vector<CNGCHoles> vNGCHoles;
 
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;

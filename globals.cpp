@@ -3,6 +3,7 @@
 #endif
 
 #include <cmath>
+#include <cstdlib>
 #include <ctime>
 #include <iomanip>
 
@@ -54,38 +55,74 @@ ostream& operator<<(ostream& strm, const UtmLatLng& ull) {
 
 int calcScore(bool front9) {
   int sum = 0;
+  int tmp = 0;
   if (front9) {
-    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].score);
+    for (int ix = 0; ix < 9; ++ix) {
+      if (vNGCHoles[ix].score == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].score);
+      sum += tmp;
+    }
   } else {
-    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].score);
+    for (int ix = 9; ix < k18; ++ix) {
+      if (vNGCHoles[ix].score == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].score);
+      sum += tmp;
+    }
   }
   return sum;
 }
 
 int calcPutts(bool front9) {
   int sum = 0;
+  int tmp = 0;
   if (front9) {
-    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].putts);
+    for (int ix = 0; ix < 9; ++ix) {
+      if (vNGCHoles[ix].putts == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].putts);
+      sum += tmp;
+    }
   } else {
-    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].putts);
+    for (int ix = 9; ix < k18; ++ix) {
+      if (vNGCHoles[ix].putts == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].putts);
+      sum += tmp;
+    }
   }
   return sum;
 }
 
 int calcUDs(bool front9) {
   int sum = 0;
+  int tmp = 0;
   if (front9) {
-    for (int ix = 0; ix < 9; ++ix) sum += stoi(vNGCHoles[ix].uds);
+    for (int ix = 0; ix < 9; ++ix) {
+      if (vNGCHoles[ix].uds == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].uds);
+      sum += tmp;
+    }
   } else {
-    for (int ix = 9; ix < k18; ++ix) sum += stoi(vNGCHoles[ix].uds);
+    for (int ix = 9; ix < k18; ++ix) {
+      if (vNGCHoles[ix].uds == "")
+        tmp = 0;
+      else
+        tmp = stoi(vNGCHoles[ix].uds);
+      sum += tmp;
+    }
   }
   return sum;
 }
 
-bool isGIR(string spar, string sscore, string sputts) {
-  int par = stoi(spar);
-  int score = stoi(sscore);
-  int putts = stoi(sputts);
+bool isGIR(int par, int score, int putts) {
   if ((score == par) && (putts == 2))
     return true;
   else if ((score + 1 == par) && (putts == 1))
@@ -96,16 +133,47 @@ bool isGIR(string spar, string sscore, string sputts) {
 
 int calcGIRs(bool front9) {
   int sum = 0;
+  int p = 0;
+  int s = 0;
+  int t = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (isGIR(vNGCHoles[ix].par, vNGCHoles[ix].score, vNGCHoles[ix].putts))
+      if (vNGCHoles[ix].par == "")
+        p = 0;
+      else
+        p = stoi(vNGCHoles[ix].par);
+
+      if (vNGCHoles[ix].score == "")
+        s = 0;
+      else
+        s = stoi(vNGCHoles[ix].score);
+
+      if (vNGCHoles[ix].putts == "")
+        t = 0;
+      else
+        t = stoi(vNGCHoles[ix].putts);
+        if (isGIR(p, s, t))
         sum++;
-    };
+    }
   } else {
-    for (int ix = 9; ix < k18; ++ix) {
-      if (isGIR(vNGCHoles[ix].par, vNGCHoles[ix].score, vNGCHoles[ix].putts))
-        sum++;
-    };
+      for (int ix = 0; ix < 9; ++ix) {
+        if (vNGCHoles[ix].par == "")
+          p = 0;
+        else
+          p = stoi(vNGCHoles[ix].par);
+
+        if (vNGCHoles[ix].score == "")
+          s = 0;
+        else
+          s = stoi(vNGCHoles[ix].score);
+
+        if (vNGCHoles[ix].putts == "")
+          t = 0;
+        else
+          t = stoi(vNGCHoles[ix].putts);
+        if (isGIR(p, s, t))
+          sum++;
+      }
   }
   return sum;
 }
@@ -159,18 +227,30 @@ string getScoreType(int par, int score) {
 
 // clang-format off
 ostream& operator<<(ostream& strm, const CNGCHoles& h) {
-      strm << h.hole << "\t";
-      strm << h.yards << "\t";
-      strm << h.hdcp << "\t";
-      strm << h.par << "\t";
-      strm << h.score << "\t";
-      strm << h.putts << "\t";
-      strm << h.uds << "\t";
-      strm << getScoreType(stoi(h.par), stoi(h.score)) << "\t";
-      if (isGIR (h.par, h.score, h.putts))
-        strm << "GIR" << endl;
-      else
-        strm << "\t" << endl;
+  strm << h.hole << "\t";
+  strm << h.yards << "\t";
+  strm << h.hdcp << "\t";
+  strm << h.par << "\t";
+  strm << h.score << "\t";
+  strm << h.putts << "\t";
+  strm << h.uds << "\t";
+  int par = stoi(h.par);
+  int score;
+  int putts;
+  if (h.score == "")
+    score = 0;
+  else
+    score = stoi(h.score);
+  if (h.putts == "")
+    putts = 99;
+  else
+    putts = stoi(h.putts);
+
+  strm << getScoreType(par, score) << "\t";
+  if (isGIR (par, score, putts))
+    strm << "GIR" << endl;
+  else
+    strm << "\t" << endl;
   return strm;
 }
 // clang-format on
@@ -235,24 +315,24 @@ void initNGCHolesVector() {
     CNGCHoles h;
     vNGCHoles.push_back(h);
   }
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
-  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "5", "2", "2");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "1", "2");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "5", "3");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "5", "2", "2");
-  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "2", "3");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "7", "3", "4");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "4", "1", "2");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "5", "3", "3");
-  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "6", "2", "4");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "6", "2", "3");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "6", "3", "3");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "5", "2", "2");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "3", "2", "2");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "6", "2", "2");
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "", "", "");
+  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "", "", "");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "", "", "");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "", "", "");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "", "", "");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "", "", "");
+  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "", "", "");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "", "", "");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "", "", "");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "", "", "");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "", "", "");
+  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "", "", "");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "", "", "");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "", "", "");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "", "", "");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "", "", "");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "", "", "");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "", "", "");
 }
 
 void initTestScores() {
@@ -382,7 +462,7 @@ string getFileSuffix() {
   struct tm* t;
   t = localtime(&gToday);
   string y = to_string(t->tm_year - 100);
-  string m = to_string(t->tm_mon);
+  string m = to_string(t->tm_mon + 1);
   if (m.length() == 1) m = "0" + m;
   string d = to_string(t->tm_mday);
   if (d.length() == 1) d = "0" + d;

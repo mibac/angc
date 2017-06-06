@@ -81,9 +81,14 @@ string writeScoreStats() {
   int bGIR = calcGIRs(false);
 
   sc.initScores();
+  int score;
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(vNGCHoles[ix].par);
-    int score = stoi(vNGCHoles[ix].score);
+
+    if (vNGCHoles[ix].score == "")
+        score = 0;
+    else
+      score = stoi(vNGCHoles[ix].score);
     incrScoreTypes(par, score);
   }
 

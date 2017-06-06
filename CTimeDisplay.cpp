@@ -1,4 +1,4 @@
-#ifndef CYELLOWBTN_H
+#ifndef CTIMEDISPLAY_H
 #include "CTimeDisplay.h"
 #endif
 
@@ -85,12 +85,18 @@ int countHolesPlayed() {
 
 void CTimeDisplay::calcAvgHoleGPStime(const string &lbl) {
   if ((count != 2) && (gStartRoundTimeStr == "")) return;
+  CGPStime val(avgTm);
+  timeStr = val.sec2str(avgTm, lbl).c_str();
+  gTmbuff->text(timeStr.c_str());
+}
+
+void CTimeDisplay::showAvgHoleGPStime(int holesPlayed) {
   CGPStime tm;
+  string lbl("Avg\n");
   int sec = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
-  int num = countHolesPlayed();
-  if (num > 0) sec /= num;
-  CGPStime val(sec);
-  timeStr = val.sec2str(sec, lbl).c_str();
+  avgTm = sec / holesPlayed;
+  CGPStime val(avgTm);
+  timeStr = val.sec2str(avgTm, lbl).c_str();
   gTmbuff->text(timeStr.c_str());
 }
 

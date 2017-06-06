@@ -12,6 +12,8 @@ using namespace std;
 
 class CTimeDisplay : public Fl_Text_Display {
   int count;
+  int avgTm;
+
   void gTmDisplay_CB2();
   static void gTmDisplay_CB(Fl_Widget *, void *data);
 
@@ -26,6 +28,7 @@ class CTimeDisplay : public Fl_Text_Display {
  public:
   CTimeDisplay(int X, int Y, int W, int H, const char *L = 0);
   void updateGPStime();
+  void showAvgHoleGPStime(int holesPlayed);
 };
 
 #endif  // CYELLOWBTN_H
