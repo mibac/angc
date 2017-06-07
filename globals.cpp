@@ -33,6 +33,7 @@ ofstream gFileShots;
 ofstream gTmpGPS;
 ofstream gTmpScore;
 ofstream gTmpShots;
+ofstream gTmpTimes;
 
 vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 vector<UtmLatLng> vUTM;
@@ -152,28 +153,26 @@ int calcGIRs(bool front9) {
         t = 0;
       else
         t = stoi(vNGCHoles[ix].putts);
-        if (isGIR(p, s, t))
-        sum++;
+      if (isGIR(p, s, t)) sum++;
     }
   } else {
-      for (int ix = 0; ix < 9; ++ix) {
-        if (vNGCHoles[ix].par == "")
-          p = 0;
-        else
-          p = stoi(vNGCHoles[ix].par);
+    for (int ix = 0; ix < 9; ++ix) {
+      if (vNGCHoles[ix].par == "")
+        p = 0;
+      else
+        p = stoi(vNGCHoles[ix].par);
 
-        if (vNGCHoles[ix].score == "")
-          s = 0;
-        else
-          s = stoi(vNGCHoles[ix].score);
+      if (vNGCHoles[ix].score == "")
+        s = 0;
+      else
+        s = stoi(vNGCHoles[ix].score);
 
-        if (vNGCHoles[ix].putts == "")
-          t = 0;
-        else
-          t = stoi(vNGCHoles[ix].putts);
-        if (isGIR(p, s, t))
-          sum++;
-      }
+      if (vNGCHoles[ix].putts == "")
+        t = 0;
+      else
+        t = stoi(vNGCHoles[ix].putts);
+      if (isGIR(p, s, t)) sum++;
+    }
   }
   return sum;
 }
@@ -406,6 +405,18 @@ void openTmpFiles() {
   gTmpShots.open(s3.c_str(), ios::app);
   gTmpShots << setprecision(kPrecision);
   gTmpShots << asctime(std::localtime(&gToday));
+
+  string s4 = dir + "tmpTimes.txt";
+  gTmpTimes.open(s4.c_str(), ios::app);
+  gTmpTimes << asctime(std::localtime(&gToday));
+}
+
+array<sHoleTimes, k18> gHoleTimeRA;
+void initHoleTimes() {
+  for (int ix = 0; ix < k18; ++ix) {
+    gHoleTimeRA[ix].beg = 0;
+    gHoleTimeRA[ix].end = 0;
+  }
 }
 
 void initGlobals() {
@@ -426,6 +437,7 @@ void initGlobals() {
   initClubNames();
   initShotStats();
   openTmpFiles();
+  initHoleTimes();
 }
 
 int countValidDistances(int hole) {

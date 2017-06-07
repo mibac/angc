@@ -189,6 +189,7 @@ extern ofstream gFileGPS;
 extern ofstream gTmpGPS;
 extern ofstream gTmpShots;
 extern ofstream gTmpScore;
+extern ofstream gTmpTimes;
 
 extern void initGlobals();
 extern int countValidDistances(int hole);
@@ -205,5 +206,12 @@ extern void initTestScores();
 
 extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;
+
+struct sHoleTimes {
+    int beg;
+    int end;
+};
+
+extern array<sHoleTimes, k18> gHoleTimeRA;
 
 #endif  // CGLOBALS_H

@@ -102,8 +102,8 @@ void CTimeDisplay::showAvgHoleGPStime(int holesPlayed) {
 
 void CTimeDisplay::updateGPStime() {
   if (!bRoundStarted) {
-      textcolor(FL_BLUE);
-      timeStr = "Start";
+    textcolor(FL_BLUE);
+    timeStr = "Start";
     gTmbuff->text(timeStr.c_str());
   } else {
     textcolor(FL_BLACK);
@@ -122,7 +122,7 @@ void CTimeDisplay::updateGPStime() {
   }
 }
 
-// Handle when user right clicks on our input widget
+// Handle when user right clicks on the Start button
 int CTimeDisplay::handle(int e) {
   int ret = 0;
   switch (e) {
@@ -136,13 +136,21 @@ int CTimeDisplay::handle(int e) {
         if (!bRoundStarted) {
           bRoundStarted = true;
           gCurrentHole = 1;
-          gShotRA[gCurrentHole-1].shot[0].utm = cll.getNowMark();
-          gShotRA[gCurrentHole-1].nmarks = 1;
+          gShotRA[gCurrentHole - 1].shot[0].utm = cll.getNowMark();
+          gShotRA[gCurrentHole - 1].nmarks = 1;
           gShotCount = 1;
           gStartRoundTimeStr = gNowTimeStr;
+          gHoleTimeRA[gCurrentHole - 1].beg = stoi(gNowTimeStr);
+          gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
+          cout << "CTimeDisplay::handle-if: gHoleTimeRA[" << gCurrentHole - 1 << "].beg "
+               << gHoleTimeRA[gCurrentHole - 1].beg << endl;
         } else {
           count++;
           if (count > 2) count = 0;
+          gHoleTimeRA[gCurrentHole - 1].beg = stoi(gNowTimeStr);
+          gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
+          cout << "CTimeDisplay::handle-else: gHoleTimeRA[" << gCurrentHole - 1 << "].beg "
+               << gHoleTimeRA[gCurrentHole - 1].beg << endl;
         }
         ret = 1;
       }

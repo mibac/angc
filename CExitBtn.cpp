@@ -67,6 +67,7 @@ void CExitBtn::Button_CB() {
   //   cout << "FL_DARK_BLUE " << (int)r << " " << (int)g << " " << (int)b <<
   //   endl;
   // }
+
   if (result == 0) {  // Close without saving
     gTmpShots.close();
     gTmpScore.close();
@@ -75,6 +76,7 @@ void CExitBtn::Button_CB() {
     gFileShots.close();
     gFileScore.close();
     gFileGPS.close();
+    gTmpTimes.close();
 
     // if (myClubPopup != nullptr) myClubPopup->hide();
     if (myHolePopup != nullptr) myHolePopup->hide();
@@ -84,6 +86,7 @@ void CExitBtn::Button_CB() {
     gTmpShots.close();
     gTmpScore.close();
     gTmpGPS.close();
+    gTmpTimes.close();
 
     writeGPS();
     writeScores();

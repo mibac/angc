@@ -599,6 +599,10 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
+  gHoleTimeRA[hole].end = stoi(gNowTimeStr);
+  gTmpTimes << gHoleTimeRA[hole].end << endl;
+  cout << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].end "
+       << gHoleTimeRA[hole].end << endl;
 
   show();
 }

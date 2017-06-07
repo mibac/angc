@@ -26,30 +26,17 @@ string CHoleBtn::holeName;
 void CHoleBtn::SetNumPadValue_CB2() {
   string str(myHolePopup->value());
   gCurrentHole = atoi(str.c_str());
-  bPlayedHole[gCurrentHole] = true;
-  gStartHoleTimeStr = gNowTimeStr;
-
-  CHoleBtn::holeName = str;
-  if (str.size() == 1)
-    str = "  " + str;
-  else
-    str = " " + str;
-  value(str.c_str());   // pass value from myHolePopup to our input
-  myHolePopup->hide();  // hide myHolePopup
+  bPlayedHole[gCurrentHole - 1] = true;
   gShotRA[gCurrentHole - 1].shot[0].utm = cll.getNowMark();
-  gShotRA[gCurrentHole - 1].nmarks = 1;
-  gShotCount = 1;
-  markBtnLabel = "Mark\n1";
-  markBtn->label(markBtnLabel.c_str());
+  updateHole(str);
 
-  gThisGreen.lng = hv->ngc->hole[gCurrentHole].startOrient[1].v[0];
-  gThisGreen.lat = hv->ngc->hole[gCurrentHole].startOrient[1].v[1];
-  gNextTee.lng = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[0];
-  gNextTee.lat = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[1];
+  gStartHoleTimeStr = gNowTimeStr;
+  gHoleTimeRA[gCurrentHole - 1].beg = stoi(gStartHoleTimeStr);
+  gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
+  cout << "CHoleBtn::SetNumPadValue_CB2: gHoleTimeRA[" << gCurrentHole - 1
+       << "].beg " << gHoleTimeRA[gCurrentHole - 1].beg << endl;
 
-  // cout << "SetNumPadValue_CB2 Hole " << gCurrentHole << endl;
-  // cout << "gThisGreen " << gThisGreen << endl;
-  // cout << "gNextTee " << gNextTee << endl;
+  myHolePopup->hide();  // hide myHolePopup
 }
 
 void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
@@ -59,16 +46,26 @@ void CHoleBtn::SetNumPadValue_CB(Fl_Widget *, void *data) {
 
 void CHoleBtn::setNewHole() {
   bPlayedHole[gCurrentHole - 1] = true;
-  gCurrentHole++;
-  string str = to_string(gCurrentHole);
-  gStartHoleTimeStr = gNowTimeStr;
 
+  gCurrentHole++;
+  if (gCurrentHole > 18) gCurrentHole = 18;
+  string str = to_string(gCurrentHole);
+  updateHole(str);
+
+  gStartHoleTimeStr = gNowTimeStr;
+  gHoleTimeRA[gCurrentHole - 1].beg = stoi(gStartHoleTimeStr);
+  gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
+  cout << "CHoleBtn::setNewHole: gHoleTimeRA[" << gCurrentHole - 1 << "].beg "
+       << gHoleTimeRA[gCurrentHole - 1].beg << endl;
+}
+
+void CHoleBtn::updateHole(string str) {
   CHoleBtn::holeName = str;
   if (str.size() == 1)
     str = "  " + str;
   else
     str = " " + str;
-  value(str.c_str());   // pass value from myHolePopup to our input
+  value(str.c_str());  // pass value from myHolePopup to our input
   gShotRA[gCurrentHole - 1].nmarks = 1;
   gShotCount = 1;
   markBtnLabel = "Mark\n1";
@@ -78,10 +75,6 @@ void CHoleBtn::setNewHole() {
   gThisGreen.lat = hv->ngc->hole[gCurrentHole].startOrient[1].v[1];
   gNextTee.lng = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[0];
   gNextTee.lat = hv->ngc->hole[gCurrentHole + 1].startOrient[0].v[1];
-  gShotRA[gCurrentHole - 1].shot[0].utm = gNextTee;
-
-  // cout << "setNewHole Hole " << gCurrentHole << endl;
-  // cout << "gNextTee " << gNextTee << endl;
 }
 
 // Handle when user right clicks on our input widget

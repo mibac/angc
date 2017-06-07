@@ -20,6 +20,7 @@ class CHoleBtn : public Fl_Output {
   void SetNumPadValue_CB2();
 
   static void SetNumPadValue_CB(Fl_Widget *, void *data);
+  void updateHole(string str);
 
   // Handle when user clicks on our input widget
   int handle(int e);
