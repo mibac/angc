@@ -76,6 +76,9 @@ void CExitBtn::Button_CB() {
     gFileShots.close();
     gFileScore.close();
     gFileGPS.close();
+    gHoleTimeRA[gCurrentHole - 1].end = stoi(gNowTimeStr);
+    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
+         << gHoleTimeRA[gCurrentHole - 1].end << endl;
     gTmpTimes.close();
 
     // if (myClubPopup != nullptr) myClubPopup->hide();
@@ -86,6 +89,9 @@ void CExitBtn::Button_CB() {
     gTmpShots.close();
     gTmpScore.close();
     gTmpGPS.close();
+    gHoleTimeRA[gCurrentHole - 1].end = stoi(gNowTimeStr);
+    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
+         << gHoleTimeRA[gCurrentHole - 1].end << endl;
     gTmpTimes.close();
 
     writeGPS();

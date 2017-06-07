@@ -141,15 +141,13 @@ int CTimeDisplay::handle(int e) {
           gShotCount = 1;
           gStartRoundTimeStr = gNowTimeStr;
           gHoleTimeRA[gCurrentHole - 1].beg = stoi(gNowTimeStr);
-          gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
-          cout << "CTimeDisplay::handle-if: gHoleTimeRA[" << gCurrentHole - 1 << "].beg "
+          gTmpTimes << "CTimeDisplay::handle-if: gHoleTimeRA[" << gCurrentHole - 1 << "].beg\t"
                << gHoleTimeRA[gCurrentHole - 1].beg << endl;
         } else {
           count++;
           if (count > 2) count = 0;
           gHoleTimeRA[gCurrentHole - 1].beg = stoi(gNowTimeStr);
-          gTmpTimes << gHoleTimeRA[gCurrentHole - 1].beg << "\t";
-          cout << "CTimeDisplay::handle-else: gHoleTimeRA[" << gCurrentHole - 1 << "].beg "
+          gTmpTimes << "CTimeDisplay::handle-else: gHoleTimeRA[" << gCurrentHole - 1 << "].beg\t"
                << gHoleTimeRA[gCurrentHole - 1].beg << endl;
         }
         ret = 1;

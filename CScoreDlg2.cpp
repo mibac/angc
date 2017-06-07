@@ -600,8 +600,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
   gHoleTimeRA[hole].end = stoi(gNowTimeStr);
-  gTmpTimes << gHoleTimeRA[hole].end << endl;
-  cout << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].end "
+  gTmpTimes << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].end\t"
        << gHoleTimeRA[hole].end << endl;
 
   show();
