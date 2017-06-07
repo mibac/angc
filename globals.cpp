@@ -414,8 +414,8 @@ void openTmpFiles() {
 array<sHoleTimes, k18> gHoleTimeRA;
 void initHoleTimes() {
   for (int ix = 0; ix < k18; ++ix) {
-    gHoleTimeRA[ix].beg = 0;
-    gHoleTimeRA[ix].end = 0;
+    gHoleTimeRA[ix].begstr = "0";
+    gHoleTimeRA[ix].endstr = "0";
   }
 }
 

@@ -31,9 +31,9 @@ void CHoleBtn::SetNumPadValue_CB2() {
   updateHole(str);
 
   gStartHoleTimeStr = gNowTimeStr;
-  gHoleTimeRA[gCurrentHole - 1].beg = stoi(gStartHoleTimeStr);
+  gHoleTimeRA[gCurrentHole - 1].begstr = gStartHoleTimeStr;
   gTmpTimes << "CHoleBtn::SetNumPadValue_CB2: gHoleTimeRA[" << gCurrentHole - 1
-       << "].beg\t" << gHoleTimeRA[gCurrentHole - 1].beg << endl;
+       << "].begstr\t" << gHoleTimeRA[gCurrentHole - 1].begstr << endl;
 
   myHolePopup->hide();  // hide myHolePopup
 }
@@ -52,9 +52,9 @@ void CHoleBtn::setNewHole() {
   updateHole(str);
 
   gStartHoleTimeStr = gNowTimeStr;
-  gHoleTimeRA[gCurrentHole - 1].beg = stoi(gStartHoleTimeStr);
-  gTmpTimes << "CHoleBtn::setNewHole: gHoleTimeRA[" << gCurrentHole - 1 << "].beg\t"
-       << gHoleTimeRA[gCurrentHole - 1].beg << endl;
+  gHoleTimeRA[gCurrentHole - 1].begstr = gStartHoleTimeStr;
+  gTmpTimes << "CHoleBtn::setNewHole: gHoleTimeRA[" << gCurrentHole - 1 << "].begstr\t"
+       << gHoleTimeRA[gCurrentHole - 1].begstr << endl;
 }
 
 void CHoleBtn::updateHole(string str) {

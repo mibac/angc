@@ -208,8 +208,8 @@ extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;
 
 struct sHoleTimes {
-    int beg;
-    int end;
+    string begstr;
+    string endstr;
 };
 
 extern array<sHoleTimes, k18> gHoleTimeRA;

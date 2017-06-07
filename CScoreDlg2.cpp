@@ -599,9 +599,9 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
-  gHoleTimeRA[hole].end = stoi(gNowTimeStr);
-  gTmpTimes << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].end\t"
-       << gHoleTimeRA[hole].end << endl;
+  gHoleTimeRA[hole].endstr = gNowTimeStr;
+  gTmpTimes << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].endstr\t"
+       << gHoleTimeRA[hole].endstr << endl;
 
   show();
 }

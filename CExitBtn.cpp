@@ -20,6 +20,10 @@
 #include "CHoleBtn.h"
 #endif
 
+#ifndef CGPSTIME_H
+#include "CGPStime.h"
+#endif
+
 using namespace std;
 
 void CExitBtn::writeGPS() {
@@ -53,6 +57,23 @@ void writeShotStats() {
   gFileShots.flush();
 }
 
+void writeHoleTimes() {
+    CGPStime tm;
+    int sum = 0;
+    int secdiff = 0;
+
+    gTmpTimes << "Time per hole"<< endl;
+    for (int ix = 0; ix < k18; ++ix) {
+        secdiff = tm.timeDifference(gHoleTimeRA[ix].endstr, gHoleTimeRA[ix].begstr);
+        gTmpTimes << ix + 1 << "\t" << tm.sec2str(secdiff, "") << endl;
+        sum += secdiff;
+    }
+    gTmpTimes << "Hole Time\t" << tm.sec2str(sum, "") << endl;
+    secdiff = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
+    gTmpTimes << "Round Time\t" << tm.sec2str(secdiff, "") << endl;
+    gTmpTimes << "Walking Time green to next tee\t" << tm.sec2str((secdiff - sum), "") << endl;
+}
+
 void CExitBtn::Button_CB() {
   int result = fl_choice("Do you want to save before quitting?",
                          "Don't Save",  // 0
@@ -76,9 +97,9 @@ void CExitBtn::Button_CB() {
     gFileShots.close();
     gFileScore.close();
     gFileGPS.close();
-    gHoleTimeRA[gCurrentHole - 1].end = stoi(gNowTimeStr);
-    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
-         << gHoleTimeRA[gCurrentHole - 1].end << endl;
+    gHoleTimeRA[gCurrentHole - 1].endstr = gNowTimeStr;
+    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].endstr\t"
+         << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
     gTmpTimes.close();
 
     // if (myClubPopup != nullptr) myClubPopup->hide();
@@ -89,9 +110,10 @@ void CExitBtn::Button_CB() {
     gTmpShots.close();
     gTmpScore.close();
     gTmpGPS.close();
-    gHoleTimeRA[gCurrentHole - 1].end = stoi(gNowTimeStr);
+    gHoleTimeRA[gCurrentHole - 1].endstr = gNowTimeStr;
     gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
-         << gHoleTimeRA[gCurrentHole - 1].end << endl;
+         << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
+    writeHoleTimes();
     gTmpTimes.close();
 
     writeGPS();
