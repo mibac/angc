@@ -158,6 +158,7 @@ extern array<string, k18> clubNamesRA;
 const string pathGPS = "/home/pi/golf/stats/gps/";
 const string pathShots = "/home/pi/golf/stats/shots/";
 const string pathScores = "/home/pi/golf/stats/scores/";
+const string pathShortScores = "/home/pi/golf/stats/";
 
 struct holeStats {
   int yards;
@@ -184,6 +185,7 @@ extern vector<UtmLatLng> vUTM;
 extern array<bool, k18> bPlayedHole;
 
 extern ofstream gFileScore;
+extern ofstream gFileShortScores;
 extern ofstream gFileShots;
 extern ofstream gFileGPS;
 extern ofstream gTmpGPS;
@@ -197,7 +199,8 @@ extern int calcUTMdistance(const UtmLatLng& now, const UtmLatLng& prev);
 extern void setButtonStyle(Fl_Button* b);
 extern string getFileSuffix();
 extern Fl_Color getBkgRGBcolor();
-extern void writeScores();
+// extern void writeScores();
+// extern void writeShortScores();
 extern int calcScore(bool front9);
 extern int calcPutts(bool front9);
 extern int calcUDs(bool front9);

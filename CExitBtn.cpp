@@ -33,6 +33,70 @@ void CExitBtn::writeGPS() {
   gFileGPS << asctime(std::localtime(&gToday));
   for (auto itr : vGPS) gFileGPS << itr;
   gFileGPS.flush();
+  gFileGPS.close();
+}
+
+void writeScores() {
+  int fscore = calcScore(true);
+  int bscore = calcScore(false);
+  int fputts = calcPutts(true);
+  int bputts = calcPutts(false);
+  int fuds = calcUDs(true);
+  int buds = calcUDs(false);
+  int fGIR = calcGIRs(true);
+  int bGIR = calcGIRs(false);
+
+  scor.initScores();
+
+  string s = pathScores + "aScore_" + getFileSuffix();
+  gFileScore.open(s.c_str());
+  gFileScore << asctime(std::localtime(&gToday));
+  /// clang-format off
+  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
+  for (int ix = 0; ix < k18; ++ix) {
+    gFileScore << vNGCHoles[ix];
+  }
+  gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
+             << fscore + bscore << endl;
+  gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t"
+             << fputts + bputts << endl;
+  gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
+             << endl;
+  gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR << endl;
+  gFileScore << "Birdies\t" << scor.birdies << endl;
+  gFileScore << "Pars\t" << scor.pars << endl;
+  gFileScore << "Bogies\t" << scor.bogies << endl;
+  gFileScore << "Doubles\t" << scor.doubles << endl;
+  gFileScore << "Triples\t" << scor.triples << endl;
+  gFileScore.flush();
+  gFileScore.close();
+}
+
+string getShortDate() {
+  string suffix;
+  struct tm* t;
+  t = localtime(&gToday);
+  string y = to_string(t->tm_year - 100);
+  string m = to_string(t->tm_mon + 1);
+  if (m.length() == 1) m = "0" + m;
+  string d = to_string(t->tm_mday);
+  if (d.length() == 1) d = "0" + d;
+  suffix = y + m + d;
+  return suffix;
+}
+
+void writeShortScores() {
+  // scor.initScores();
+  string s = pathShortScores + "shortScores.text";
+  gFileShortScores.open(s.c_str(), ios::app);
+  gFileShortScores << getShortDate();
+  for (int ix = 0; ix < k18; ++ix) {
+    gFileShortScores << vNGCHoles[ix].score << vNGCHoles[ix].putts
+                     << vNGCHoles[ix].uds;
+  }
+  gFileShortScores << endl;
+  gFileShortScores.flush();
+  gFileShortScores.close();
 }
 
 void writeShotStats() {
@@ -55,6 +119,7 @@ void writeShotStats() {
     }
   gFileShots << endl;
   gFileShots.flush();
+  gFileShots.close();
 }
 
 void writeHoleTimes() {
@@ -72,6 +137,8 @@ void writeHoleTimes() {
     secdiff = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
     gTmpTimes << "Round Time\t" << tm.sec2str(secdiff, "") << endl;
     gTmpTimes << "Walking Time green to next tee\t" << tm.sec2str((secdiff - sum), "") << endl;
+    gTmpTimes.flush();
+    gTmpTimes.close();
 }
 
 void CExitBtn::Button_CB() {
@@ -94,9 +161,6 @@ void CExitBtn::Button_CB() {
     gTmpScore.close();
     gTmpGPS.close();
 
-    gFileShots.close();
-    gFileScore.close();
-    gFileGPS.close();
     gHoleTimeRA[gCurrentHole - 1].endstr = gNowTimeStr;
     gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].endstr\t"
          << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
@@ -114,12 +178,14 @@ void CExitBtn::Button_CB() {
     gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
          << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
     writeHoleTimes();
-    gTmpTimes.close();
+    writeShortScores();
 
     writeGPS();
     writeScores();
     writeShotStats();
-    gFileScore.close();
+
+    gFileGPS.close();
+
     if (myHolePopup != nullptr) myHolePopup->hide();
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();

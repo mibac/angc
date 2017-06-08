@@ -29,6 +29,7 @@ string timeStr = "Start";
 
 ofstream gFileGPS;
 ofstream gFileScore;
+ofstream gFileShortScores;
 ofstream gFileShots;
 ofstream gTmpGPS;
 ofstream gTmpScore;
@@ -254,40 +255,7 @@ ostream& operator<<(ostream& strm, const CNGCHoles& h) {
 }
 // clang-format on
 
-void writeScores() {
-  int fscore = calcScore(true);
-  int bscore = calcScore(false);
-  int fputts = calcPutts(true);
-  int bputts = calcPutts(false);
-  int fuds = calcUDs(true);
-  int buds = calcUDs(false);
-  int fGIR = calcGIRs(true);
-  int bGIR = calcGIRs(false);
 
-  scor.initScores();
-
-  string s = pathScores + "aScore_" + getFileSuffix();
-  gFileScore.open(s.c_str());
-  gFileScore << asctime(std::localtime(&gToday));
-  /// clang-format off
-  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
-  for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << vNGCHoles[ix];
-  }
-  gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
-             << fscore + bscore << endl;
-  gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t"
-             << fputts + bputts << endl;
-  gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
-             << endl;
-  gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR << endl;
-  gFileScore << "Birdies\t" << scor.birdies << endl;
-  gFileScore << "Pars\t" << scor.pars << endl;
-  gFileScore << "Bogies\t" << scor.bogies << endl;
-  gFileScore << "Doubles\t" << scor.doubles << endl;
-  gFileScore << "Triples\t" << scor.triples << endl;
-  gFileScore.flush();
-}
 
 // clang-format off
 ostream& operator<<(ostream& strm, const holeStats& h) {
