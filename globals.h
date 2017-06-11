@@ -53,7 +53,7 @@ struct UtmLatLng {
   friend ostream& operator<<(ostream& strm, const UtmLatLng& ull);
 };
 
-struct Scores {
+struct ScoreTypes {
   int albatross;
   int eagles;
   int birdies;
@@ -62,7 +62,7 @@ struct Scores {
   int doubles;
   int triples;
   int x;
-  Scores()
+  ScoreTypes()
       : albatross(0),
         eagles(0),
         birdies(0),
@@ -72,7 +72,7 @@ struct Scores {
         triples(0),
         x(0) {}
 
-  void initScores() {
+  void initScoreType() {
     albatross = 0;
     eagles = 0;
     birdies = 0;
@@ -84,9 +84,9 @@ struct Scores {
   }
 };
 
-extern Scores scor;
+extern ScoreTypes scoretype;
 
-enum class ScoreType {
+enum class ScorType {
   ace = -4,
   albatross = -3,
   eagle = -2,
@@ -100,39 +100,68 @@ enum class ScoreType {
 
 extern string getScoreType(int par, int score);
 
-class CNGCHoles {
+// class CNGCScorecardData {
+//  public:
+//   string hole;
+//   string yards;
+//   string hdcp;
+//   string par;
+//   string score;
+//   string putts;
+//   string uds;
+//
+//   CNGCScorecardData()
+//       : hole(""), yards(""), hdcp(""), par(""), score(""), putts(""), uds("")
+//       {}
+//
+//   void setHoleDesc(const string h, const string y, const string c,
+//                    const string p, const string sc, const string pu,
+//                    const string ud) {
+//     hole = h;
+//     yards = y;
+//     hdcp = c;
+//     par = p;
+//     score = sc;
+//     putts = pu;
+//     uds = ud;
+//   }
+//   void setHoleScore(const string s, const string p, const string u) {
+//     score = s;
+//     putts = p;
+//     uds = u;
+//   }
+//   friend ostream& operator<<(ostream& strm, const CNGCScorecardData& h);
+// };
+
+class CNGCScorecardData {
  public:
   string hole;
   string yards;
   string hdcp;
   string par;
-  string score;
-  string putts;
-  string uds;
 
-  CNGCHoles()
-      : hole(""), yards(""), hdcp(""), par(""), score(""), putts(""), uds("") {}
+  CNGCScorecardData() : hole(""), yards(""), hdcp(""), par("") {}
 
   void setHoleDesc(const string h, const string y, const string c,
-                   const string p, const string sc, const string pu,
-                   const string ud) {
+                   const string p) {
     hole = h;
     yards = y;
     hdcp = c;
     par = p;
-    score = sc;
-    putts = pu;
-    uds = ud;
   }
-  void setHoleScore(const string s, const string p, const string u) {
-    score = s;
-    putts = p;
-    uds = u;
-  }
-  friend ostream& operator<<(ostream& strm, const CNGCHoles& h);
+  // friend ostream& operator<<(ostream& strm, const CNGCScorecardData& h);
 };
+extern vector<CNGCScorecardData> vNGCHoles;
 
-extern vector<CNGCHoles> vNGCHoles;
+struct ScoreData {
+  string score;
+  string putts;
+  string uds;
+  ScoreData() : score(""), putts(""), uds("") {}
+  void setHoleScore(string s, string p, string u);
+  friend ostream& operator<<(ostream& strm, const ScoreData& sd);
+};
+extern vector<ScoreData> vsd;
 
 const int kDr = 0;
 const int k3w = 1;
@@ -178,7 +207,6 @@ extern int gShotCount;
 extern array<ShotStats, k18> gShotRA;
 extern void initShotStats();
 
-
 extern vector<string> vGPS;  // the complete round of nmea GPGGA sentences
 extern vector<UtmLatLng> vUTM;
 
@@ -211,8 +239,8 @@ extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;
 
 struct sHoleTimes {
-    string begstr;
-    string endstr;
+  string begstr;
+  string endstr;
 };
 
 extern array<sHoleTimes, k18> gHoleTimeRA;

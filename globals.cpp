@@ -41,7 +41,9 @@ vector<UtmLatLng> vUTM;
 // vector<string> vClubsUsed;
 array<bool, k18> bPlayedHole;
 
-vector<CNGCHoles> vNGCHoles;
+vector<CNGCScorecardData> vNGCHoles;
+vector<ScoreData> vsd;
+
 array<string, k18> clubNamesRA;
 
 int gShotCount;
@@ -60,18 +62,18 @@ int calcScore(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vNGCHoles[ix].score == "")
+      if (vsd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].score);
+        tmp = stoi(vsd[ix].score);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vNGCHoles[ix].score == "")
+      if (vsd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].score);
+        tmp = stoi(vsd[ix].score);
       sum += tmp;
     }
   }
@@ -83,18 +85,18 @@ int calcPutts(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vNGCHoles[ix].putts == "")
+      if (vsd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].putts);
+        tmp = stoi(vsd[ix].putts);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vNGCHoles[ix].putts == "")
+      if (vsd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].putts);
+        tmp = stoi(vsd[ix].putts);
       sum += tmp;
     }
   }
@@ -106,18 +108,18 @@ int calcUDs(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vNGCHoles[ix].uds == "")
+      if (vsd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].uds);
+        tmp = stoi(vsd[ix].uds);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vNGCHoles[ix].uds == "")
+      if (vsd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(vNGCHoles[ix].uds);
+        tmp = stoi(vsd[ix].uds);
       sum += tmp;
     }
   }
@@ -145,15 +147,15 @@ int calcGIRs(bool front9) {
       else
         p = stoi(vNGCHoles[ix].par);
 
-      if (vNGCHoles[ix].score == "")
+      if (vsd[ix].score == "")
         s = 0;
       else
-        s = stoi(vNGCHoles[ix].score);
+        s = stoi(vsd[ix].score);
 
-      if (vNGCHoles[ix].putts == "")
+      if (vsd[ix].putts == "")
         t = 0;
       else
-        t = stoi(vNGCHoles[ix].putts);
+        t = stoi(vsd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   } else {
@@ -163,59 +165,59 @@ int calcGIRs(bool front9) {
       else
         p = stoi(vNGCHoles[ix].par);
 
-      if (vNGCHoles[ix].score == "")
+      if (vsd[ix].score == "")
         s = 0;
       else
-        s = stoi(vNGCHoles[ix].score);
+        s = stoi(vsd[ix].score);
 
-      if (vNGCHoles[ix].putts == "")
+      if (vsd[ix].putts == "")
         t = 0;
       else
-        t = stoi(vNGCHoles[ix].putts);
+        t = stoi(vsd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   }
   return sum;
 }
 
-Scores scor;
+ScoreTypes scoretype;
 
 string getScoreType(int par, int score) {
   int n = score - par;     // order important
   if (score == 0) n = 99;  // bad case
   string s;
-  switch (ScoreType(n)) {
-    case ScoreType::albatross:
+  switch (ScorType(n)) {
+    case ScorType::albatross:
       s = "albatross";
-      scor.albatross++;
+      scoretype.albatross++;
       break;
-    case ScoreType::eagle:
+    case ScorType::eagle:
       s = "eagle";
-      scor.eagles++;
+      scoretype.eagles++;
       break;
-    case ScoreType::birdie:
+    case ScorType::birdie:
       s = "birdie";
-      scor.birdies++;
+      scoretype.birdies++;
       break;
-    case ScoreType::par:
+    case ScorType::par:
       s = "par";
-      scor.pars++;
+      scoretype.pars++;
       break;
-    case ScoreType::bogey:
+    case ScorType::bogey:
       s = "bogey";
-      scor.bogies++;
+      scoretype.bogies++;
       break;
-    case ScoreType::dbogey:
+    case ScorType::dbogey:
       s = "double";
-      scor.doubles++;
+      scoretype.doubles++;
       break;
-    case ScoreType::tbogey:
+    case ScorType::tbogey:
       s = "triple";
-      scor.triples++;
+      scoretype.triples++;
       break;
-    case ScoreType::x:
+    case ScorType::x:
       s = "X";
-      scor.x++;
+      scoretype.x++;
       break;
     default:
       s = "";
@@ -226,36 +228,47 @@ string getScoreType(int par, int score) {
 }
 
 // clang-format off
-ostream& operator<<(ostream& strm, const CNGCHoles& h) {
-  strm << h.hole << "\t";
-  strm << h.yards << "\t";
-  strm << h.hdcp << "\t";
-  strm << h.par << "\t";
-  strm << h.score << "\t";
-  strm << h.putts << "\t";
-  strm << h.uds << "\t";
-  int par = stoi(h.par);
-  int score;
-  int putts;
-  if (h.score == "")
-    score = 0;
-  else
-    score = stoi(h.score);
-  if (h.putts == "")
-    putts = 99;
-  else
-    putts = stoi(h.putts);
+// ostream& operator<<(ostream& strm, const CNGCScorecardData& h) {
+//   strm << h.hole << "\t";
+//   strm << h.yards << "\t";
+//   strm << h.hdcp << "\t";
+//   strm << h.par << "\t";
+//   strm << h.score << "\t";
+//   strm << h.putts << "\t";
+//   strm << h.uds << "\t";
+//   int par = stoi(h.par);
+//   int score;
+//   int putts;
+//   if (h.score == "")
+//     score = 0;
+//   else
+//     score = stoi(h.score);
+//   if (h.putts == "")
+//     putts = 99;
+//   else
+//     putts = stoi(h.putts);
+//
+//   strm << getScoreType(par, score) << "\t";
+//   if (isGIR (par, score, putts))
+//     strm << "GIR" << endl;
+//   else
+//     strm << "\t" << endl;
+//   return strm;
+// }
+// clang-format on
 
-  strm << getScoreType(par, score) << "\t";
-  if (isGIR (par, score, putts))
-    strm << "GIR" << endl;
-  else
-    strm << "\t" << endl;
+void ScoreData::setHoleScore(string s, string p, string u) {
+  score = s;
+  putts = p;
+  uds = u;
+}
+
+// clang-format off
+ostream& operator<<(ostream& strm, const ScoreData& sd) {
+    strm << sd.score << sd.putts << sd.uds;
   return strm;
 }
 // clang-format on
-
-
 
 // clang-format off
 ostream& operator<<(ostream& strm, const holeStats& h) {
@@ -279,48 +292,53 @@ ostream& operator<<(ostream& strm, const ShotStats& sra) {
 
 void initNGCHolesVector() {
   for (int ix = 0; ix < k18; ++ix) {
-    CNGCHoles h;
+    CNGCScorecardData h;
     vNGCHoles.push_back(h);
   }
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "", "", "");
-  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "", "", "");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "", "", "");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "", "", "");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "", "", "");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "", "", "");
-  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "", "", "");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "", "", "");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "", "", "");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "", "", "");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "", "", "");
-  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "", "", "");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "", "", "");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "", "", "");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "", "", "");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "", "", "");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "", "", "");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "", "", "");
+  vNGCHoles[0].setHoleDesc("1", "492", "7", "5");
+  vNGCHoles[1].setHoleDesc("2", "185", "13", "3");
+  vNGCHoles[2].setHoleDesc("3", "421", "1", "4");
+  vNGCHoles[3].setHoleDesc("4", "510", "3", "5");
+  vNGCHoles[4].setHoleDesc("5", "395", "5", "4");
+  vNGCHoles[5].setHoleDesc("6", "383", "11", "4");
+  vNGCHoles[6].setHoleDesc("7", "135", "17", "3");
+  vNGCHoles[7].setHoleDesc("8", "368", "9", "4");
+  vNGCHoles[8].setHoleDesc("9", "312", "15", "4");
+  vNGCHoles[9].setHoleDesc("10", "342", "8", "4");
+  vNGCHoles[10].setHoleDesc("11", "145", "16", "3");
+  vNGCHoles[11].setHoleDesc("12", "471", "12", "5");
+  vNGCHoles[12].setHoleDesc("13", "380", "6", "4");
+  vNGCHoles[13].setHoleDesc("14", "365", "4", "4");
+  vNGCHoles[14].setHoleDesc("15", "331", "18", "4");
+  vNGCHoles[15].setHoleDesc("16", "521", "2", "5");
+  vNGCHoles[16].setHoleDesc("17", "168", "14", "3");
+  vNGCHoles[17].setHoleDesc("18", "337", "10", "4");
+}
+
+void initHoleScores() {
+  ScoreData sd;
+  for (int ix = 0; ix < k18; ++ix) vsd.push_back(sd);
 }
 
 void initTestScores() {
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5", "7", "3", "4");
-  vNGCHoles[1].setHoleDesc("2", "185", "13", "3", "4", "2", "3");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4", "5", "2", "2");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5", "5", "1", "2");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4", "5", "5", "3");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4", "5", "2", "2");
-  vNGCHoles[6].setHoleDesc("7", "135", "17", "3", "3", "1", "2");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4", "6", "2", "3");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4", "7", "3", "4");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4", "4", "1", "2");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3", "5", "3", "3");
-  vNGCHoles[11].setHoleDesc("12", "471", "12", "5", "5", "2", "2");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4", "6", "2", "4");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4", "6", "2", "3");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4", "6", "3", "3");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5", "5", "2", "2");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3", "3", "2", "2");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4", "6", "2", "2");
+  vsd[0].setHoleScore("7", "3", "4");
+  vsd[1].setHoleScore("4", "2", "3");
+  vsd[2].setHoleScore("5", "2", "2");
+  vsd[3].setHoleScore("5", "1", "2");
+  vsd[4].setHoleScore("5", "5", "3");
+  vsd[5].setHoleScore("5", "2", "2");
+  vsd[6].setHoleScore("3", "1", "2");
+  vsd[7].setHoleScore("6", "2", "3");
+  vsd[8].setHoleScore("7", "3", "4");
+  vsd[9].setHoleScore("4", "1", "2");
+  vsd[10].setHoleScore("5", "3", "3");
+  vsd[11].setHoleScore("5", "2", "2");
+  vsd[12].setHoleScore("6", "2", "4");
+  vsd[13].setHoleScore("6", "2", "3");
+  vsd[14].setHoleScore("6", "3", "3");
+  vsd[15].setHoleScore("5", "2", "2");
+  vsd[16].setHoleScore("3", "2", "2");
+  vsd[17].setHoleScore("6", "2", "2");
 }
 
 void initClubNames() {
@@ -401,6 +419,8 @@ void initGlobals() {
   for (int ii = 0; ii < k18; ++ii) bPlayedHole[ii] = false;
 
   initNGCHolesVector();
+  initHoleScores();
+  initTestScores();
   // initScoreResults();
   initClubNames();
   initShotStats();

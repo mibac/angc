@@ -46,7 +46,7 @@ void writeScores() {
   int fGIR = calcGIRs(true);
   int bGIR = calcGIRs(false);
 
-  scor.initScores();
+  scoretype.initScoreType();
 
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
@@ -54,7 +54,8 @@ void writeScores() {
   /// clang-format off
   gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << vNGCHoles[ix];
+    gFileScore << vsd[ix];
+  gFileScore << endl;
   }
   gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
              << fscore + bscore << endl;
@@ -63,11 +64,11 @@ void writeScores() {
   gFileScore << "Updown\t" << fuds << "\t" << buds << "\t" << fuds + buds
              << endl;
   gFileScore << "GIR\t" << fGIR << "\t" << bGIR << "\t" << fGIR + bGIR << endl;
-  gFileScore << "Birdies\t" << scor.birdies << endl;
-  gFileScore << "Pars\t" << scor.pars << endl;
-  gFileScore << "Bogies\t" << scor.bogies << endl;
-  gFileScore << "Doubles\t" << scor.doubles << endl;
-  gFileScore << "Triples\t" << scor.triples << endl;
+  gFileScore << "Birdies\t" << scoretype.birdies << endl;
+  gFileScore << "Pars\t" << scoretype.pars << endl;
+  gFileScore << "Bogies\t" << scoretype.bogies << endl;
+  gFileScore << "Doubles\t" << scoretype.doubles << endl;
+  gFileScore << "Triples\t" << scoretype.triples << endl;
   gFileScore.flush();
   gFileScore.close();
 }
@@ -86,13 +87,12 @@ string getShortDate() {
 }
 
 void writeShortScores() {
-  // scor.initScores();
+  // scoretype.initScoreType();
   string s = pathShortScores + "shortScores.text";
   gFileShortScores.open(s.c_str(), ios::app);
   gFileShortScores << getShortDate();
   for (int ix = 0; ix < k18; ++ix) {
-    gFileShortScores << vNGCHoles[ix].score << vNGCHoles[ix].putts
-                     << vNGCHoles[ix].uds;
+    gFileShortScores << vsd[ix];
   }
   gFileShortScores << endl;
   gFileShortScores.flush();

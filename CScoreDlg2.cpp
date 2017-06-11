@@ -172,10 +172,10 @@ void CScoreDlg2::stuffData(int n) {
   vNGCHoles[n].yards = yardsValue->label();
   vNGCHoles[n].hdcp = hdcpValue->label();
   vNGCHoles[n].par = parValue->label();
-  vNGCHoles[n].score = scoreValue->label();
-  vNGCHoles[n].putts = puttValue->label();
-  vNGCHoles[n].uds = udValue->label();
-  gTmpScore << vNGCHoles[n];
+  vsd[n].score = scoreValue->label();
+  vsd[n].putts = puttValue->label();
+  vsd[n].uds = udValue->label();
+  gTmpScore << vsd[n];
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
@@ -183,9 +183,9 @@ void CScoreDlg2::updateHoleDescription(int n) {
   yardsValue->label(vNGCHoles[n].yards.c_str());
   hdcpValue->label(vNGCHoles[n].hdcp.c_str());
   parValue->label(vNGCHoles[n].par.c_str());
-  scoreValue->label(vNGCHoles[n].score.c_str());
-  puttValue->label(vNGCHoles[n].putts.c_str());
-  udValue->label(vNGCHoles[n].uds.c_str());
+  scoreValue->label(vsd[n].score.c_str());
+  puttValue->label(vsd[n].putts.c_str());
+  udValue->label(vsd[n].uds.c_str());
 }
 
 // Handle when user right clicks on our input widget

@@ -129,9 +129,9 @@ void CScorecard::drawScoreData(int COL, int X, int Y, int W, int H) {
     //   string s = to_string(n);
     //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].score.c_str(), X, Y, W, H);
+    DrawData(vsd[COL].score.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].score.c_str(), X, Y, W, H);
+    DrawData(vsd[COL + 9].score.c_str(), X, Y, W, H);
   }
 }
 
@@ -143,9 +143,9 @@ void CScorecard::drawPuttData(int COL, int X, int Y, int W, int H) {
     //   string s = to_string(n);
     //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].putts.c_str(), X, Y, W, H);
+    DrawData(vsd[COL].putts.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].putts.c_str(), X, Y, W, H);
+    DrawData(vsd[COL + 9].putts.c_str(), X, Y, W, H);
   }
 }
 
@@ -157,9 +157,9 @@ void CScorecard::drawUDData(int COL, int X, int Y, int W, int H) {
     //   string s = to_string(n);
     //   DrawData(s.c_str(), X, Y, W, H);
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].uds.c_str(), X, Y, W, H);
+    DrawData(vsd[COL].uds.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].uds.c_str(), X, Y, W, H);
+    DrawData(vsd[COL + 9].uds.c_str(), X, Y, W, H);
   }
 }
 
@@ -179,19 +179,19 @@ string CScorecard::sumRow(const int row) {
     case kScoreRow:
       if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) {
-          if (vNGCHoles[ix].score == "")
+          if (vsd[ix].score == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].score);
+            tmp = stoi(vsd[ix].score);
           total += tmp;
         }
         results.fscore = total;
       } else {
         for (int ix = 9; ix < k18; ++ix) {
-          if (vNGCHoles[ix].score == "")
+          if (vsd[ix].score == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].score);
+            tmp = stoi(vsd[ix].score);
           total += tmp;
         }
         results.fscore = total;
@@ -200,19 +200,19 @@ string CScorecard::sumRow(const int row) {
     case kPuttRow:
       if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) {
-          if (vNGCHoles[ix].putts == "")
+          if (vsd[ix].putts == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].putts);
+            tmp = stoi(vsd[ix].putts);
           total += tmp;
         }
         results.fputts = total;
       } else {
         for (int ix = 9; ix < k18; ++ix) {
-          if (vNGCHoles[ix].putts == "")
+          if (vsd[ix].putts == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].putts);
+            tmp = stoi(vsd[ix].putts);
           total += tmp;
         }
         results.fputts = total;
@@ -221,19 +221,19 @@ string CScorecard::sumRow(const int row) {
     case kUDRow:
       if (gFront9) {
         for (int ix = 0; ix < 9; ++ix) {
-          if (vNGCHoles[ix].uds == "")
+          if (vsd[ix].uds == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].uds);
+            tmp = stoi(vsd[ix].uds);
           total += tmp;
         }
         results.fuds = total;
       } else {
         for (int ix = 9; ix < k18; ++ix) {
-          if (vNGCHoles[ix].uds == "")
+          if (vsd[ix].uds == "")
             tmp = 0;
           else
-            tmp = stoi(vNGCHoles[ix].uds);
+            tmp = stoi(vsd[ix].uds);
           total += tmp;
         }
         results.fuds = total;
