@@ -27,6 +27,7 @@ extern time_t gToday;
 extern string gNowTimeStr;
 extern string gStartHoleTimeStr;
 extern string gStartRoundTimeStr;
+extern string gRoundDateStr;
 
 extern bool bRoundStarted;
 extern bool gFront9;

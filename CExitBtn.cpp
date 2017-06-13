@@ -52,11 +52,13 @@ void writeScores() {
   gFileScore.open(s.c_str());
   gFileScore << asctime(std::localtime(&gToday));
   /// clang-format off
-  gFileScore << "Hole\tYards\tHdcp\tPar\tScore\tPutts\tUD\n";
+  gFileScore << "Score\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << vsd[ix];
-  gFileScore << endl;
+    gFileScore << vsd[ix].score << "\t";
+    gFileScore << vsd[ix].putts << "\t";
+    gFileScore << vsd[ix].uds << endl;
   }
+
   gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
              << fscore + bscore << endl;
   gFileScore << "Putts \t" << fputts << "\t" << bputts << "\t"
@@ -75,7 +77,7 @@ void writeScores() {
 
 string getShortDate() {
   string suffix;
-  struct tm* t;
+  struct tm *t;
   t = localtime(&gToday);
   string y = to_string(t->tm_year - 100);
   string m = to_string(t->tm_mon + 1);
@@ -123,22 +125,23 @@ void writeShotStats() {
 }
 
 void writeHoleTimes() {
-    CGPStime tm;
-    int sum = 0;
-    int secdiff = 0;
+  CGPStime tm;
+  int sum = 0;
+  int secdiff = 0;
 
-    gTmpTimes << "Time per hole"<< endl;
-    for (int ix = 0; ix < k18; ++ix) {
-        secdiff = tm.timeDifference(gHoleTimeRA[ix].endstr, gHoleTimeRA[ix].begstr);
-        gTmpTimes << ix + 1 << "\t" << tm.sec2str(secdiff, "") << endl;
-        sum += secdiff;
-    }
-    gTmpTimes << "Hole Time\t" << tm.sec2str(sum, "") << endl;
-    secdiff = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
-    gTmpTimes << "Round Time\t" << tm.sec2str(secdiff, "") << endl;
-    gTmpTimes << "Walking Time green to next tee\t" << tm.sec2str((secdiff - sum), "") << endl;
-    gTmpTimes.flush();
-    gTmpTimes.close();
+  gTmpTimes << "Time per hole" << endl;
+  for (int ix = 0; ix < k18; ++ix) {
+    secdiff = tm.timeDifference(gHoleTimeRA[ix].endstr, gHoleTimeRA[ix].begstr);
+    gTmpTimes << ix + 1 << "\t" << tm.sec2str(secdiff, "") << endl;
+    sum += secdiff;
+  }
+  gTmpTimes << "Hole Time\t" << tm.sec2str(sum, "") << endl;
+  secdiff = tm.timeDifference(gNowTimeStr, gStartRoundTimeStr);
+  gTmpTimes << "Round Time\t" << tm.sec2str(secdiff, "") << endl;
+  gTmpTimes << "Walking Time green to next tee\t"
+            << tm.sec2str((secdiff - sum), "") << endl;
+  gTmpTimes.flush();
+  gTmpTimes.close();
 }
 
 void CExitBtn::Button_CB() {
@@ -162,8 +165,8 @@ void CExitBtn::Button_CB() {
     gTmpGPS.close();
 
     gHoleTimeRA[gCurrentHole - 1].endstr = gNowTimeStr;
-    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].endstr\t"
-         << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
+    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1
+              << "].endstr\t" << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
     gTmpTimes.close();
 
     // if (myClubPopup != nullptr) myClubPopup->hide();
@@ -175,8 +178,8 @@ void CExitBtn::Button_CB() {
     gTmpScore.close();
     gTmpGPS.close();
     gHoleTimeRA[gCurrentHole - 1].endstr = gNowTimeStr;
-    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1 << "].end\t"
-         << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
+    gTmpTimes << "CExitBtn::Button_CB: gHoleTimeRA[" << gCurrentHole - 1
+              << "].end\t" << gHoleTimeRA[gCurrentHole - 1].endstr << endl;
     writeHoleTimes();
     writeShortScores();
 

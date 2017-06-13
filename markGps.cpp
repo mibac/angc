@@ -163,6 +163,11 @@ void HandleFD(FL_SOCKET fd, void *data) {
       if (isCloserToNextTee(u)) holeBtn->setNewHole();
       hv->redraw();
     }
+    found = gpsStr.find("GPRMC");
+    if ((!bRoundStarted) &&(found != string::npos)) {
+        myGPS.setValuesRMC(gpsStr.c_str());
+        gRoundDateStr = to_string(myGPS.date);
+    }
   }
 #endif
 }

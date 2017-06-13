@@ -142,7 +142,9 @@ int CTimeDisplay::handle(int e) {
           gStartRoundTimeStr = gNowTimeStr;
           gHoleTimeRA[gCurrentHole - 1].begstr = gNowTimeStr;
           gTmpTimes << "CTimeDisplay::handle-if: gHoleTimeRA[" << gCurrentHole - 1 << "].begstr\t"
-               << gHoleTimeRA[gCurrentHole - 1].begstr << endl;
+               << gHoleTimeRA[gCurrentHole - 1].begstr << endl;          
+          gRoundDateStr = to_string(myGPS.date);
+
         } else {
           count++;
           if (count > 2) count = 0;

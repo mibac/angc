@@ -16,6 +16,8 @@ time_t gToday;
 string gNowTimeStr;
 string gStartHoleTimeStr;
 string gStartRoundTimeStr;
+string gRoundDateStr;
+
 
 bool bRoundStarted;
 bool gFront9;
@@ -420,8 +422,7 @@ void initGlobals() {
 
   initNGCHolesVector();
   initHoleScores();
-  initTestScores();
-  // initScoreResults();
+  // initTestScores();
   initClubNames();
   initShotStats();
   openTmpFiles();
@@ -459,13 +460,9 @@ string getFileSuffix() {
   asctime(localtime(&result));
   suffix = to_string(result);
 
-  struct tm* t;
-  t = localtime(&gToday);
-  string y = to_string(t->tm_year - 100);
-  string m = to_string(t->tm_mon + 1);
-  if (m.length() == 1) m = "0" + m;
-  string d = to_string(t->tm_mday);
-  if (d.length() == 1) d = "0" + d;
+  string y =  gRoundDateStr.substr(4,2);
+  string m = gRoundDateStr.substr(2,2);
+  string d = gRoundDateStr.substr(0,2);
   suffix = suffix + "_" + y + m + d + ".txt";
   return suffix;
 }
