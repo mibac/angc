@@ -2,6 +2,7 @@
 #include "globals.h"
 #endif
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
@@ -43,7 +44,7 @@ vector<UtmLatLng> vUTM;
 array<bool, k18> bPlayedHole;
 
 vector<CNGCScorecardData> vNGCHoles;
-vector<ScoreData> vsd;
+array<ScoreData, k18> asd;
 
 array<string, k18> clubNamesRA;
 
@@ -63,18 +64,18 @@ int calcScore(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vsd[ix].score == "")
+      if (asd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].score);
+        tmp = stoi(asd[ix].score);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vsd[ix].score == "")
+      if (asd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].score);
+        tmp = stoi(asd[ix].score);
       sum += tmp;
     }
   }
@@ -86,18 +87,18 @@ int calcPutts(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vsd[ix].putts == "")
+      if (asd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].putts);
+        tmp = stoi(asd[ix].putts);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vsd[ix].putts == "")
+      if (asd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].putts);
+        tmp = stoi(asd[ix].putts);
       sum += tmp;
     }
   }
@@ -109,18 +110,18 @@ int calcUDs(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vsd[ix].uds == "")
+      if (asd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].uds);
+        tmp = stoi(asd[ix].uds);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (vsd[ix].uds == "")
+      if (asd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(vsd[ix].uds);
+        tmp = stoi(asd[ix].uds);
       sum += tmp;
     }
   }
@@ -148,15 +149,15 @@ int calcGIRs(bool front9) {
       else
         p = stoi(vNGCHoles[ix].par);
 
-      if (vsd[ix].score == "")
+      if (asd[ix].score == "")
         s = 0;
       else
-        s = stoi(vsd[ix].score);
+        s = stoi(asd[ix].score);
 
-      if (vsd[ix].putts == "")
+      if (asd[ix].putts == "")
         t = 0;
       else
-        t = stoi(vsd[ix].putts);
+        t = stoi(asd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   } else {
@@ -166,15 +167,15 @@ int calcGIRs(bool front9) {
       else
         p = stoi(vNGCHoles[ix].par);
 
-      if (vsd[ix].score == "")
+      if (asd[ix].score == "")
         s = 0;
       else
-        s = stoi(vsd[ix].score);
+        s = stoi(asd[ix].score);
 
-      if (vsd[ix].putts == "")
+      if (asd[ix].putts == "")
         t = 0;
       else
-        t = stoi(vsd[ix].putts);
+        t = stoi(asd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   }
@@ -318,28 +319,7 @@ void initNGCHolesVector() {
 
 void initHoleScores() {
   ScoreData sd;
-  for (int ix = 0; ix < k18; ++ix) vsd.push_back(sd);
-}
-
-void initTestScores() {
-  vsd[0].setHoleScore("7", "3", "4");
-  vsd[1].setHoleScore("4", "2", "3");
-  vsd[2].setHoleScore("5", "2", "2");
-  vsd[3].setHoleScore("5", "1", "2");
-  vsd[4].setHoleScore("5", "5", "3");
-  vsd[5].setHoleScore("5", "2", "2");
-  vsd[6].setHoleScore("3", "1", "2");
-  vsd[7].setHoleScore("6", "2", "3");
-  vsd[8].setHoleScore("7", "3", "4");
-  vsd[9].setHoleScore("4", "1", "2");
-  vsd[10].setHoleScore("5", "3", "3");
-  vsd[11].setHoleScore("5", "2", "2");
-  vsd[12].setHoleScore("6", "2", "4");
-  vsd[13].setHoleScore("6", "2", "3");
-  vsd[14].setHoleScore("6", "3", "3");
-  vsd[15].setHoleScore("5", "2", "2");
-  vsd[16].setHoleScore("3", "2", "2");
-  vsd[17].setHoleScore("6", "2", "2");
+  for (int ix = 0; ix < k18; ++ix) asd[ix] = sd;
 }
 
 void initClubNames() {
@@ -396,20 +376,20 @@ void openTmpFiles() {
   string s1 = dir + "tmpGPS.txt";
   gTmpGPS.open(s1.c_str(), ios::app);
   gTmpGPS << setprecision(kPrecision);
-  gTmpGPS << do_console_command_get_result("date");
+  gTmpGPS << getShortDate();
 
   string s2 = dir + "tmpScore.txt";
   gTmpScore.open(s2.c_str(), ios::app);
-  gTmpGPS << do_console_command_get_result("date");
+  gTmpScore << getShortDate();
 
   string s3 = dir + "tmpShots.txt";
   gTmpShots.open(s3.c_str(), ios::app);
   gTmpShots << setprecision(kPrecision);
-  gTmpGPS << do_console_command_get_result("date");
+  gTmpShots << getShortDate();
 
   string s4 = dir + "tmpTimes.txt";
   gTmpTimes.open(s4.c_str(), ios::app);
-  gTmpGPS << do_console_command_get_result("date");
+  gTmpTimes << getShortDate();
 }
 
 array<sHoleTimes, k18> gHoleTimeRA;
@@ -473,10 +453,12 @@ string getFileSuffix() {
   asctime(localtime(&result));
   suffix = to_string(result);
 
-  string y = gRoundDateStr.substr(4, 2);
-  string m = gRoundDateStr.substr(2, 2);
-  string d = gRoundDateStr.substr(0, 2);
-  suffix = suffix + "_" + y + m + d + ".txt";
+  // string y = gRoundDateStr.substr(4, 2);
+  // string m = gRoundDateStr.substr(2, 2);
+  // string d = gRoundDateStr.substr(0, 2);
+  // suffix = suffix + "_" + y + m + d + ".txt";
+  string d = getShortDate();
+  suffix = suffix + "_" + d + ".txt";
   return suffix;
 }
 
@@ -488,17 +470,18 @@ Fl_Color getBkgRGBcolor() {
   return fl_rgb_color(150, 255, 160);
 }
 
-string do_console_command_get_result(char* command) {
-  FILE* pipe = popen(command, "r");  // Send the command, popen exits
-                                     // immediately
-  if (!pipe) return "ERROR";
-
-  char buffer[128];
-  string result = "";
-  while (!feof(pipe))  // Wait for the output resulting from the command
-  {
-    if (fgets(buffer, 128, pipe) != NULL) result += buffer;
-  }
-  pclose(pipe);
-  return (result);
+string getShortDate() {
+  string str = do_console_command_get_result("date +%y%m%d");
+  str.erase(remove(str.begin(), str.end(), '\n'), str.end());
+  return str;
+  // string suffix;
+  // struct tm *t;
+  // t = localtime(&gToday);
+  // string y = to_string(t->tm_year - 100);
+  // string m = to_string(t->tm_mon + 1);
+  // if (m.length() == 1) m = "0" + m;
+  // string d = to_string(t->tm_mday);
+  // if (d.length() == 1) d = "0" + d;
+  // suffix = y + m + d;
+  // return suffix;
 }

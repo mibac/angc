@@ -66,6 +66,46 @@ CScoreDlg2 *scoreDlg2 = nullptr;
 
 int hole;
 
+void initTestScores() {
+  asd[0].setHoleScore("1", "1", "1");
+  asd[1].setHoleScore("2", "2", "2");
+  asd[2].setHoleScore("3", "3", "3");
+  asd[3].setHoleScore("4", "4", "4");
+  asd[4].setHoleScore("5", "5", "5");
+  asd[5].setHoleScore("6", "6", "6");
+  asd[6].setHoleScore("7", "7", "7");
+  asd[7].setHoleScore("8", "8", "8");
+  asd[8].setHoleScore("9", "9", "9");
+  asd[9].setHoleScore("9", "9", "9");
+  asd[10].setHoleScore("8", "8", "8");
+  asd[11].setHoleScore("7", "7", "7");
+  asd[12].setHoleScore("6", "6", "6");
+  asd[13].setHoleScore("5", "5", "5");
+  asd[14].setHoleScore("4", "4", "4");
+  asd[15].setHoleScore("3", "3", "3");
+  asd[16].setHoleScore("2", "2", "2");
+  asd[17].setHoleScore("1", "1", "1");
+
+  // asd[0].setHoleScore("7", "3", "4");
+  // asd[1].setHoleScore("4", "2", "3");
+  // asd[2].setHoleScore("5", "2", "2");
+  // asd[3].setHoleScore("5", "1", "2");
+  // asd[4].setHoleScore("5", "5", "3");
+  // asd[5].setHoleScore("5", "2", "2");
+  // asd[6].setHoleScore("3", "1", "2");
+  // asd[7].setHoleScore("6", "2", "3");
+  // asd[8].setHoleScore("7", "3", "4");
+  // asd[9].setHoleScore("4", "1", "2");
+  // asd[10].setHoleScore("5", "3", "3");
+  // asd[11].setHoleScore("5", "2", "2");
+  // asd[12].setHoleScore("6", "2", "4");
+  // asd[13].setHoleScore("6", "2", "3");
+  // asd[14].setHoleScore("6", "3", "3");
+  // asd[15].setHoleScore("5", "2", "2");
+  // asd[16].setHoleScore("3", "2", "2");
+  // asd[17].setHoleScore("6", "2", "2");
+}
+
 void btnOK_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
   parent->stuffData(hole);
@@ -172,10 +212,10 @@ void CScoreDlg2::stuffData(int n) {
   vNGCHoles[n].yards = yardsValue->label();
   vNGCHoles[n].hdcp = hdcpValue->label();
   vNGCHoles[n].par = parValue->label();
-  vsd[n].score = scoreValue->label();
-  vsd[n].putts = puttValue->label();
-  vsd[n].uds = udValue->label();
-  gTmpScore << vsd[n];
+  asd[n].score = scoreValue->label();
+  asd[n].putts = puttValue->label();
+  asd[n].uds = udValue->label();
+  gTmpScore << asd[n];
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
@@ -183,9 +223,9 @@ void CScoreDlg2::updateHoleDescription(int n) {
   yardsValue->label(vNGCHoles[n].yards.c_str());
   hdcpValue->label(vNGCHoles[n].hdcp.c_str());
   parValue->label(vNGCHoles[n].par.c_str());
-  scoreValue->label(vsd[n].score.c_str());
-  puttValue->label(vsd[n].putts.c_str());
-  udValue->label(vsd[n].uds.c_str());
+  scoreValue->label(asd[n].score.c_str());
+  puttValue->label(asd[n].putts.c_str());
+  udValue->label(asd[n].uds.c_str());
 }
 
 // Handle when user right clicks on our input widget
@@ -595,7 +635,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   // clear_border();
   end();
 
-  // initTestScores();
+  initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);

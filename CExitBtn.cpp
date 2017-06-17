@@ -31,7 +31,7 @@ void CExitBtn::writeGPS() {
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
   // gFileGPS << asctime(std::localtime(&gToday));
-  gFileGPS << do_console_command_get_result("date");
+  gFileGPS << getShortDate();
 
   for (auto itr : vGPS) gFileGPS << itr;
   gFileGPS.flush();
@@ -53,14 +53,14 @@ void writeScores() {
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
   // gFileScore << asctime(std::localtime(&gToday));
-  gFileScore << do_console_command_get_result("date");
+  gFileScore << getShortDate();
 
   /// clang-format off
   gFileScore << "Score\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << vsd[ix].score << "\t";
-    gFileScore << vsd[ix].putts << "\t";
-    gFileScore << vsd[ix].uds << endl;
+    gFileScore << asd[ix].score << "\t";
+    gFileScore << asd[ix].putts << "\t";
+    gFileScore << asd[ix].uds << endl;
   }
 
   gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
@@ -79,26 +79,13 @@ void writeScores() {
   gFileScore.close();
 }
 
-string getShortDate() {
-  string suffix;
-  struct tm *t;
-  t = localtime(&gToday);
-  string y = to_string(t->tm_year - 100);
-  string m = to_string(t->tm_mon + 1);
-  if (m.length() == 1) m = "0" + m;
-  string d = to_string(t->tm_mday);
-  if (d.length() == 1) d = "0" + d;
-  suffix = y + m + d;
-  return suffix;
-}
-
 void writeShortScores() {
   // scoretype.initScoreType();
   string s = pathShortScores + "shortScores.text";
   gFileShortScores.open(s.c_str(), ios::app);
   gFileShortScores << getShortDate();
   for (int ix = 0; ix < k18; ++ix) {
-    gFileShortScores << vsd[ix];
+    gFileShortScores << asd[ix];
   }
   gFileShortScores << endl;
   gFileShortScores.flush();
@@ -109,7 +96,7 @@ void writeShotStats() {
   string s = pathShots + "aShots_" + getFileSuffix();
   gFileShots.open(s.c_str());
   // gFileShots << asctime(std::localtime(&gToday));
-  gFileShots << do_console_command_get_result("date");
+  gFileShots << getShortDate();
 
   gFileShots << "Hole\tClub\tDist\tLng      \tLat" << endl;
   int valid = 0;
@@ -166,6 +153,9 @@ void CExitBtn::Button_CB() {
   // }
 
   if (result == 0) {  // Close without saving
+    gTmpShots << endl;
+    gTmpScore << endl;
+    gTmpGPS << endl;
     gTmpShots.close();
     gTmpScore.close();
     gTmpGPS.close();
@@ -180,6 +170,9 @@ void CExitBtn::Button_CB() {
     if (gpsin != nullptr) pclose(gpsin);
     mainwin->hide();
   } else if (result == 1) {  // Save and close
+    gTmpShots << endl;
+    gTmpScore << endl;
+    gTmpGPS << endl;
     gTmpShots.close();
     gTmpScore.close();
     gTmpGPS.close();

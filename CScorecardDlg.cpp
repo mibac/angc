@@ -85,10 +85,10 @@ string writeScoreStats() {
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(vNGCHoles[ix].par);
 
-    if (vsd[ix].score == "")
+    if (asd[ix].score == "")
         score = 0;
     else
-      score = stoi(vsd[ix].score);
+      score = stoi(asd[ix].score);
     incrScoreTypes(par, score);
   }
 

@@ -162,7 +162,7 @@ struct ScoreData {
   void setHoleScore(string s, string p, string u);
   friend ostream& operator<<(ostream& strm, const ScoreData& sd);
 };
-extern vector<ScoreData> vsd;
+extern array<ScoreData, k18> asd;
 
 const int kDr = 0;
 const int k3w = 1;
@@ -235,7 +235,7 @@ extern int calcPutts(bool front9);
 extern int calcUDs(bool front9);
 extern int calcGIRs(bool front9);
 extern void initTestScores();
-extern string do_console_command_get_result(const char* command);
+extern string getShortDate();
 
 extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;
