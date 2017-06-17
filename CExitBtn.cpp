@@ -30,7 +30,9 @@ void CExitBtn::writeGPS() {
   string s = pathGPS + "aGPS_" + getFileSuffix();
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
-  gFileGPS << asctime(std::localtime(&gToday));
+  // gFileGPS << asctime(std::localtime(&gToday));
+  gFileGPS << do_console_command_get_result("date");
+
   for (auto itr : vGPS) gFileGPS << itr;
   gFileGPS.flush();
   gFileGPS.close();
@@ -50,7 +52,9 @@ void writeScores() {
 
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
-  gFileScore << asctime(std::localtime(&gToday));
+  // gFileScore << asctime(std::localtime(&gToday));
+  gFileScore << do_console_command_get_result("date");
+
   /// clang-format off
   gFileScore << "Score\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
@@ -104,7 +108,9 @@ void writeShortScores() {
 void writeShotStats() {
   string s = pathShots + "aShots_" + getFileSuffix();
   gFileShots.open(s.c_str());
-  gFileShots << asctime(std::localtime(&gToday));
+  // gFileShots << asctime(std::localtime(&gToday));
+  gFileShots << do_console_command_get_result("date");
+
   gFileShots << "Hole\tClub\tDist\tLng      \tLat" << endl;
   int valid = 0;
   gFileShots << setprecision(kPrecision);

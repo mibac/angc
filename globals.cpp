@@ -18,7 +18,6 @@ string gStartHoleTimeStr;
 string gStartRoundTimeStr;
 string gRoundDateStr;
 
-
 bool bRoundStarted;
 bool gFront9;
 
@@ -377,26 +376,40 @@ void initShotStats() {
   }
 }
 
+string do_console_command_get_result(const char* command) {
+  FILE* pipe = popen(command, "r");  // Send the command, popen exits
+                                     // immediately
+  if (!pipe) return "ERROR";
+
+  char buffer[128];
+  string result = "";
+  while (!feof(pipe))  // Wait for the output resulting from the command
+  {
+    if (fgets(buffer, 128, pipe) != NULL) result += buffer;
+  }
+  pclose(pipe);
+  return (result);
+}
+
 void openTmpFiles() {
   string dir = "/home/pi/golf/stats/";
   string s1 = dir + "tmpGPS.txt";
   gTmpGPS.open(s1.c_str(), ios::app);
   gTmpGPS << setprecision(kPrecision);
-  gTmpGPS << asctime(std::localtime(&gToday));
+  gTmpGPS << do_console_command_get_result("date");
 
   string s2 = dir + "tmpScore.txt";
   gTmpScore.open(s2.c_str(), ios::app);
-  // gTmpScore << setprecision(kPrecision);
-  gTmpScore << asctime(std::localtime(&gToday));
+  gTmpGPS << do_console_command_get_result("date");
 
   string s3 = dir + "tmpShots.txt";
   gTmpShots.open(s3.c_str(), ios::app);
   gTmpShots << setprecision(kPrecision);
-  gTmpShots << asctime(std::localtime(&gToday));
+  gTmpGPS << do_console_command_get_result("date");
 
   string s4 = dir + "tmpTimes.txt";
   gTmpTimes.open(s4.c_str(), ios::app);
-  gTmpTimes << asctime(std::localtime(&gToday));
+  gTmpGPS << do_console_command_get_result("date");
 }
 
 array<sHoleTimes, k18> gHoleTimeRA;
@@ -460,9 +473,9 @@ string getFileSuffix() {
   asctime(localtime(&result));
   suffix = to_string(result);
 
-  string y =  gRoundDateStr.substr(4,2);
-  string m = gRoundDateStr.substr(2,2);
-  string d = gRoundDateStr.substr(0,2);
+  string y = gRoundDateStr.substr(4, 2);
+  string m = gRoundDateStr.substr(2, 2);
+  string d = gRoundDateStr.substr(0, 2);
   suffix = suffix + "_" + y + m + d + ".txt";
   return suffix;
 }
@@ -473,4 +486,19 @@ Fl_Color getBkgRGBcolor() {
 
   // experiments
   return fl_rgb_color(150, 255, 160);
+}
+
+string do_console_command_get_result(char* command) {
+  FILE* pipe = popen(command, "r");  // Send the command, popen exits
+                                     // immediately
+  if (!pipe) return "ERROR";
+
+  char buffer[128];
+  string result = "";
+  while (!feof(pipe))  // Wait for the output resulting from the command
+  {
+    if (fgets(buffer, 128, pipe) != NULL) result += buffer;
+  }
+  pclose(pipe);
+  return (result);
 }

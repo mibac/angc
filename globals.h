@@ -235,6 +235,7 @@ extern int calcPutts(bool front9);
 extern int calcUDs(bool front9);
 extern int calcGIRs(bool front9);
 extern void initTestScores();
+extern string do_console_command_get_result(const char* command);
 
 extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;
