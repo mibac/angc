@@ -52,6 +52,8 @@ CScorecardDlg.o \
 CFrontBackBtn.o \
 CClubDlg.o \
 CClubcard.o \
+dout.o \
+CHistoryDlg.o \
 Fl_Image_Button.o
 	g++ -o aNGCApp \
 		markGps.o \
@@ -72,6 +74,8 @@ Fl_Image_Button.o
 		CFrontBackBtn.o \
 		CClubDlg.o \
 		CClubcard.o \
+		dout.o \
+		CHistoryDlg.o \
 		Fl_Image_Button.o \
 		$(LDFLAGS)
 
@@ -92,6 +96,8 @@ CScorecard.h \
 CScorecardDlg.h \
 CClubDlg.h \
 CClubcard.h \
+dout.h \
+CHistoryDlg.h \
 Fl_Image_Button.h
 	g++ -c $<  $(CXXFLAGS)
 
@@ -144,6 +150,12 @@ CClubDlg.o: CClubDlg.cpp CClubDlg.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 CClubcard.o: CClubcard.cpp CClubcard.h globals.h Fl_Image_Button.h
+	g++ -c $<  $(CXXFLAGS)
+
+dout.o: dout.cpp dout.h
+	g++ -c $<  $(CXXFLAGS)
+
+CHistoryDlg.o: CHistoryDlg.cpp CHistoryDlg.h
 	g++ -c $<  $(CXXFLAGS)
 
 Fl_Image_Button.o: Fl_Image_Button.cpp Fl_Image_Button.h
