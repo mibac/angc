@@ -31,7 +31,7 @@ void CExitBtn::writeGPS() {
   gFileGPS.open(s.c_str());
   gFileGPS << setprecision(kPrecision);
   // gFileGPS << asctime(std::localtime(&gToday));
-  gFileGPS << getShortDate();
+  gFileGPS << getShortDate() << endl;
 
   for (auto itr : vGPS) gFileGPS << itr;
   gFileGPS.flush();
@@ -53,7 +53,7 @@ void writeScores() {
   string s = pathScores + "aScore_" + getFileSuffix();
   gFileScore.open(s.c_str());
   // gFileScore << asctime(std::localtime(&gToday));
-  gFileScore << getShortDate();
+  gFileScore << getShortDate() << endl;
 
   /// clang-format off
   gFileScore << "Score\tPutts\tUD\n";
@@ -83,7 +83,7 @@ void writeShortScores() {
   // scoretype.initScoreType();
   string s = pathShortScores + "shortScores.text";
   gFileShortScores.open(s.c_str(), ios::app);
-  gFileShortScores << getShortDate();
+  gFileShortScores << getShortDate() << endl;
   for (int ix = 0; ix < k18; ++ix) {
     gFileShortScores << asd[ix];
   }
@@ -96,7 +96,7 @@ void writeShotStats() {
   string s = pathShots + "aShots_" + getFileSuffix();
   gFileShots.open(s.c_str());
   // gFileShots << asctime(std::localtime(&gToday));
-  gFileShots << getShortDate();
+  gFileShots << getShortDate() << endl;
 
   gFileShots << "Hole\tClub\tDist\tLng      \tLat" << endl;
   int valid = 0;

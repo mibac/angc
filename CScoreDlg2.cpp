@@ -106,9 +106,15 @@ void initTestScores() {
   // asd[17].setHoleScore("6", "2", "2");
 }
 
+void writeTmpScores() {
+  for (int ix = 0; ix < k18; ++ix) gTmpScore << asd[ix];
+  gTmpScore << endl;
+}
+
 void btnOK_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
-  parent->stuffData(hole);
+  parent->updateScoreData(hole);
+  writeTmpScores();
   string s = holeValue->label();
   int n = stoi(s);
   gTmDisplay->showAvgHoleGPStime(n);
@@ -117,14 +123,15 @@ void btnOK_cb(Fl_Widget *w, void *data) {
 
 void cardBtn_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
-  parent->stuffData(hole);
+  parent->updateScoreData(hole);
+  writeTmpScores();
   createScorecardDlg();
   parent->hide();
 }
 
 void clubB_cb(Fl_Widget *w, void *data) {
   CScoreDlg2 *parent = (CScoreDlg2 *)data;
-  // parent->stuffData(hole);
+  // parent->updateScoreData(hole);
   createCClubDlg();
   parent->hide();
 }
@@ -207,15 +214,10 @@ void incrementSelection() {
   hdr->labelcolor(FL_WHITE);
 }
 
-void CScoreDlg2::stuffData(int n) {
-  aNGCHoles[n].hole = holeValue->label();
-  aNGCHoles[n].yards = yardsValue->label();
-  aNGCHoles[n].hdcp = hdcpValue->label();
-  aNGCHoles[n].par = parValue->label();
+void CScoreDlg2::updateScoreData(int n) {
   asd[n].score = scoreValue->label();
   asd[n].putts = puttValue->label();
   asd[n].uds = udValue->label();
-  gTmpScore << asd[n];
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
@@ -288,12 +290,12 @@ int CScoreDlg2::handle(int e) {
           sel->label("9");
           incrementSelection();
         } else if (w == prevBtn) {
-          stuffData(hole);
+          updateScoreData(hole);
           hole -= 1;
           if (hole < 0) hole = 0;
           updateHoleDescription(hole);
         } else if (w == nextBtn) {
-          stuffData(hole);
+          updateScoreData(hole);
           hole += 1;
           if (hole == 18) hole = 17;
           updateHoleDescription(hole);
@@ -635,16 +637,15 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   // clear_border();
   end();
 
-  initTestScores();
+  // initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
   gHoleTimeRA[hole].endstr = gNowTimeStr;
   gTmpTimes << "CScoreDlg2::CScoreDlg2: gHoleTimeRA[" << hole << "].endstr\t"
-       << gHoleTimeRA[hole].endstr << endl;
+            << gHoleTimeRA[hole].endstr << endl;
 
   show();
 }
-
 
 void createScoreDlg2() { scoreDlg2 = new CScoreDlg2(0, 0, 480, 800); }

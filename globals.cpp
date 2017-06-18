@@ -376,20 +376,20 @@ void openTmpFiles() {
   string s1 = dir + "tmpGPS.txt";
   gTmpGPS.open(s1.c_str(), ios::app);
   gTmpGPS << setprecision(kPrecision);
-  gTmpGPS << getShortDate();
+  gTmpGPS << getShortDate() << endl;
 
   string s2 = dir + "tmpScore.txt";
   gTmpScore.open(s2.c_str(), ios::app);
-  gTmpScore << getShortDate();
+  gTmpScore << getShortDate() << endl;
 
   string s3 = dir + "tmpShots.txt";
   gTmpShots.open(s3.c_str(), ios::app);
   gTmpShots << setprecision(kPrecision);
-  gTmpShots << getShortDate();
+  gTmpShots << getShortDate() << endl;
 
   string s4 = dir + "tmpTimes.txt";
   gTmpTimes.open(s4.c_str(), ios::app);
-  gTmpTimes << getShortDate();
+  gTmpTimes << getShortDate() << endl;
 }
 
 array<sHoleTimes, k18> gHoleTimeRA;

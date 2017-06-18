@@ -158,7 +158,7 @@ struct ScoreData {
   string score;
   string putts;
   string uds;
-  ScoreData() : score(""), putts(""), uds("") {}
+  ScoreData() : score("0"), putts("0"), uds("0") {}
   void setHoleScore(string s, string p, string u);
   friend ostream& operator<<(ostream& strm, const ScoreData& sd);
 };
