@@ -83,7 +83,7 @@ string writeScoreStats() {
   st.initScoreType();
   int score;
   for (int ix = 0; ix < k18; ++ix) {
-    int par = stoi(vNGCHoles[ix].par);
+    int par = stoi(aNGCHoles[ix].par);
 
     if (asd[ix].score == "")
         score = 0;

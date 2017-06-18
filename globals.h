@@ -152,7 +152,7 @@ class CNGCScorecardData {
   }
   // friend ostream& operator<<(ostream& strm, const CNGCScorecardData& h);
 };
-extern vector<CNGCScorecardData> vNGCHoles;
+extern array<CNGCScorecardData, k18> aNGCHoles;
 
 struct ScoreData {
   string score;

@@ -89,9 +89,9 @@ void CScorecard::drawHoleData(int COL, int X, int Y, int W, int H) {
     // } else if (COL == 10) {
     //   DrawData("TT", X, Y, W, H);
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].hole.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL].hole.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].hole.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL + 9].hole.c_str(), X, Y, W, H);
   }
 }
 
@@ -99,9 +99,9 @@ void CScorecard::drawHdcpData(int COL, int X, int Y, int W, int H) {
   if ((COL == 9) || (COL == 10)) {
     DrawData(" ", X, Y, W, H);
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL].hdcp.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].hdcp.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL + 9].hdcp.c_str(), X, Y, W, H);
   }
 }
 
@@ -115,9 +115,9 @@ void CScorecard::drawParData(int COL, int X, int Y, int W, int H) {
       DrawData("72", X, Y, W, H);
     }
   } else if (gFront9) {
-    DrawData(vNGCHoles[COL].par.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL].par.c_str(), X, Y, W, H);
   } else {
-    DrawData(vNGCHoles[COL + 9].par.c_str(), X, Y, W, H);
+    DrawData(aNGCHoles[COL + 9].par.c_str(), X, Y, W, H);
   }
 }
 
@@ -171,9 +171,9 @@ string CScorecard::sumRow(const int row) {
   switch (row) {
     case kParRow:
       if (gFront9) {
-        for (int ix = 0; ix < 9; ++ix) total += stoi(vNGCHoles[ix].par);
+        for (int ix = 0; ix < 9; ++ix) total += stoi(aNGCHoles[ix].par);
       } else {
-        for (int ix = 9; ix < k18; ++ix) total += stoi(vNGCHoles[ix].par);
+        for (int ix = 9; ix < k18; ++ix) total += stoi(aNGCHoles[ix].par);
       }
       break;
     case kScoreRow:

@@ -43,7 +43,7 @@ vector<UtmLatLng> vUTM;
 // vector<string> vClubsUsed;
 array<bool, k18> bPlayedHole;
 
-vector<CNGCScorecardData> vNGCHoles;
+array<CNGCScorecardData, k18> aNGCHoles;
 array<ScoreData, k18> asd;
 
 array<string, k18> clubNamesRA;
@@ -144,10 +144,10 @@ int calcGIRs(bool front9) {
   int t = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vNGCHoles[ix].par == "")
+      if (aNGCHoles[ix].par == "")
         p = 0;
       else
-        p = stoi(vNGCHoles[ix].par);
+        p = stoi(aNGCHoles[ix].par);
 
       if (asd[ix].score == "")
         s = 0;
@@ -162,10 +162,10 @@ int calcGIRs(bool front9) {
     }
   } else {
     for (int ix = 0; ix < 9; ++ix) {
-      if (vNGCHoles[ix].par == "")
+      if (aNGCHoles[ix].par == "")
         p = 0;
       else
-        p = stoi(vNGCHoles[ix].par);
+        p = stoi(aNGCHoles[ix].par);
 
       if (asd[ix].score == "")
         s = 0;
@@ -295,26 +295,26 @@ ostream& operator<<(ostream& strm, const ShotStats& sra) {
 void initNGCHolesVector() {
   for (int ix = 0; ix < k18; ++ix) {
     CNGCScorecardData h;
-    vNGCHoles.push_back(h);
+    aNGCHoles[ix] = h;
   }
-  vNGCHoles[0].setHoleDesc("1", "492", "7", "5");
-  vNGCHoles[1].setHoleDesc("2", "185", "13", "3");
-  vNGCHoles[2].setHoleDesc("3", "421", "1", "4");
-  vNGCHoles[3].setHoleDesc("4", "510", "3", "5");
-  vNGCHoles[4].setHoleDesc("5", "395", "5", "4");
-  vNGCHoles[5].setHoleDesc("6", "383", "11", "4");
-  vNGCHoles[6].setHoleDesc("7", "135", "17", "3");
-  vNGCHoles[7].setHoleDesc("8", "368", "9", "4");
-  vNGCHoles[8].setHoleDesc("9", "312", "15", "4");
-  vNGCHoles[9].setHoleDesc("10", "342", "8", "4");
-  vNGCHoles[10].setHoleDesc("11", "145", "16", "3");
-  vNGCHoles[11].setHoleDesc("12", "471", "12", "5");
-  vNGCHoles[12].setHoleDesc("13", "380", "6", "4");
-  vNGCHoles[13].setHoleDesc("14", "365", "4", "4");
-  vNGCHoles[14].setHoleDesc("15", "331", "18", "4");
-  vNGCHoles[15].setHoleDesc("16", "521", "2", "5");
-  vNGCHoles[16].setHoleDesc("17", "168", "14", "3");
-  vNGCHoles[17].setHoleDesc("18", "337", "10", "4");
+  aNGCHoles[0].setHoleDesc("1", "492", "7", "5");
+  aNGCHoles[1].setHoleDesc("2", "185", "13", "3");
+  aNGCHoles[2].setHoleDesc("3", "421", "1", "4");
+  aNGCHoles[3].setHoleDesc("4", "510", "3", "5");
+  aNGCHoles[4].setHoleDesc("5", "395", "5", "4");
+  aNGCHoles[5].setHoleDesc("6", "383", "11", "4");
+  aNGCHoles[6].setHoleDesc("7", "135", "17", "3");
+  aNGCHoles[7].setHoleDesc("8", "368", "9", "4");
+  aNGCHoles[8].setHoleDesc("9", "312", "15", "4");
+  aNGCHoles[9].setHoleDesc("10", "342", "8", "4");
+  aNGCHoles[10].setHoleDesc("11", "145", "16", "3");
+  aNGCHoles[11].setHoleDesc("12", "471", "12", "5");
+  aNGCHoles[12].setHoleDesc("13", "380", "6", "4");
+  aNGCHoles[13].setHoleDesc("14", "365", "4", "4");
+  aNGCHoles[14].setHoleDesc("15", "331", "18", "4");
+  aNGCHoles[15].setHoleDesc("16", "521", "2", "5");
+  aNGCHoles[16].setHoleDesc("17", "168", "14", "3");
+  aNGCHoles[17].setHoleDesc("18", "337", "10", "4");
 }
 
 void initHoleScores() {

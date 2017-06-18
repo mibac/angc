@@ -208,10 +208,10 @@ void incrementSelection() {
 }
 
 void CScoreDlg2::stuffData(int n) {
-  vNGCHoles[n].hole = holeValue->label();
-  vNGCHoles[n].yards = yardsValue->label();
-  vNGCHoles[n].hdcp = hdcpValue->label();
-  vNGCHoles[n].par = parValue->label();
+  aNGCHoles[n].hole = holeValue->label();
+  aNGCHoles[n].yards = yardsValue->label();
+  aNGCHoles[n].hdcp = hdcpValue->label();
+  aNGCHoles[n].par = parValue->label();
   asd[n].score = scoreValue->label();
   asd[n].putts = puttValue->label();
   asd[n].uds = udValue->label();
@@ -219,10 +219,10 @@ void CScoreDlg2::stuffData(int n) {
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
-  holeValue->label(vNGCHoles[n].hole.c_str());
-  yardsValue->label(vNGCHoles[n].yards.c_str());
-  hdcpValue->label(vNGCHoles[n].hdcp.c_str());
-  parValue->label(vNGCHoles[n].par.c_str());
+  holeValue->label(aNGCHoles[n].hole.c_str());
+  yardsValue->label(aNGCHoles[n].yards.c_str());
+  hdcpValue->label(aNGCHoles[n].hdcp.c_str());
+  parValue->label(aNGCHoles[n].par.c_str());
   scoreValue->label(asd[n].score.c_str());
   puttValue->label(asd[n].putts.c_str());
   udValue->label(asd[n].uds.c_str());
