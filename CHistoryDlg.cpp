@@ -27,9 +27,6 @@ int scoreIndex;
 vector<string> vSavedScores;
 
 void readSavedScores() {
-  // save today scores
-  for (int ix = 0; ix < k18; ++ix) gTodayScores[ix] = gsd[ix];
-
   ifstream inf;
   string s = pathShortScores + "savedScores.text";
   inf.open(s.c_str());

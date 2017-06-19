@@ -163,7 +163,7 @@ struct ScoreData {
   friend ostream& operator<<(ostream& strm, const ScoreData& sd);
 };
 extern array<ScoreData, k18> gsd;
-extern array<ScoreData, k18> gTodayScores;
+// extern array<ScoreData, k18> gHistoryScore;
 
 const int kDr = 0;
 const int k3w = 1;
@@ -237,7 +237,6 @@ extern int calcUDs(bool front9);
 extern int calcGIRs(bool front9);
 extern void initTestScores();
 extern string getShortDate();
-extern void restoreTodayScores();
 
 extern UtmLatLng gThisGreen;
 extern UtmLatLng gNextTee;

@@ -45,7 +45,7 @@ array<bool, k18> bPlayedHole;
 
 array<CNGCScorecardData, k18> aNGCHoles;
 array<ScoreData, k18> gsd;
-array<ScoreData, k18> gTodayScores;
+// array<ScoreData, k18> gHistoryScore;
 
 array<string, k18> clubNamesRA;
 
@@ -485,10 +485,4 @@ string getShortDate() {
   // if (d.length() == 1) d = "0" + d;
   // suffix = y + m + d;
   // return suffix;
-}
-
-void restoreTodayScores() {
-  for (int ix = 0; ix < k18; ++ix) {
-    gsd[ix] = gTodayScores[ix];
-  }
 }

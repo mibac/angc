@@ -67,43 +67,24 @@ CScoreDlg2 *scoreDlg2 = nullptr;
 int hole;
 
 void initTestScores() {
-  gsd[0].setHoleScore("1", "1", "1");
-  gsd[1].setHoleScore("2", "2", "2");
-  gsd[2].setHoleScore("3", "3", "3");
-  gsd[3].setHoleScore("4", "4", "4");
-  gsd[4].setHoleScore("5", "5", "5");
-  gsd[5].setHoleScore("6", "6", "6");
-  gsd[6].setHoleScore("7", "7", "7");
-  gsd[7].setHoleScore("8", "8", "8");
-  gsd[8].setHoleScore("9", "9", "9");
-  gsd[9].setHoleScore("9", "9", "9");
-  gsd[10].setHoleScore("8", "8", "8");
-  gsd[11].setHoleScore("7", "7", "7");
-  gsd[12].setHoleScore("6", "6", "6");
-  gsd[13].setHoleScore("5", "5", "5");
-  gsd[14].setHoleScore("4", "4", "4");
-  gsd[15].setHoleScore("3", "3", "3");
-  gsd[16].setHoleScore("2", "2", "2");
-  gsd[17].setHoleScore("1", "1", "1");
-
-  // gsd[0].setHoleScore("7", "3", "4");
-  // gsd[1].setHoleScore("4", "2", "3");
-  // gsd[2].setHoleScore("5", "2", "2");
-  // gsd[3].setHoleScore("5", "1", "2");
-  // gsd[4].setHoleScore("5", "5", "3");
-  // gsd[5].setHoleScore("5", "2", "2");
-  // gsd[6].setHoleScore("3", "1", "2");
-  // gsd[7].setHoleScore("6", "2", "3");
-  // gsd[8].setHoleScore("7", "3", "4");
-  // gsd[9].setHoleScore("4", "1", "2");
-  // gsd[10].setHoleScore("5", "3", "3");
+  gsd[0].setHoleScore("5", "2", "2");
+  gsd[1].setHoleScore("3", "2", "2");
+  gsd[2].setHoleScore("4", "2", "2");
+  // gsd[3].setHoleScore("5", "2", "2");
+  gsd[4].setHoleScore("4", "2", "2");
+  gsd[5].setHoleScore("4", "2", "2");
+  // gsd[6].setHoleScore("3", "2", "2");
+  gsd[7].setHoleScore("4", "2", "2");
+  gsd[8].setHoleScore("4", "2", "2");
+  // gsd[9].setHoleScore("4", "2", "2");
+  // gsd[10].setHoleScore("3", "2", "2");
   // gsd[11].setHoleScore("5", "2", "2");
-  // gsd[12].setHoleScore("6", "2", "4");
-  // gsd[13].setHoleScore("6", "2", "3");
-  // gsd[14].setHoleScore("6", "3", "3");
+  // gsd[12].setHoleScore("4", "2", "2");
+  // gsd[13].setHoleScore("4", "2", "2");
+  // gsd[14].setHoleScore("4", "2", "2");
   // gsd[15].setHoleScore("5", "2", "2");
   // gsd[16].setHoleScore("3", "2", "2");
-  // gsd[17].setHoleScore("6", "2", "2");
+  // gsd[17].setHoleScore("4", "2", "2");
 }
 
 void writeTmpScores() {

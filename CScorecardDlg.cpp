@@ -38,14 +38,14 @@ Fl_Button *historyBtn = nullptr;
 ScoreTypes st;
 string statsStr;
 
+void restoreTodayScores();
+
 void okB_cb(Fl_Widget *w, void *data) {
   scorecardDlg->hide();
   restoreTodayScores();
 }
 
-void historyB_cb(Fl_Widget *w, void *data) {
-  createHistoryDlg();
-}
+void historyB_cb(Fl_Widget *w, void *data) { createHistoryDlg(); }
 
 void incrScoreTypes(int par, int score) {
   int n = score - par;     // order important
@@ -167,4 +167,24 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   show();
 }
 
-void createScorecardDlg() { scorecardDlg = new CScorecardDlg(0, 0, 480, 800); }
+array<ScoreData, k18> todayScores;
+void saveTodayScores() {
+  for (int ix = 0; ix < k18; ++ix) {
+    todayScores[ix].score = gsd[ix].score;
+    todayScores[ix].putts = gsd[ix].putts;
+    todayScores[ix].uds = gsd[ix].uds;
+  }
+}
+
+void restoreTodayScores() {
+  for (int ix = 0; ix < k18; ++ix) {
+    gsd[ix].score = todayScores[ix].score;
+    gsd[ix].putts = todayScores[ix].putts;
+    gsd[ix].uds = todayScores[ix].uds;
+  }
+}
+
+void createScorecardDlg() {
+  scorecardDlg = new CScorecardDlg(0, 0, 480, 800);
+  saveTodayScores();
+}

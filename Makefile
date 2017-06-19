@@ -155,7 +155,7 @@ CClubcard.o: CClubcard.cpp CClubcard.h globals.h Fl_Image_Button.h
 dout.o: dout.cpp dout.h
 	g++ -c $<  $(CXXFLAGS)
 
-CHistoryDlg.o: CHistoryDlg.cpp CHistoryDlg.h
+CHistoryDlg.o: CHistoryDlg.cpp CHistoryDlg.h globals.h
 	g++ -c $<  $(CXXFLAGS)
 
 Fl_Image_Button.o: Fl_Image_Button.cpp Fl_Image_Button.h
