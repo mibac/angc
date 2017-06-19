@@ -44,7 +44,8 @@ vector<UtmLatLng> vUTM;
 array<bool, k18> bPlayedHole;
 
 array<CNGCScorecardData, k18> aNGCHoles;
-array<ScoreData, k18> asd;
+array<ScoreData, k18> gsd;
+array<ScoreData, k18> gTodayScores;
 
 array<string, k18> clubNamesRA;
 
@@ -64,18 +65,18 @@ int calcScore(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (asd[ix].score == "")
+      if (gsd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].score);
+        tmp = stoi(gsd[ix].score);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (asd[ix].score == "")
+      if (gsd[ix].score == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].score);
+        tmp = stoi(gsd[ix].score);
       sum += tmp;
     }
   }
@@ -87,18 +88,18 @@ int calcPutts(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (asd[ix].putts == "")
+      if (gsd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].putts);
+        tmp = stoi(gsd[ix].putts);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (asd[ix].putts == "")
+      if (gsd[ix].putts == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].putts);
+        tmp = stoi(gsd[ix].putts);
       sum += tmp;
     }
   }
@@ -110,18 +111,18 @@ int calcUDs(bool front9) {
   int tmp = 0;
   if (front9) {
     for (int ix = 0; ix < 9; ++ix) {
-      if (asd[ix].uds == "")
+      if (gsd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].uds);
+        tmp = stoi(gsd[ix].uds);
       sum += tmp;
     }
   } else {
     for (int ix = 9; ix < k18; ++ix) {
-      if (asd[ix].uds == "")
+      if (gsd[ix].uds == "")
         tmp = 0;
       else
-        tmp = stoi(asd[ix].uds);
+        tmp = stoi(gsd[ix].uds);
       sum += tmp;
     }
   }
@@ -149,15 +150,15 @@ int calcGIRs(bool front9) {
       else
         p = stoi(aNGCHoles[ix].par);
 
-      if (asd[ix].score == "")
+      if (gsd[ix].score == "")
         s = 0;
       else
-        s = stoi(asd[ix].score);
+        s = stoi(gsd[ix].score);
 
-      if (asd[ix].putts == "")
+      if (gsd[ix].putts == "")
         t = 0;
       else
-        t = stoi(asd[ix].putts);
+        t = stoi(gsd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   } else {
@@ -167,15 +168,15 @@ int calcGIRs(bool front9) {
       else
         p = stoi(aNGCHoles[ix].par);
 
-      if (asd[ix].score == "")
+      if (gsd[ix].score == "")
         s = 0;
       else
-        s = stoi(asd[ix].score);
+        s = stoi(gsd[ix].score);
 
-      if (asd[ix].putts == "")
+      if (gsd[ix].putts == "")
         t = 0;
       else
-        t = stoi(asd[ix].putts);
+        t = stoi(gsd[ix].putts);
       if (isGIR(p, s, t)) sum++;
     }
   }
@@ -319,7 +320,7 @@ void initNGCHolesVector() {
 
 void initHoleScores() {
   ScoreData sd;
-  for (int ix = 0; ix < k18; ++ix) asd[ix] = sd;
+  for (int ix = 0; ix < k18; ++ix) gsd[ix] = sd;
 }
 
 void initClubNames() {
@@ -484,4 +485,10 @@ string getShortDate() {
   // if (d.length() == 1) d = "0" + d;
   // suffix = y + m + d;
   // return suffix;
+}
+
+void restoreTodayScores() {
+  for (int ix = 0; ix < k18; ++ix) {
+    gsd[ix] = gTodayScores[ix];
+  }
 }

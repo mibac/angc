@@ -58,9 +58,9 @@ void writeScores() {
   /// clang-format off
   gFileScore << "Score\tPutts\tUD\n";
   for (int ix = 0; ix < k18; ++ix) {
-    gFileScore << asd[ix].score << "\t";
-    gFileScore << asd[ix].putts << "\t";
-    gFileScore << asd[ix].uds << endl;
+    gFileScore << gsd[ix].score << "\t";
+    gFileScore << gsd[ix].putts << "\t";
+    gFileScore << gsd[ix].uds << endl;
   }
 
   gFileScore << "Score \t" << fscore << "\t" << bscore << "\t"
@@ -85,7 +85,7 @@ void writeShortScores() {
   gFileShortScores.open(s.c_str(), ios::app);
   gFileShortScores << getShortDate() << endl;
   for (int ix = 0; ix < k18; ++ix) {
-    gFileShortScores << asd[ix];
+    gFileShortScores << gsd[ix];
   }
   gFileShortScores << endl;
   gFileShortScores.flush();

@@ -67,47 +67,47 @@ CScoreDlg2 *scoreDlg2 = nullptr;
 int hole;
 
 void initTestScores() {
-  asd[0].setHoleScore("1", "1", "1");
-  asd[1].setHoleScore("2", "2", "2");
-  asd[2].setHoleScore("3", "3", "3");
-  asd[3].setHoleScore("4", "4", "4");
-  asd[4].setHoleScore("5", "5", "5");
-  asd[5].setHoleScore("6", "6", "6");
-  asd[6].setHoleScore("7", "7", "7");
-  asd[7].setHoleScore("8", "8", "8");
-  asd[8].setHoleScore("9", "9", "9");
-  asd[9].setHoleScore("9", "9", "9");
-  asd[10].setHoleScore("8", "8", "8");
-  asd[11].setHoleScore("7", "7", "7");
-  asd[12].setHoleScore("6", "6", "6");
-  asd[13].setHoleScore("5", "5", "5");
-  asd[14].setHoleScore("4", "4", "4");
-  asd[15].setHoleScore("3", "3", "3");
-  asd[16].setHoleScore("2", "2", "2");
-  asd[17].setHoleScore("1", "1", "1");
+  gsd[0].setHoleScore("1", "1", "1");
+  gsd[1].setHoleScore("2", "2", "2");
+  gsd[2].setHoleScore("3", "3", "3");
+  gsd[3].setHoleScore("4", "4", "4");
+  gsd[4].setHoleScore("5", "5", "5");
+  gsd[5].setHoleScore("6", "6", "6");
+  gsd[6].setHoleScore("7", "7", "7");
+  gsd[7].setHoleScore("8", "8", "8");
+  gsd[8].setHoleScore("9", "9", "9");
+  gsd[9].setHoleScore("9", "9", "9");
+  gsd[10].setHoleScore("8", "8", "8");
+  gsd[11].setHoleScore("7", "7", "7");
+  gsd[12].setHoleScore("6", "6", "6");
+  gsd[13].setHoleScore("5", "5", "5");
+  gsd[14].setHoleScore("4", "4", "4");
+  gsd[15].setHoleScore("3", "3", "3");
+  gsd[16].setHoleScore("2", "2", "2");
+  gsd[17].setHoleScore("1", "1", "1");
 
-  // asd[0].setHoleScore("7", "3", "4");
-  // asd[1].setHoleScore("4", "2", "3");
-  // asd[2].setHoleScore("5", "2", "2");
-  // asd[3].setHoleScore("5", "1", "2");
-  // asd[4].setHoleScore("5", "5", "3");
-  // asd[5].setHoleScore("5", "2", "2");
-  // asd[6].setHoleScore("3", "1", "2");
-  // asd[7].setHoleScore("6", "2", "3");
-  // asd[8].setHoleScore("7", "3", "4");
-  // asd[9].setHoleScore("4", "1", "2");
-  // asd[10].setHoleScore("5", "3", "3");
-  // asd[11].setHoleScore("5", "2", "2");
-  // asd[12].setHoleScore("6", "2", "4");
-  // asd[13].setHoleScore("6", "2", "3");
-  // asd[14].setHoleScore("6", "3", "3");
-  // asd[15].setHoleScore("5", "2", "2");
-  // asd[16].setHoleScore("3", "2", "2");
-  // asd[17].setHoleScore("6", "2", "2");
+  // gsd[0].setHoleScore("7", "3", "4");
+  // gsd[1].setHoleScore("4", "2", "3");
+  // gsd[2].setHoleScore("5", "2", "2");
+  // gsd[3].setHoleScore("5", "1", "2");
+  // gsd[4].setHoleScore("5", "5", "3");
+  // gsd[5].setHoleScore("5", "2", "2");
+  // gsd[6].setHoleScore("3", "1", "2");
+  // gsd[7].setHoleScore("6", "2", "3");
+  // gsd[8].setHoleScore("7", "3", "4");
+  // gsd[9].setHoleScore("4", "1", "2");
+  // gsd[10].setHoleScore("5", "3", "3");
+  // gsd[11].setHoleScore("5", "2", "2");
+  // gsd[12].setHoleScore("6", "2", "4");
+  // gsd[13].setHoleScore("6", "2", "3");
+  // gsd[14].setHoleScore("6", "3", "3");
+  // gsd[15].setHoleScore("5", "2", "2");
+  // gsd[16].setHoleScore("3", "2", "2");
+  // gsd[17].setHoleScore("6", "2", "2");
 }
 
 void writeTmpScores() {
-  for (int ix = 0; ix < k18; ++ix) gTmpScore << asd[ix];
+  for (int ix = 0; ix < k18; ++ix) gTmpScore << gsd[ix];
   gTmpScore << endl;
 }
 
@@ -215,9 +215,9 @@ void incrementSelection() {
 }
 
 void CScoreDlg2::updateScoreData(int n) {
-  asd[n].score = scoreValue->label();
-  asd[n].putts = puttValue->label();
-  asd[n].uds = udValue->label();
+  gsd[n].score = scoreValue->label();
+  gsd[n].putts = puttValue->label();
+  gsd[n].uds = udValue->label();
 }
 
 void CScoreDlg2::updateHoleDescription(int n) {
@@ -225,9 +225,9 @@ void CScoreDlg2::updateHoleDescription(int n) {
   yardsValue->label(aNGCHoles[n].yards.c_str());
   hdcpValue->label(aNGCHoles[n].hdcp.c_str());
   parValue->label(aNGCHoles[n].par.c_str());
-  scoreValue->label(asd[n].score.c_str());
-  puttValue->label(asd[n].putts.c_str());
-  udValue->label(asd[n].uds.c_str());
+  scoreValue->label(gsd[n].score.c_str());
+  puttValue->label(gsd[n].putts.c_str());
+  udValue->label(gsd[n].uds.c_str());
 }
 
 // Handle when user right clicks on our input widget
@@ -637,7 +637,7 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   // clear_border();
   end();
 
-  // initTestScores();
+  initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);

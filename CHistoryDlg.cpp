@@ -4,6 +4,10 @@
 #include "CHistoryDlg.h"
 #endif
 
+#ifndef CSCORECARDDLG_H
+#include "CScorecardDlg.h"
+#endif
+
 #ifndef CGLOBALS_H
 #include "globals.h"
 #endif
@@ -17,47 +21,50 @@
 
 using namespace std;
 
-string scorStr;
-vector<string> vs;
-vector<string> dates;
-
 CHistoryDlg *historyDlg = nullptr;
 Fl_Button *okBt = nullptr;
 int scoreIndex;
+vector<string> vSavedScores;
 
 void readSavedScores() {
+  // save today scores
+  for (int ix = 0; ix < k18; ++ix) gTodayScores[ix] = gsd[ix];
+
   ifstream inf;
   string s = pathShortScores + "savedScores.text";
   inf.open(s.c_str());
 
   string line;
+  vSavedScores.erase(vSavedScores.begin(),
+                     vSavedScores.begin() + vSavedScores.size());
   while (getline(inf, line)) {
     string scor;
     scor = line + "\n";
-    vs.push_back(scor);
+    vSavedScores.push_back(scor);
   }
 }
 
 void updateScores() {
-  initNGCHolesVector();
-  string s = vs[scoreIndex].substr(6, 54);
-  cout << "s " << s << endl;
+  // initNGCHolesVector();
+  string s = vSavedScores[scoreIndex].substr(6, 54);
   int n = 0;
-  string sc;
-  string pu;
-  string ud;
   for (int ix = 0; ix < k18; ++ix) {
-      sc = s.substr(n, 1); n++;
-      pu = s.substr(n, 1); n++;
-      ud = s.substr(n, 1); n++;
-      gScores.setScoreData(ix, sc, pu, ud);
+    gsd[ix].score = s.substr(n, 1);
+    gsd[ix].putts = s.substr(n + 1, 1);
+    gsd[ix].uds = s.substr(n + 2, 1);
+    n += 3;
   }
 }
 
 void okBt_cb(Fl_Widget *w, void *data) {
+  CScorecardDlg *parent = (CScorecardDlg *)data;
+
   historyDlg->hide();
-  cout << vs[scoreIndex];
+  cout << vSavedScores[scoreIndex];
   updateScores();
+  // parent->activate();
+  gScorecard->redraw();
+  parent->updateStats();
 }
 
 // Tree's callback
@@ -121,28 +128,12 @@ CHistoryDlg::CHistoryDlg(int X, int Y, int W, int H, const char *L)
     string s;
     Fl_Tree_Item *i;
     int indx = 0;
-    for (auto itr : vs) {
+    for (auto itr : vSavedScores) {
       s = itr.substr(0, 6);
       i = tree->add(s.c_str());
       i->user_data((void *)indx);
       indx++;
-      // cout << s << endl;
     }
-    // tree->add("Flintstones/Fred");
-    // tree->add("Flintstones/Wilma");
-    // tree->add("Flintstones/Pebbles");
-    // tree->add("Simpsons/Homer");
-    // tree->add("Simpsons/Marge");
-    // tree->add("Simpsons/Bart");
-    // tree->add("Simpsons/Lisa");
-    // tree->add("Pathnames/\\/bin");  // front slashes
-    // tree->add("Pathnames/\\/usr\\/sbin");
-    // tree->add("Pathnames/C:\\\\Program Files");  // backslashes
-    // tree->add("Pathnames/C:\\\\Documents and Settings");
-    //
-    // // Start with some items closed
-    // tree->close("Simpsons");
-    // tree->close("Pathnames");
   }
 
   color((Fl_Color)159);
@@ -154,4 +145,7 @@ CHistoryDlg::CHistoryDlg(int X, int Y, int W, int H, const char *L)
   show();
 }
 
-void createHistoryDlg() { historyDlg = new CHistoryDlg(0, 0, 480, 800); }
+void createHistoryDlg() {
+  historyDlg = new CHistoryDlg(0, 0, 480, 800);
+  gFront9 = true;
+}

@@ -16,6 +16,10 @@
 #include "CFrontBackBtn.h"
 #endif
 
+#ifndef CHISTORY_H
+#include "CHistoryDlg.h"
+#endif
+
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/Fl_Text_Display.H>
 
@@ -27,13 +31,21 @@ using namespace std;
 CScorecardDlg *scorecardDlg = nullptr;
 Fl_Button *okB = nullptr;
 CFrontBackBtn *fbBtn = nullptr;
-CScorecard *card = nullptr;
+CScorecard *gScorecard = nullptr;
 Fl_Text_Display *stats = nullptr;
 Fl_Text_Buffer *txtbuf = nullptr;
-
-void okB_cb(Fl_Widget *w, void *data) { scorecardDlg->hide(); }
-
+Fl_Button *historyBtn = nullptr;
 ScoreTypes st;
+string statsStr;
+
+void okB_cb(Fl_Widget *w, void *data) {
+  scorecardDlg->hide();
+  restoreTodayScores();
+}
+
+void historyB_cb(Fl_Widget *w, void *data) {
+  createHistoryDlg();
+}
 
 void incrScoreTypes(int par, int score) {
   int n = score - par;     // order important
@@ -69,7 +81,6 @@ void incrScoreTypes(int par, int score) {
   }
 }
 
-string statsStr;
 string writeScoreStats() {
   int fscore = calcScore(true);
   int bscore = calcScore(false);
@@ -85,10 +96,10 @@ string writeScoreStats() {
   for (int ix = 0; ix < k18; ++ix) {
     int par = stoi(aNGCHoles[ix].par);
 
-    if (asd[ix].score == "")
-        score = 0;
+    if (gsd[ix].score == "")
+      score = 0;
     else
-      score = stoi(asd[ix].score);
+      score = stoi(gsd[ix].score);
     incrScoreTypes(par, score);
   }
 
@@ -110,9 +121,14 @@ string writeScoreStats() {
   return oss.str();
 }
 
+void CScorecardDlg::updateStats() {
+  statsStr = writeScoreStats();
+  txtbuf->text(statsStr.c_str());
+}
+
 CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
     : Fl_Window(X, Y, W, H, L) {
-  { card = new CScorecard(2, 20, 472, 244); }
+  { gScorecard = new CScorecard(2, 20, 472, 244); }
   {
     okB = new Fl_Button(174, kBtnWinBottomY, kBtnW, kBtnH, "OK");
     setButtonStyle(okB);
@@ -121,6 +137,11 @@ CScorecardDlg::CScorecardDlg(int X, int Y, int W, int H, const char *L)
   {
     fbBtn = new CFrontBackBtn(190, 300, 0, 0);
     setButtonStyle(fbBtn);
+  }
+  {
+    historyBtn = new Fl_Button(330, 300, 0, 0, "History");
+    setButtonStyle(historyBtn);
+    historyBtn->callback(historyB_cb, this);
   }
   {
     stats = new Fl_Text_Display(2, 380, 472, 270);
