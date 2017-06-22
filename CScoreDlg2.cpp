@@ -66,26 +66,7 @@ CScoreDlg2 *scoreDlg2 = nullptr;
 
 int hole;
 
-void initTestScores() {
-  gsd[0].setHoleScore("5", "2", "2");
-  gsd[1].setHoleScore("3", "2", "2");
-  gsd[2].setHoleScore("4", "2", "2");
-  // gsd[3].setHoleScore("5", "2", "2");
-  gsd[4].setHoleScore("4", "2", "2");
-  gsd[5].setHoleScore("4", "2", "2");
-  // gsd[6].setHoleScore("3", "2", "2");
-  gsd[7].setHoleScore("4", "2", "2");
-  gsd[8].setHoleScore("4", "2", "2");
-  // gsd[9].setHoleScore("4", "2", "2");
-  // gsd[10].setHoleScore("3", "2", "2");
-  // gsd[11].setHoleScore("5", "2", "2");
-  // gsd[12].setHoleScore("4", "2", "2");
-  // gsd[13].setHoleScore("4", "2", "2");
-  // gsd[14].setHoleScore("4", "2", "2");
-  // gsd[15].setHoleScore("5", "2", "2");
-  // gsd[16].setHoleScore("3", "2", "2");
-  // gsd[17].setHoleScore("4", "2", "2");
-}
+void initTestScores();
 
 void writeTmpScores() {
   for (int ix = 0; ix < k18; ++ix) gTmpScore << gsd[ix];
@@ -618,7 +599,6 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
   // clear_border();
   end();
 
-  initTestScores();
   toggleSelection(scoreValue);
   hole = gCurrentHole - 1;
   updateHoleDescription(hole);
@@ -627,6 +607,27 @@ CScoreDlg2::CScoreDlg2(int X, int Y, int W, int H, const char *L)
             << gHoleTimeRA[hole].endstr << endl;
 
   show();
+}
+
+void initTestScores() {
+  gsd[0].setHoleScore("5", "2", "2");
+  gsd[1].setHoleScore("3", "2", "2");
+  gsd[2].setHoleScore("4", "2", "2");
+  gsd[3].setHoleScore("5", "2", "2");
+  gsd[4].setHoleScore("4", "2", "2");
+  gsd[5].setHoleScore("4", "2", "2");
+  gsd[6].setHoleScore("3", "2", "2");
+  gsd[7].setHoleScore("4", "2", "2");
+  gsd[8].setHoleScore("4", "2", "2");
+  gsd[9].setHoleScore("4", "2", "2");
+  gsd[10].setHoleScore("3", "2", "2");
+  gsd[11].setHoleScore("5", "2", "2");
+  gsd[12].setHoleScore("4", "2", "2");
+  gsd[13].setHoleScore("4", "2", "2");
+  gsd[14].setHoleScore("4", "2", "2");
+  gsd[15].setHoleScore("5", "2", "2");
+  gsd[16].setHoleScore("3", "2", "2");
+  gsd[17].setHoleScore("4", "2", "2");
 }
 
 void createScoreDlg2() { scoreDlg2 = new CScoreDlg2(0, 0, 480, 800); }
