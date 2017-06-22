@@ -95,7 +95,7 @@ void setMainBtnStyle(Fl_Button *b) {
 // This window callback allows the user to save & exit, don't save, or cancel.
 static void window_cb(Fl_Widget *widget, void *) { exitBtn->Button_CB(); }
 
-static void markBtn_cb(Fl_Widget *widget, void *) {
+void updateMark() {
   gShotCount++;
   if (gShotCount > kMAX_SHOTS) gShotCount = kMAX_SHOTS;
   markBtnLabel = "Mark\n" + to_string(gShotCount);
@@ -104,7 +104,10 @@ static void markBtn_cb(Fl_Widget *widget, void *) {
   UtmLatLng u = cll.getNowMark();
   gShotRA[gCurrentHole - 1].shot[gShotCount - 1].utm = u;
   gShotRA[gCurrentHole - 1].nmarks++;
+}
 
+static void markBtn_cb(Fl_Widget *widget, void *) {
+  updateMark();
   createCClubDlg();
 }
 
@@ -160,13 +163,16 @@ void HandleFD(FL_SOCKET fd, void *data) {
             hv->ngc->hole[gCurrentHole].startOrient[0].v[1]);
       else
         hv->ngc->hole[gCurrentHole].setCurrentPoint(u.lng, u.lat);
-      if (isCloserToNextTee(u)) holeBtn->setNewHole();
+      if (isCloserToNextTee(u)) {
+        holeBtn->setNewHole();
+        updateMark();
+      }
       hv->redraw();
     }
     found = gpsStr.find("GPRMC");
-    if ((!bRoundStarted) &&(found != string::npos)) {
-        myGPS.setValuesRMC(gpsStr.c_str());
-        gRoundDateStr = to_string(myGPS.date);
+    if ((!bRoundStarted) && (found != string::npos)) {
+      myGPS.setValuesRMC(gpsStr.c_str());
+      gRoundDateStr = to_string(myGPS.date);
     }
   }
 #endif

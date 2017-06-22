@@ -124,6 +124,7 @@ void CClubcard::DrawData(const char *s, int X, int Y, int W, int H, int ROW,
 }
 
 void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
+
   if (COL == 0) {
     DrawData(gShotRA[hole].shot[ROW].club.c_str(), X, Y, W, H, ROW, COL);
   } else if (COL == 1) {
@@ -132,8 +133,11 @@ void CClubcard::drawShotData(int ROW, int COL, int X, int Y, int W, int H) {
     gShotRA[hole].shot[ROW].yards = d;
     DrawData(to_string(d).c_str(), X, Y, W, H, ROW, COL);
   }
-  gTmpShots << hole << "\t" << ROW << "\t";
-  gTmpShots << gShotRA[hole].shot[ROW];
+  // gTmpShots << hole + 1 << "\t" ;
+  // gTmpShots << gShotRA[hole].shot[ROW].club << "\t";
+  // gTmpShots << gShotRA[hole].shot[ROW].yards << "\t";
+  // gTmpShots << gShotRA[hole].shot[ROW].utm.lng << "\t";
+  // gTmpShots << gShotRA[hole].shot[ROW].utm.lat << endl;
 }
 
 // Handle drawing table's cells

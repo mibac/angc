@@ -62,6 +62,18 @@ int clubDlgHole = 0;
 static void oKBtn_cb(Fl_Widget *w, void *data) {
   CClubDlg *ccd = (CClubDlg *)data;
   ccd->hide();
+  int valid = 0;
+  int ix = gCurrentHole - 1;
+  if (gShotRA[ix].nmarks > 1) {
+    valid = countValidDistances(ix);
+    for (int jx = 0; jx < valid; ++jx) {
+      gTmpShots << ix + 1 << "\t";
+      gTmpShots << gShotRA[ix].shot[jx].club << "\t";
+      gTmpShots << gShotRA[ix].shot[jx].yards << "\t";
+      gTmpShots << gShotRA[ix].shot[jx].utm.lng << "\t";
+      gTmpShots << gShotRA[ix].shot[jx].utm.lat << endl;
+    }
+  }
   gCurrentHole = saveCurrentHole;
 }
 

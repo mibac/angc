@@ -274,23 +274,23 @@ ostream& operator<<(ostream& strm, const ScoreData& sd) {
 // clang-format on
 
 // clang-format off
-ostream& operator<<(ostream& strm, const holeStats& h) {
-    strm << h.club << "\t"
-         << h.yards
-         << "\t" << setprecision(10)
-         << h.utm.lat << "\t"
-         << h.utm.lng << endl;
-  return strm;
-}
+// ostream& operator<<(ostream& strm, const holeStats& h) {
+//     strm << h.club << "\t"
+//          << h.yards
+//          << "\t" << setprecision(10)
+//          << h.utm.lat << "\t"
+//          << h.utm.lng << endl;
+//   return strm;
+// }
 // clang-format on
 
 // clang-format off
-ostream& operator<<(ostream& strm, const ShotStats& sra) {
-  for (int ix = 0; ix < sra.nmarks - 1; ++ix) {
-    strm << sra.shot[ix];
-  }
-  return strm;
-}
+// ostream& operator<<(ostream& strm, const ShotStats& sra) {
+//   for (int ix = 0; ix < sra.nmarks - 1; ++ix) {
+//     strm << sra.shot[ix];
+//   }
+//   return strm;
+// }
 // clang-format on
 
 void initNGCHolesVector() {
